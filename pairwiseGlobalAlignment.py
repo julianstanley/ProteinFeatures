@@ -67,11 +67,11 @@ def pairwiseGlobalAlignment(seqs):
             score = nw.score_alignment("".join(seq1), "".join(seq2), 
                                       gap_open = 1000,
                                       gap_extend = 1000,
-                                      matrix = 'HIJACK30')
+                                      matrix = 'matricies/HIJACK30')
             scoreCenter = nw.score_alignment(seq1Center, seq2Center,
                                             gap_open = 1000,
                                             gap_extend = 1000,
-                                            matrix = 'HIJACK30')
+                                            matrix = 'matricies/HIJACK30')
             
             # The alignment scores should be scaled by 0.2
             scoreScaled = 0.2 * score
