@@ -3,19 +3,17 @@ from Bio.SubsMat import MatrixInfo as matlist
 import nwalign3 as nw
 import math
 
-def pairwiseGlobalAlignment(seqs):
-    ''' Align a set of amino acid sequences pairwise.
+def pairwiseGlobalAlignment(seqs, matDir = ""):
+    ''' Align a set of amino acid sequences pairwise/amongst themselves
 
     Args:
-        List[str]: A list of amino acid sequences of equal length 
+        seqs (List[str]): A list of amino acid sequences of equal length 
         for pairwise alignment
+        
+        matDir (str, optional): The directory containing the alignment matrix
 
     Returns:
-        List[ndarray(float)]: A list containing two entries. The first
-        contains the alignment scores--the (i,j) entry represents the alignment
-        score between the (i,j) input sequences. The second contains the alignment
-        lengths--the (i,j) entry represents the minimum of the lengths of the
-        (i,j) input sequences.
+        ndarray(float): A matrix of alignment 
     
     Notes:
     This uses the HIJACK30 matrix, which must be included 
@@ -67,11 +65,11 @@ def pairwiseGlobalAlignment(seqs):
             score = nw.score_alignment("".join(seq1), "".join(seq2), 
                                       gap_open = 1000,
                                       gap_extend = 1000,
-                                      matrix = 'matricies/HIJACK30')
+                                      matrix = matDir + 'HIJACK30')
             scoreCenter = nw.score_alignment(seq1Center, seq2Center,
                                             gap_open = 1000,
                                             gap_extend = 1000,
-                                            matrix = 'matricies/HIJACK30')
+                                            matrix = matDir + 'HIJACK30')
             
             # The alignment scores should be scaled by 0.2
             scoreScaled = 0.2 * score
