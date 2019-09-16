@@ -84,4 +84,3 @@ def pairwiseGlobalAlignment(seqs, matDir = "../matricies/HIJACK30"):
         scores[j, i] = scoreCorrected
             
     return([scores, lengths])
-    
