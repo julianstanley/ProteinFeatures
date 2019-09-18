@@ -1,5 +1,10 @@
 # re for regular expression substitution
 import re
+from ChimeraUtils import read_reply_log
+from chimera import selection
+from chimera import runCommand as rc
+from ExtendedAtom import ExtendedAtom
+from Utils import median
 
 # All of the features that we care about
 features = ['AAindCodonDiv', 'AAindMolVol', 'AAindPolarity', 'AAindSS',
@@ -10,22 +15,6 @@ features = ['AAindCodonDiv', 'AAindMolVol', 'AAindPolarity', 'AAindSS',
             "sheet", "disord", "disordScore", "protBindSPPIDER",
             "protBindDISOPREDscore", "areaSAS", "reactivity",
             "circularVariance", "depth"]
-
-
-def get_residue_features_metals(eResidue):
-    residue_features = {
-        "sumMetals_res": float('NaN'),
-        "CO_res": eResidue.metals.count("CO"),
-        "CU_res": eResidue.metals.count("CU"),
-        "FE_res": eResidue.metals.count("FE"),
-        "K_res": eResidue.metals.count("K"),
-        "MG_res": eResidue.metals.count("MG"),
-        "MN_res": eResidue.metals.count("MN"),
-        "MO_res": eResidue.metals.count("MO"),
-        "NA_res": eResidue.metals.count("NA"),
-        "NI_res": eResidue.metals.count("NI"),
-        "ZN_res": eResidue.metals.count("ZN")
-    }
 
 
 def get_residue_features(eResidue):
@@ -42,6 +31,18 @@ def get_residue_features(eResidue):
         "netCharge_res": eResidue.charge,
         "posCharge_res": (1 if eResidue.charge == 1 else 0),
         "negCharge_res": (-1 if eResidue.charge == -1 else 0),
+        # Keep sumMetals as NaN, since metals sum isn't strictly addative
+        "sumMetals_res": float('NaN'),
+        "CO_res": eResidue.metal_contacts.count("CO"),
+        "CU_res": eResidue.metal_contacts.count("CU"),
+        "FE_res": eResidue.metal_contacts.count("FE"),
+        "K_res": eResidue.metal_contacts.count("K"),
+        "MG_res": eResidue.metal_contacts.count("MG"),
+        "MN_res": eResidue.metal_contacts.count("MN"),
+        "MO_res": eResidue.metal_contacts.count("MO"),
+        "NA_res": eResidue.metal_contacts.count("NA"),
+        "NI_res": eResidue.metal_contacts.count("NI"),
+        "ZN_res": eResidue.metal_contacts.count("ZN"),
         'RPKT_res': (1 if eResidue.residue_1_letter in ["R", "K", "P", "T"]
                      else 0),
         "Arg_res": (1 if eResidue.residue_1_letter == "R" else 0),
@@ -89,6 +90,9 @@ def get_residues_features_sums(eResidues):
             residues_features[feature] +=\
                 single_residue_features[single_feature]
 
+        # Override the sumMetals feature, since it doesn't add up
+        residues_features["sumMetals"] = len(eResidues[0].all_metals)
+
     return residues_features
 
 
@@ -119,6 +123,33 @@ def compute_bubble_attributes_residues(base_atom, compared_residues, radius):
     return get_residues_features_sums(base_atom.residue_contacts)
 
 
+def get_depths(times=5):
+    with open("troubleshoot.txt", 'a') as file:
+        file.write("In get_depths")
+
+    depths_lists = {}
+    depths_return = {}
+    for time in range(times):
+        current_depths = get_depth()
+        for atom_name, depth in current_depths.items():
+            if atom_name in depths_lists:
+                depths_lists[atom_name].append(depth)
+            else:
+                depths_lists[atom_name] = [depth]
+
+    with open("troubleshoot.txt", 'a') as file:
+        file.write("First loop")
+
+    for atom_name, depths_list in depths_lists.items():
+        depths_return[atom_name] = median(
+            [float(depth) for depth in depths_list])
+
+    with open("troubleshoot.txt", 'a') as file:
+        file.write("Second loop")
+
+    return(depths_return)
+
+
 def get_depth(all_atoms=False):
     """ Gets the depth of all RPKT to the surface
 
@@ -133,11 +164,9 @@ def get_depth(all_atoms=False):
     """
     # Read and clear the reply log before measuring distance
     # save_and_clear_reply_log(logfile_name)
-    from ChimeraFeatures import *
-    from ChimeraUtils import *
-    from ExtendedAtom import *
-    from Utils import *
-    from chimera import selection
+
+    with open("troubleshoot.txt", 'a') as file:
+        file.write("Get_depth")
 
     if all_atoms:
         rc("select #0")
@@ -151,6 +180,8 @@ def get_depth(all_atoms=False):
                      for atom in selection.currentAtoms()]
 
     else:
+        with open("troubleshoot.txt", 'a') as file:
+            file.write("Before rc")
         rc("select :arg@cd|:lys@ce|:mly@ce|:kcx@ce|:pro@cd|:thr@cb|:met|:cys")
         all_atoms = [ExtendedAtom(atom)
                      for atom in selection.currentAtoms()]
@@ -161,8 +192,15 @@ def get_depth(all_atoms=False):
         r, distances = read_reply_log()
 
         rc("select :arg@cd|:lys@ce|:mly@ce|:kcx@ce|:pro@cd|:thr@cb|:met|:cys")
+        with open("troubleshoot.txt", 'a') as file:
+            file.write("Before init atoms")
         all_atoms = [ExtendedAtom(atom)
                      for atom in selection.currentAtoms()]
+        with open("troubleshoot.txt", 'a') as file:
+            file.write("After init atoms")
+
+    with open("troubleshoot.txt", 'a') as file:
+        file.write("Get_depth after first block")
 
     # Map between atom number and atom residue
     atom_to_aa = {}
@@ -215,11 +253,6 @@ def get_depth_minimum(all_atoms=False):
     """
     # Read and clear the reply log before measuring distance
     # save_and_clear_reply_log(logfile_name)
-    from ChimeraFeatures import *
-    from ChimeraUtils import *
-    from ExtendedAtom import *
-    from Utils import *
-    from chimera import selection
 
     if all_atoms:
         rc("select #0")

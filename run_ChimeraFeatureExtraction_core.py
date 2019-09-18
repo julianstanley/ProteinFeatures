@@ -95,6 +95,7 @@ def featureWrapper(pdbfile, pdbdir, outfile, radii, attempts_limit, logfile,
             except Exception as e:
                 rc("close all")
                 with open(logfile, 'w+') as log:
+                    log.write("Begin exception log:")
                     save_and_clear_reply_log(logfile)
                     log.write("""Feature extraction for {} failed {} times.
                     The most recent exception thrown was {}""".format(

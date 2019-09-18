@@ -1,8 +1,11 @@
-from ExtendedChimera.ChimeraFeatures import *
-from ExtendedChimera.ChimeraUtils import *
-from ExtendedChimera.ExtendedAtom import *
-from ExtendedChimera.Utils import *
-from ExtendedChimera.MetalAtom import *
+from ExtendedChimera.ChimeraFeatures import get_depths, \
+    compute_bubble_attributes_residues, compute_global_attributes_residues, \
+    get_residue_features
+from ExtendedChimera.MetalAtom import MetalAtom
+from ExtendedChimera.ChimeraUtils import generate_surface, add_hydrogens_prep,\
+    save_and_clear_reply_log, read_reply_log
+from ExtendedChimera.ExtendedAtom import ExtendedAtom, ExtendedResidue
+from ExtendedChimera.Utils import ionicRadiusDict
 from chimera import selection
 from chimera import runCommand as rc
 import re
@@ -81,7 +84,11 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12],
 
     # Depths
     print("Getting depths")
+    save_and_clear_reply_log("chimera_outlog_pre_depths.txt")
     depths = get_depths()
+
+    # New
+    save_and_clear_reply_log("chimera_outlog_post_depths.txt")
 
     # Get RPKT atoms and residues
     rc("~select")
@@ -90,9 +97,12 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12],
     #                 for residue in selection.currentResidues()]
     print("getting all {} rpkt residues".format(
         len(selection.currentResidues())))
+    # New
+    save_and_clear_reply_log("troubleshoot.txt")
     rpkt_atoms = [ExtendedAtom(atom, depths, metals)
                   for atom in selection.currentAtoms()]
     print("done")
+    save_and_clear_reply_log("troubleshoot.txt")
 
     # Get all atoms and residues
     rc("~select")
@@ -142,6 +152,6 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12],
     atom_features = {}
     for atom in rpkt_atoms:
         atom_features[atom.name] = get_residue_features(
-            atom.residue)
+            ExtendedResidue(atom.residue, depths, metals))
 
     return(global_attributes, atom_features, atom_radius_features)

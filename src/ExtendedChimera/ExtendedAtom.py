@@ -47,9 +47,9 @@ class ExtendedResidue():
         self.reactivity = reactivity_index_dict[self.residue_1_letter]
 
         # Depth
+        self.depths = depths
         if depths is None:
             self.depth = float("NaN")
-            print("Depths is None for {}".format(self.name))
         else:
             if "{},{}".format(self.number.split(".")[0],
                               self.residue_1_letter) in depths:
@@ -57,27 +57,25 @@ class ExtendedResidue():
                                                    self.residue_1_letter)]
             else:
                 self.depth = float("NaN")
-                print("Depth not found for {}".format(self.name))
-                print("Number: {}".format(self.number))
-                print("Number split: {}".format(self.number.split(".")))
-                print("Tried key: {}").format(
-                    "{},{}".format(self.number.split(".")[0],
-                                   self.residue_1_letter))
-                print("Depth dictionary: ")
-                print(depths)
 
-        # Direct metal contacts
+        # All metals in this structure
         self.all_metals = all_metals
-        direct_contacts = []
-        for metal in all_metals:
-            for atom in self.atoms:
-                distance = chimera.distance(atom.xformCoord(),
-                                            metal.metal_atom.xformCoord())
-                if distance < metal.radius:
-                    direct_contacts.append(metal)
-                    break
 
-        self.direct_metal_contacts = direct_contacts
+        # Initalize residue with contacts of radius 0
+        self.set_metal_contacts(0)
+
+    def set_metal_contacts(self, radius):
+        ''' Metal contacts of this residue are equal to the greatest
+        number of metal contacts of any of this residue's atoms.
+        '''
+        contacts = []
+        for atom in [ExtendedAtom(atom, self.depths, self.all_metals)
+                     for atom in self.atoms]:
+            atom.set_metal_contacts(radius)
+            if len(atom.metal_contacts) > contacts:
+                contacts = atom.metal_contacts
+
+        self.metal_contacts = contacts
 
 
 class ExtendedAtom(ExtendedResidue, object):
@@ -92,8 +90,6 @@ class ExtendedAtom(ExtendedResidue, object):
         # This atom should have all of the attributes of its parent residue
         super(ExtendedAtom, self).__init__(atom.residue, depths, all_metals=[])
 
-        self.residue = ExtendedResidue(atom.residue)
-
         # Identifier attributes
         self.atom = atom
         self.set_name()
@@ -101,9 +97,8 @@ class ExtendedAtom(ExtendedResidue, object):
         # The areaSAS of this atom
         self.set_area_sas(atom)
 
-        # Set direct metal contacts
+        # Set metal contacts at 0 to initalize
         self.set_metal_contacts(0)
-        self.direct_metal_contacts = self.metal_contacts
 
     # Informal property setters
     def set_area_sas(self, atom):
@@ -118,11 +113,9 @@ class ExtendedAtom(ExtendedResidue, object):
     def set_name(self):
         ''' Each ExtendedAtom has a name, formatted the way we like it
         '''
-        # Get the residue associated with this atom
-        residue = self.residue
 
         # Get the name of this atom, its number, and alternative locations
-        atom_number = str(residue.residue)
+        atom_number = str(self.residue)
         atom_small_name = self.atom.name
         alternative_loc = self.atom.altLoc
         alternative_loc = "" if alternative_loc == "" else "." \
@@ -173,14 +166,12 @@ class ExtendedAtom(ExtendedResidue, object):
         self.residue_contacts = contacts
 
     def set_metal_contacts(self, radius):
-        ''' For the metals given, sets the contacts of this residue that
+        ''' For the metals given, sets the contacts of this atom that
         are within a "radius" distance from that metal
         '''
         metals = self.all_metals
         contacts = []
         for metal in metals:
-            print('metal')
-            print(metal)
             distance = self.distance(metal.metal_atom) - metal.radius
             if(distance <= radius):
                 contacts.append(metal.metal_type)

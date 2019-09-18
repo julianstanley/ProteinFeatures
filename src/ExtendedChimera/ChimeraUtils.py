@@ -4,32 +4,6 @@ from DockPrep import prep
 import chimera
 import AddH
 from DockPrep.prefs import defaults, INCOMPLETE_SC
-from ChimeraFeatures import *
-
-
-def median(lst):
-    n = len(lst)
-    s = sorted(lst)
-    return \
-        (sum(s[n // 2 - 1:n // 2 + 1]) / 2.0, s[n // 2])[n % 2] if n else None
-
-
-def get_depths(times=5):
-    depths_lists = {}
-    depths_return = {}
-    for time in range(times):
-        current_depths = get_depth()
-        for atom_name, depth in current_depths.items():
-            if atom_name in depths_lists:
-                depths_lists[atom_name].append(depth)
-            else:
-                depths_lists[atom_name] = [depth]
-
-    for atom_name, depths_list in depths_lists.items():
-        depths_return[atom_name] = median(
-            [float(depth) for depth in depths_list])
-
-    return(depths_return)
 
 
 def read_reply_log():

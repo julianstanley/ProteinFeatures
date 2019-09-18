@@ -34,6 +34,13 @@ ionicRadiusDict = dict(
      'MN': 0.83, 'MO': 0.65, 'NA': 1.02, 'NI': 0.69, 'ZN': 0.74})
 
 
+def median(lst):
+    n = len(lst)
+    s = sorted(lst)
+    return \
+        (sum(s[n // 2 - 1:n // 2 + 1]) / 2.0, s[n // 2])[n % 2] if n else None
+
+
 def is_nonstandard_residue(residue):
     return('MSE' in str(residue) or 'CSX' in str(residue) or
            'UNK' in str(residue) or 'CSD' in str(residue) or
