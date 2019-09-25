@@ -132,8 +132,16 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12],
             ":thr@cb z<{radius}").format(radius=radius_plus_bit))
         print("getting all {} residues near rpkt".format(
             len(selection.currentResidues())))
-        residues_near_rpkt = [ExtendedResidue(residue, depths, metals)
-                              for residue in selection.currentResidues()]
+
+        # Added try-except due to error on 09/18
+        residues_near_rpkt = []
+        for residue in selection.currentResidues():
+            try:
+                eResidue = ExtendedResidue(residue, depths, metals)
+                residues_near_rpkt.append(eResidue)
+            except Exception:
+                continue
+
         print("done")
 
         # Get bubble attributes

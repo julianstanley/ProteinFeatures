@@ -16,7 +16,11 @@ class ExtendedResidue():
         # Identifier attributes
         self.atoms = residue.atoms
         self.residue = residue
-        self.residue_1_letter = aa_3_to_1[residue.type]
+        try:
+            self.residue_1_letter = aa_3_to_1[residue.type]
+        except Exception as e:
+            raise Exception("{type} not found in residue {name}".format(type=residue.type,
+                                                                        name=str(residue)))
         self.name = str(residue)
         self.number = re.sub(r"#.+ .+ ", "", str(residue))  # .split(".")[0]
         print("Number here")

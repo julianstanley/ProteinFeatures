@@ -84,24 +84,30 @@ def featureWrapper(pdbfile, pdbdir, outfile, radii, attempts_limit, logfile,
         # attempts_limit = int(attempts_limit)
         attempts = 0
         while attempts < attempts_limit:
-            try:
-                features = chimeraFeatureExtraction(
-                    file, [int(radius) for radius in radii.split()],
-                    metal_binding_sites)
+            features = chimeraFeatureExtraction(
+                file, [int(radius) for radius in radii.split()],
+                metal_binding_sites)
 
-                all_features.update(format_single_features(features, file))
-                break
+            all_features.update(format_single_features(features, file))
 
-            except Exception as e:
-                rc("close all")
-                with open(logfile, 'w+') as log:
-                    log.write("Begin exception log:")
-                    save_and_clear_reply_log(logfile)
-                    log.write("""Feature extraction for {} failed {} times.
-                    The most recent exception thrown was {}""".format(
-                        file, attempts_limit, e))
-                # continue
-                break
+            # try:
+            #     features = chimeraFeatureExtraction(
+            #         file, [int(radius) for radius in radii.split()],
+            #         metal_binding_sites)
+
+            #     all_features.update(format_single_features(features, file))
+            #     break
+
+            # except Exception as e:
+            #     rc("close all")
+            #     with open(logfile, 'w+') as log:
+            #         log.write("Begin exception log:")
+            #         save_and_clear_reply_log(logfile)
+            #         log.write("""Feature extraction for {} failed {} times.
+            #         The most recent exception thrown was {}""".format(
+            #             file, attempts_limit, e))
+            #     # continue
+            #     break
 
     rpkt_features = {}
     for atom_name, features in all_features.items():

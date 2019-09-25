@@ -33,6 +33,7 @@ def get_residue_features(eResidue):
         "negCharge_res": (-1 if eResidue.charge == -1 else 0),
         # Keep sumMetals as NaN, since metals sum isn't strictly addative
         "sumMetals_res": float('NaN'),
+        "CA_res": eResidue.metal_contacts.count("CA"),
         "CO_res": eResidue.metal_contacts.count("CO"),
         "CU_res": eResidue.metal_contacts.count("CU"),
         "FE_res": eResidue.metal_contacts.count("FE"),
