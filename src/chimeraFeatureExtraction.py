@@ -75,7 +75,7 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12],
         except Exception as e:
             print("Exception: {}".format(e))
             save_and_clear_reply_log("chimera_outlog_pre_metals.txt")
-
+        
     # Print
     for metal in metals:
         print metal
