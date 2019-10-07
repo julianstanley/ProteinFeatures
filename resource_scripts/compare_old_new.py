@@ -2,8 +2,8 @@
 import pandas as pd
 
 # Grab the new and old feature frames
-old = pd.read_csv("data/old_ref.csv")
-new = pd.read_csv("new_compare.csv")
+old = pd.read_csv("../data/old_ref.csv")
+new = pd.read_csv("../new_compare.csv")
 
 # Add a Site by Structure column to the new dataframe
 new["Site by Structure"] = new.apply(lambda x: "{protein}_{res}{loc}".format(protein = x["Protein"], res = x["AA"], loc = x["Position"].split(".")[0]), axis = 1)
