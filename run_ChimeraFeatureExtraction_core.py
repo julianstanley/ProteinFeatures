@@ -78,7 +78,6 @@ def featureWrapper(pdbfile, pdbdir, outfile, radii, attempts_limit, logfile,
         # Get the metal binding sites associated with the file, if it exists
         if file_name_short in metal_binding:
             metal_binding_sites = metal_binding[file_name_short]
-            raise Exception(str(metal_binding_sites))
         else:
             metal_binding_sites = []
 
@@ -182,9 +181,9 @@ def format_single_features(single_features, file_name):
         features['Protein'] = file_name.split("/")[-1]
         for feature_name, feature_value in global_features.items():
             features["{}_global_sum".format(feature_name)] = feature_value
-            if 'contacts' not in feature_name:
-                features["{}_global_avg".format(feature_name)] = \
-                    feature_value / global_features["contacts"]
+            # if 'contacts' not in feature_name:
+            #     features["{}_global_avg".format(feature_name)] = \
+            #         feature_value / global_features["contacts"]
 
         for feature_name, feature_value in residue_features[atom].items():
             features[feature_name] = feature_value
@@ -195,9 +194,9 @@ def format_single_features(single_features, file_name):
                 feature_name = "{bubble}_{radius}A_sum".format(
                     bubble=bubble_feature_name, radius=radius)
                 features[feature_name] = feature_value
-                if 'contacts' not in feature_name:
-                    features[feature_name.replace("sum", "avg")] =\
-                        feature_value / bubble_features["contacts"]
+                # if 'contacts' not in feature_name:
+                #     features[feature_name.replace("sum", "avg")] =\
+                #         feature_value / bubble_features["contacts"]
         atom_to_features[atom] = features
 
     return(atom_to_features)
