@@ -15,6 +15,7 @@ for index, row in old.iterrows():
     try:
         new_match = new[new["Site by Structure"] == row["Site by Structure"]]
         if not new_match.empty:
+            outfile.write("New Structure,{},{},TRUE\n".format(row["Site by Structure"], row["Site by Structure"]))
             for new_name in list(new_match):
                 if new_name in list(old):
                     feature = new_name
