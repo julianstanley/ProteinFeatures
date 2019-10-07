@@ -8,7 +8,7 @@ This project is currently under private, closed-source development.
 
 Created by the [Silver Lab](http://silver.med.harvard.edu/) at Harvard Medical School. 
 
-Contacts: 
+Contacts:
     * Julian (Research Assistant, julian_stanley at hms dot harvard dot edu)
     * Dr. Roger Chang (Project Lead, roger_chang at hms dot harvard dot edu)
 
