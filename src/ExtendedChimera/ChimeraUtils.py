@@ -131,6 +131,7 @@ def add_hydrogens_prep():
     # Add hydrogen atoms/charges, mutate MSE and other non-standard
     # AAs to standard, and perform other basic DockPrep operations.
     models = chimera.openModels.list(modelTypes=[chimera.Molecule])
+    # try:
     prep(models, addHFunc=AddH.hbondAddHydrogens, hisScheme=None,
          mutateMSE=True,
          mutate5BU=True, mutateUMS=True, mutateCSL=True, delSolvent=True,
@@ -138,3 +139,5 @@ def add_hydrogens_prep():
          incompleteSideChains="rotamers", nogui=True,
          rotamerLib=defaults[INCOMPLETE_SC], rotamerPreserve=True,
          memorize=False, memorizeName=None)
+    # except Exception as e:
+    #   print(e)

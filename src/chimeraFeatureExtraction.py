@@ -64,18 +64,13 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12],
         coords = ",".join(coords.split())
         save_and_clear_reply_log("chimera_outlog_pre_metals.txt")
 
-        # Get an atom corresponding to the x,y,z coordinates of the metal
-        rc("~select")
-        rc("cofr {}; ac mc; namesel metalAtom".format(coords))
-        metal_atom = selection.currentAtoms()
-
         try:
             metals.append(MetalAtom(metal_type, residues,
-                                    coords, metal_atom))
+                                    coords))
         except Exception as e:
             print("Exception: {}".format(e))
             save_and_clear_reply_log("chimera_outlog_pre_metals.txt")
-        
+
     # Print
     for metal in metals:
         print metal

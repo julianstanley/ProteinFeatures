@@ -54,6 +54,7 @@ def featureWrapper(pdbfile, pdbdir, outfile, radii, attempts_limit, logfile,
     '''
     attempts_limit = int(attempts_limit)
 
+    # Get the PDB files for this run, or throw an error if you can't find them
     if pdbfile != "":
         pdb_files = [pdbfile]
     if pdbdir != "":
@@ -62,7 +63,7 @@ def featureWrapper(pdbfile, pdbdir, outfile, radii, attempts_limit, logfile,
     if (pdbfile == "" and pdbdir == ""):
         raise ValueError("Must supply either a pdbfile or a pdbdir")
 
-    # Get metal binding information, or empty dict if not found
+    # Get metal binding information, or default to empty if you cant find them
     try:
         metal_binding = get_metal_binding(metals_file)
     except Exception as e:
@@ -77,6 +78,7 @@ def featureWrapper(pdbfile, pdbdir, outfile, radii, attempts_limit, logfile,
         # Get the metal binding sites associated with the file, if it exists
         if file_name_short in metal_binding:
             metal_binding_sites = metal_binding[file_name_short]
+            raise Exception(str(metal_binding_sites))
         else:
             metal_binding_sites = []
 
@@ -89,7 +91,7 @@ def featureWrapper(pdbfile, pdbdir, outfile, radii, attempts_limit, logfile,
                 metal_binding_sites)
 
             all_features.update(format_single_features(features, file))
-
+            attempts += 1
             # try:
             #     features = chimeraFeatureExtraction(
             #         file, [int(radius) for radius in radii.split()],
