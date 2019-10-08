@@ -1,5 +1,7 @@
 from Utils import get_AAindex_df, charge_index_dict, aa_3_to_1, \
-    reactivity_index_dict, OHrxnConst_index_dict, is_nonstandard_residue
+    reactivity_index_dict, OHrxnConst_index_dict, is_nonstandard_residue, \
+    ionicRadiusDict
+from ChimeraUtils import set_metal_contacts
 import re
 import chimera
 
@@ -66,6 +68,33 @@ class ExtendedResidue():
 
         # All metals in this structure
         self.all_metals = all_metals
+
+        # Set inital contacts to be at a radius of 0
+        self.metal_contacts = set_metal_contacts(self.atoms, all_metals, 0)
+
+    def set_metal_contacts(self, all_metals, radius):
+        ''' Set contacts between this residue and metals at a given radius
+        '''
+        contacts = []
+
+        for metal in all_metals:
+            for atom in self.atoms:
+                # Set the coordinates of this metal in a way that Point()
+                # can accept
+                metal_coords = [float(x)
+                                for x in metal.location.split(",")]
+                # Get the distance between this atom and this metal
+                distance = chimera.distance(atom.xformCoord(),
+                                            chimera.Point(metal_coords[0],
+                                                          metal_coords[1],
+                                                          metal_coords[2]))
+                # If we're within the distance expected, add this metal
+                # to the list and move to the next
+                if(distance - ionicRadiusDict[metal.type] <= radius):
+                    contacts.append(metal)
+                    break
+
+        self.metal_contacts = contacts
 
 
 class ExtendedAtom(ExtendedResidue, object):
@@ -168,7 +197,7 @@ class ExtendedAtom(ExtendedResidue, object):
                                         chimera.Point(metal_coords[0],
                                                       metal_coords[1],
                                                       metal_coords[2]))
-            if(distance <= radius):
+            if(distance - ionicRadiusDict[metal.type] <= radius):
                 contacts.append(metal.type)
         self.metal_contacts = contacts
 

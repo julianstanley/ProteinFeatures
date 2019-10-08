@@ -4,6 +4,7 @@ from DockPrep import prep
 import chimera
 import AddH
 from DockPrep.prefs import defaults, INCOMPLETE_SC
+from Utils import ionicRadiusDict
 
 
 def read_reply_log():
@@ -141,3 +142,28 @@ def add_hydrogens_prep():
          memorize=False, memorizeName=None)
     # except Exception as e:
     #   print(e)
+
+
+def set_metal_contacts(atoms, all_metals, radius):
+    ''' Set contacts between the given atoms and metals at a given radius
+    '''
+    contacts = []
+
+    for metal in all_metals:
+        for atom in atoms:
+            # Set the coordinates of this metal in a way that Point()
+            # can accept
+            metal_coords = [float(x)
+                            for x in metal.location.split(",")]
+            # Get the distance between this atom and this metal
+            distance = chimera.distance(atom.xformCoord(),
+                                        chimera.Point(metal_coords[0],
+                                                      metal_coords[1],
+                                                      metal_coords[2]))
+            # If we're within the distance expected, add this metal
+            # to the list and move to the next
+            if(distance - ionicRadiusDict[metal.type] <= radius):
+                contacts.append(metal)
+                break
+
+    return contacts
