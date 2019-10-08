@@ -163,8 +163,11 @@ class ExtendedAtom(ExtendedResidue, object):
         metals = self.all_metals
         contacts = []
         for metal in metals:
+            metal_coords = [float(x) for x in metal.location.split(",")]
             distance = chimera.distance(self.atom.xformCoord(),
-                                        chimera.Point(metal.location))
+                                        chimera.Point(metal_coords[0],
+                                                      metal_coords[1],
+                                                      metal_coords[2]))
             if(distance <= radius):
                 contacts.append(metal.metal_type)
         self.metal_contacts = contacts
