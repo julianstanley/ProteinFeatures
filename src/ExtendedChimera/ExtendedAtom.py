@@ -72,12 +72,12 @@ class ExtendedResidue():
         # Set inital contacts to be at a radius of 0
         self.metal_contacts = set_metal_contacts(self.atoms, all_metals, 0)
 
-    def set_metal_contacts(self, all_metals, radius):
+    def set_metal_contacts(self, radius):
         ''' Set contacts between this residue and metals at a given radius
         '''
         contacts = []
 
-        for metal in all_metals:
+        for metal in self.all_metals:
             for atom in self.atoms:
                 # Set the coordinates of this metal in a way that Point()
                 # can accept
