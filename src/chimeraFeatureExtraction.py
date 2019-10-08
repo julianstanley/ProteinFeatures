@@ -26,7 +26,7 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12],
     rc("~select")
     add_hydrogens_prep()
 
-    # Init metals
+    # Initalize metal binding features for this pdb file
     metals = []
     for metal_binding_site in metal_binding_sites:
         metal_type = metal_binding_site['Metal ID']
@@ -65,12 +65,8 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12],
         coords = ",".join(coords.split())
         save_and_clear_reply_log("chimera_outlog_pre_metals.txt")
 
-        try:
-            metals.append(MetalAtom(metal_type, residues,
-                                    coords, site_number))
-        except Exception as e:
-            print("Exception: {}".format(e))
-            save_and_clear_reply_log("chimera_outlog_pre_metals.txt")
+        metals.append(MetalAtom(metal_type, residues,
+                                coords, site_number))
 
     # Print
     for metal in metals:
