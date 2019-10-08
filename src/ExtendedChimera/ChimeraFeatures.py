@@ -116,7 +116,6 @@ def compute_global_attributes_residues(eResidues):
         None
     """
 
-    # TODO: Global metal features should not be the sum of residues
     features = get_residues_features_sums(eResidues)
 
     # Overwrite metal binding features
@@ -146,11 +145,32 @@ def compute_global_attributes_residues(eResidues):
 
 
 def compute_bubble_attributes_residues(base_atom, compared_residues, radius):
-    # TODO: Metal binding of some atom should only be calculated based
-    # on metal contacts
     base_atom.set_residue_contacts(compared_residues, radius)
     base_atom.set_metal_contacts(radius)
     bubble_features = get_residues_features_sums(base_atom.residue_contacts)
+
+    # Overwrite metal binding features
+    # Metal binding features at a bubble level does not depend on compared residues,
+    # just the base atom
+    base_atom.set_metal_contacts(radius)
+    metal_types = [metal.type for metal in base_atom.metal_contacts]
+
+    # Update the features dictionary with contacts from this residue
+    bubble_features.update({
+        "sumMetals": len(
+            list(set([metal.site_number for metal in base_atom.metal_contacts]))),
+        "CA": metal_types.count("CA"),
+        "CO": metal_types.count("CO"),
+        "CU": metal_types.count("CU"),
+        "FE": metal_types.count("FE"),
+        "K": metal_types.count("K"),
+        "MG": metal_types.count("MG"),
+        "MN": metal_types.count("MN"),
+        "MO": metal_types.count("MO"),
+        "NA": metal_types.count("NA"),
+        "NI": metal_types.count("NI"),
+        "ZN": metal_types.count("ZN")})
+
     return(bubble_features)
 
 
