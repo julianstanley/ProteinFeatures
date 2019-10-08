@@ -151,7 +151,17 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12],
     print("getting atom-level attributes")
     atom_features = {}
     for atom in rpkt_atoms:
-        atom_features[atom.name] = get_residue_features(
-            ExtendedResidue(atom.residue, depths, metals))
+        eResidue = ExtendedResidue(atom.residue, [], [])
+        atom_features[atom.name] = compute_bubble_attributes_residues(
+            atom, all_residues, 0)
+        for key in atom_features[atom.name]:
+            if "res" not in key:
+                atom_features[atom.name]["{}_res".format(
+                    key)] = atom_features[atom.name].pop(key)
+
+        atom_features[atom.name].update({
+            "AA": eResidue.residue_1_letter,
+            "Position": eResidue.number
+        })
 
     return(global_attributes, atom_features, atom_radius_features)
