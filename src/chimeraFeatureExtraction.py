@@ -67,7 +67,6 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12],
 
         metals.append(MetalAtom(metal_type, residues,
                                 coords, site_number))
-    raise Exception(metals)
 
     # Print
     for metal in metals:
