@@ -113,10 +113,14 @@ def compute_global_attributes_residues(eResidues):
     Effect:
         None
     """
+
+    # TODO: Global metal features should not be the sum of residues
     return get_residues_features_sums(eResidues)
 
 
 def compute_bubble_attributes_residues(base_atom, compared_residues, radius):
+    # TODO: Metal binding of some atom should only be calculated based
+    # on metal contacts
     base_atom.set_residue_contacts(compared_residues, radius)
     base_atom.set_metal_contacts(radius)
     return get_residues_features_sums(base_atom.residue_contacts)
