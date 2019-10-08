@@ -17,6 +17,66 @@ features = ['AAindCodonDiv', 'AAindMolVol', 'AAindPolarity', 'AAindSS',
             "circularVariance", "depth"]
 
 
+def get_atom_features(eAtom):
+    ''' Get the features associated with this ExtendedAtom
+    '''
+    atom_features = {
+        "AA": eAtom.residue_1_letter,
+        "Position": eAtom.number,
+        "AAindCodonDiv": eAtom.aaind_codon_diversity,
+        "AAindMolVol": eAtom.aaind_molecular_volume,
+        "AAindPolarity": eAtom.aaind_polarity,
+        "AAindSS": eAtom.aaind_secondary_structure,
+        "AAindElecCharge": eAtom.aaind_charge,
+        "netCharge": eAtom.charge,
+        "posCharge": (1 if eAtom.charge == 1 else 0),
+        "negCharge": (-1 if eAtom.charge == -1 else 0),
+        # Keep sumMetals as NaN, since metals sum isn't strictly addative
+        "sumMetals": len(list(set(
+            [metal.site_number for metal in eAtom.metal_contacts]))),
+        "CA": eAtom.metal_contacts.count("CA"),
+        "CO": eAtom.metal_contacts.count("CO"),
+        "CU": eAtom.metal_contacts.count("CU"),
+        "FE": eAtom.metal_contacts.count("FE"),
+        "K": eAtom.metal_contacts.count("K"),
+        "MG": eAtom.metal_contacts.count("MG"),
+        "MN": eAtom.metal_contacts.count("MN"),
+        "MO": eAtom.metal_contacts.count("MO"),
+        "NA": eAtom.metal_contacts.count("NA"),
+        "NI": eAtom.metal_contacts.count("NI"),
+        "ZN": eAtom.metal_contacts.count("ZN"),
+        'RPKT': (1 if eAtom.residue_1_letter in ["R", "K", "P", "T"] else 0),
+        "Arg": (1 if eAtom.residue_1_letter == "R" else 0),
+        "Lys": (1 if eAtom.residue_1_letter == "K" else 0),
+        "Pro": (1 if eAtom.residue_1_letter == "P" else 0),
+        "Thr": (1 if eAtom.residue_1_letter == "T" else 0),
+        "surfMC": float('NaN'),
+        "surfM": float('NaN'),
+        "surfC": float('NaN'),
+        "hydro": eAtom.hydrophobicity,
+        "OHRxnConst": eAtom.hydroxyl_constant,
+        "SS": (1 if eAtom.isSheet or eAtom.isHelix else 0),
+        "helix": (1 if eAtom.isHelix else 0),
+        "sheet": (1 if eAtom.isSheet else 0),
+        "disord": float('NaN'),
+        "disordScore": float('NaN'),
+        "protBindSPPIDER": float('NaN'),
+        "protBindDISOPREDscore": float('NaN'),
+        "areaSAS": eAtom.area_sas,
+        "reactivity": eAtom.reactivity,
+        "circularVariance": float('NaN'),
+        "depth": eAtom.depth,
+        "contacts": 1
+    }
+
+    # Make sure that we get all of the features
+    for feature_name in features:
+        if feature_name not in atom_features:
+            atom_features[feature_name] = float('NaN')
+
+    return atom_features
+
+
 def get_residue_features(eResidue):
     ''' Get the features associated with this ExtendedResidue.
     '''
@@ -148,6 +208,15 @@ def compute_bubble_attributes_residues(base_atom, compared_residues, radius):
     base_atom.set_residue_contacts(compared_residues, radius)
     base_atom.set_metal_contacts(radius)
     bubble_features = get_residues_features_sums(base_atom.residue_contacts)
+
+    # Add the base features to the bubble features, if we're at a radius of 0
+    if radius < 1e-20:
+        base_features = get_atom_features(base_atom)
+        for key in bubble_features:
+            # Don't include self in measurement of RPKT and contacts
+            if key in base_features and key not in ["R", "K", "P", "T", "RPKT",
+                                                    "contacts"]:
+                bubble_features[key] = bubble_features[key] + base_features[key]
 
     # Overwrite metal binding features
     # Metal binding features at a bubble level does not depend on compared residues,
