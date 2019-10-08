@@ -32,7 +32,8 @@ def get_residue_features(eResidue):
         "posCharge_res": (1 if eResidue.charge == 1 else 0),
         "negCharge_res": (-1 if eResidue.charge == -1 else 0),
         # Keep sumMetals as NaN, since metals sum isn't strictly addative
-        "sumMetals_res": float('NaN'),
+        "sumMetals_res": len(list(set(
+            [metal.site_number for metal in eResidue.metal_contacts]))),
         "CA_res": eResidue.metal_contacts.count("CA"),
         "CO_res": eResidue.metal_contacts.count("CO"),
         "CU_res": eResidue.metal_contacts.count("CU"),
@@ -90,9 +91,6 @@ def get_residues_features_sums(eResidues):
             single_feature = "{}_res".format(feature)
             residues_features[feature] +=\
                 single_residue_features[single_feature]
-
-        # Override the sumMetals feature, since it doesn't add up
-        residues_features["sumMetals"] = len(eResidues[0].all_metals)
 
     return residues_features
 

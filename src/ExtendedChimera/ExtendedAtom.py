@@ -65,8 +65,10 @@ class ExtendedResidue():
         # All metals in this structure
         self.all_metals = all_metals
 
-        # Initalize residue with contacts of radius 0
-        self.set_metal_contacts(0)
+        # Initalize residue with contacts of radius Inf
+        self.set_metal_contacts(float('Inf'))
+        self.global_metal_contacts = self.metal_contacts
+        raise Exception(self.metal_contacts)
 
     def set_metal_contacts(self, radius):
         ''' Metal contacts of this residue are equal to the greatest
@@ -101,8 +103,9 @@ class ExtendedAtom(ExtendedResidue, object):
         # The areaSAS of this atom
         self.set_area_sas(atom)
 
-        # Set metal contacts at 0 to initalize
-        self.set_metal_contacts(0)
+        # Set metal contacts at Inf to initalize
+        self.set_metal_contacts(float('Inf'))
+        self.global_metal_contacts = self.metal_contacts
 
     # Informal property setters
     def set_area_sas(self, atom):

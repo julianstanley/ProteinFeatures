@@ -8,7 +8,7 @@ class MetalAtom():
     ''' Represents a metal atom within a protein structure
     '''
 
-    def __init__(self, metal_type, nearby_residues, location):
+    def __init__(self, metal_type, nearby_residues, location, site_number):
         '''
         nearby_residues: A list of strings in the format:
         residuenumber ("C208", "H271", etc.)
@@ -24,6 +24,7 @@ class MetalAtom():
         self.type = metal_type
         self.nearby_residues = nearby_residues
         self.location = location
+        self.site_number = site_number
 
         with open("chimera_outlog_pre_metals.txt", 'a') as f:
             f.write("Completed: {}".format(self))

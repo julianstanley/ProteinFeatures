@@ -30,6 +30,7 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12],
     metals = []
     for metal_binding_site in metal_binding_sites:
         metal_type = metal_binding_site['Metal ID']
+        site_number = metal_binding_site['Site Number']
         # Convert residues from:
         # C208,C211,etc ; to:
         # #:208@|#:211@
@@ -66,7 +67,7 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12],
 
         try:
             metals.append(MetalAtom(metal_type, residues,
-                                    coords))
+                                    coords, site_number))
         except Exception as e:
             print("Exception: {}".format(e))
             save_and_clear_reply_log("chimera_outlog_pre_metals.txt")
