@@ -124,22 +124,23 @@ def compute_global_attributes_residues(eResidues):
     # so just get all of the metals infinite distance from one of the residues
     eResidue = eResidues[0]
     eResidue.set_metal_contacts(float('Inf'))
+    metal_types = [metal.type for metal in eResidue.metal_contacts]
 
     # Update the features dictionary with contacts from this residue
     features.update({
         "sumMetals": len(
             list(set([metal.site_number for metal in eResidue.metal_contacts]))),
-        "CA": eResidue.metal_contacts.count("CA"),
-        "CO": eResidue.metal_contacts.count("CO"),
-        "CU": eResidue.metal_contacts.count("CU"),
-        "FE": eResidue.metal_contacts.count("FE"),
-        "K": eResidue.metal_contacts.count("K"),
-        "MG": eResidue.metal_contacts.count("MG"),
-        "MN": eResidue.metal_contacts.count("MN"),
-        "MO": eResidue.metal_contacts.count("MO"),
-        "NA": eResidue.metal_contacts.count("NA"),
-        "NI": eResidue.metal_contacts.count("NI"),
-        "ZN": eResidue.metal_contacts.count("ZN")})
+        "CA": metal_types.count("CA"),
+        "CO": metal_types.count("CO"),
+        "CU": metal_types.count("CU"),
+        "FE": metal_types.count("FE"),
+        "K": metal_types.count("K"),
+        "MG": metal_types.count("MG"),
+        "MN": metal_types.count("MN"),
+        "MO": metal_types.count("MO"),
+        "NA": metal_types.count("NA"),
+        "NI": metal_types.count("NI"),
+        "ZN": metal_types.count("ZN")})
 
     return(features)
 
