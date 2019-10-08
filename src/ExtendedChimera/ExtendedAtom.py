@@ -18,9 +18,11 @@ class ExtendedResidue():
         self.residue = residue
         try:
             self.residue_1_letter = aa_3_to_1[residue.type]
+        # Better exception formatting
         except Exception as e:
-            raise Exception("{type} not found in residue {name}".format(type=residue.type,
-                                                                        name=str(residue)))
+            raise Exception("{type} not found in residue {name}, {e}".format(
+                type=residue.type,
+                name=str(residue)), e=e)
         self.name = str(residue)
         self.number = re.sub(r"#.+ .+ ", "", str(residue))  # .split(".")[0]
         print("Number here")
@@ -68,7 +70,6 @@ class ExtendedResidue():
         # Initalize residue with contacts of radius Inf
         self.set_metal_contacts(float('Inf'))
         self.global_metal_contacts = self.metal_contacts
-        raise Exception(self.metal_contacts)
 
     def set_metal_contacts(self, radius):
         ''' Metal contacts of this residue are equal to the greatest
@@ -94,7 +95,7 @@ class ExtendedAtom(ExtendedResidue, object):
 
     def __init__(self, atom, depths=None, all_metals=[]):
         # This atom should have all of the attributes of its parent residue
-        super(ExtendedAtom, self).__init__(atom.residue, depths, all_metals=[])
+        super(ExtendedAtom, self).__init__(atom.residue, depths, all_metals)
 
         # Identifier attributes
         self.atom = atom
