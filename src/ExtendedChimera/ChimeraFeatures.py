@@ -80,13 +80,15 @@ def get_residue_features(eResidue):
 
 
 def get_residues_features_sums(eResidues):
-    ''' Get the features associated with this list of ExtendedResidue
+    ''' Get the sum of all the features for the residues in the given
+    list of ExtendedResidues.
     '''
     residues_features = dict.fromkeys(features, 0)
 
     for residue in eResidues:
-        # Update all sums with the features from this residue
+        # Get the features for this single residue
         single_residue_features = get_residue_features(residue)
+        # Add this residue's features to the accumulating features
         for feature in residues_features:
             single_feature = "{}_res".format(feature)
             residues_features[feature] +=\
@@ -115,7 +117,31 @@ def compute_global_attributes_residues(eResidues):
     """
 
     # TODO: Global metal features should not be the sum of residues
-    return get_residues_features_sums(eResidues)
+    features = get_residues_features_sums(eResidues)
+
+    # Overwrite metal binding features
+    # Metal binding features at a global level will not vary residue-to-residue,
+    # so just get all of the metals infinite distance from one of the residues
+    eResidue = eResidues[0]
+    eResidue.set_metal_contacts(float('Inf'))
+
+    # Update the features dictionary with contacts from this residue
+    features.update({
+        "sumMetals": len(
+            list(set([metal.site_number for metal in eResidue.metal_contacts]))),
+        "CA": eResidue.metal_contacts.count("CA"),
+        "CO": eResidue.metal_contacts.count("CO"),
+        "CU": eResidue.metal_contacts.count("CU"),
+        "FE": eResidue.metal_contacts.count("FE"),
+        "K": eResidue.metal_contacts.count("K"),
+        "MG": eResidue.metal_contacts.count("MG"),
+        "MN": eResidue.metal_contacts.count("MN"),
+        "MO": eResidue.metal_contacts.count("MO"),
+        "NA": eResidue.metal_contacts.count("NA"),
+        "NI": eResidue.metal_contacts.count("NI"),
+        "ZN": eResidue.metal_contacts.count("ZN")})
+
+    return(features)
 
 
 def compute_bubble_attributes_residues(base_atom, compared_residues, radius):
@@ -123,7 +149,8 @@ def compute_bubble_attributes_residues(base_atom, compared_residues, radius):
     # on metal contacts
     base_atom.set_residue_contacts(compared_residues, radius)
     base_atom.set_metal_contacts(radius)
-    return get_residues_features_sums(base_atom.residue_contacts)
+    bubble_features = get_residues_features_sums(base_atom.residue_contacts)
+    return(bubble_features)
 
 
 def get_depths(times=5):
