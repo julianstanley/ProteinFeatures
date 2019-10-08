@@ -198,7 +198,7 @@ class ExtendedAtom(ExtendedResidue, object):
                                                       metal_coords[1],
                                                       metal_coords[2]))
             if(distance - ionicRadiusDict[metal.type] <= radius):
-                contacts.append(metal.type)
+                contacts.append(metal)
         self.metal_contacts = contacts
 
     # Proper methods
