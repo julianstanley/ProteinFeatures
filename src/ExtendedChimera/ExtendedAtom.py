@@ -67,23 +67,6 @@ class ExtendedResidue():
         # All metals in this structure
         self.all_metals = all_metals
 
-        # Initalize residue with contacts of radius Inf
-        self.set_metal_contacts(float('Inf'))
-        self.global_metal_contacts = self.metal_contacts
-
-    def set_metal_contacts(self, radius):
-        ''' Metal contacts of this residue are equal to the greatest
-        number of metal contacts of any of this residue's atoms.
-        '''
-        contacts = []
-        for atom in [ExtendedAtom(atom, self.depths, self.all_metals)
-                     for atom in self.atoms]:
-            atom.set_metal_contacts(radius)
-            if len(atom.metal_contacts) > contacts:
-                contacts = atom.metal_contacts
-
-        self.metal_contacts = contacts
-
 
 class ExtendedAtom(ExtendedResidue, object):
     '''
