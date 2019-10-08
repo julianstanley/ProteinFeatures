@@ -169,7 +169,7 @@ class ExtendedAtom(ExtendedResidue, object):
                                                       metal_coords[1],
                                                       metal_coords[2]))
             if(distance <= radius):
-                contacts.append(metal.metal_type)
+                contacts.append(metal.type)
         self.metal_contacts = contacts
 
     # Proper methods
