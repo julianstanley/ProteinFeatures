@@ -191,8 +191,15 @@ def format_single_features(single_features, file_name):
         for radius, bubble_features in radius_to_bubble_features.items():
             for bubble_feature_name, feature_value \
                     in bubble_features.items():
-                feature_name = "{bubble}_{radius}A_sum".format(
-                    bubble=bubble_feature_name, radius=radius)
+                sum_excluded = ["circular", "sumMetals", "CA", "CO", "CU",
+                                "FE", "K", "MG", "MN", "MO", "NA", "NI", "ZN"]
+
+                if any([excl not in bubble_feature_name for excl in sum_excluded]):
+                    feature_name = "{bubble}_{radius}A_sum".format(
+                        bubble=bubble_feature_name, radius=radius)
+                else:
+                    feature_name = "{bubble}_{radius}A".format(
+                        bubble=bubble_feature_name, radius=radius)
                 features[feature_name] = feature_value
                 # if 'contacts' not in feature_name:
                 #     features[feature_name.replace("sum", "avg")] =\
