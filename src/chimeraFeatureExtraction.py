@@ -68,12 +68,6 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12],
         metals.append(MetalAtom(metal_type, residues,
                                 coords, site_number))
 
-    # Print
-    for metal in metals:
-        print metal
-    save_and_clear_reply_log("chimera_outlog_post_metals.txt")
-    # Print end
-
     # Depths
     print("Getting depths")
     save_and_clear_reply_log("chimera_outlog_pre_depths.txt")

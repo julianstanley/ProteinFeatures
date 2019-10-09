@@ -1,6 +1,6 @@
 # re for regular expression substitution
 import re
-from ChimeraUtils import read_reply_log
+from ChimeraUtils import read_reply_log, save_and_clear_reply_log
 from chimera import selection
 from chimera import runCommand as rc
 from ExtendedAtom import ExtendedAtom
@@ -243,7 +243,7 @@ def compute_bubble_attributes_residues(base_atom, compared_residues, radius):
     return(bubble_features)
 
 
-def get_depths(times=5):
+def get_depths(times=1):
     with open("troubleshoot.txt", 'a') as file:
         file.write("In get_depths")
 
@@ -270,8 +270,20 @@ def get_depths(times=5):
     return(depths_return)
 
 
-def get_depth(all_atoms=False):
-    """ Gets the depth of all RPKT to the surface
+def get_depth():
+    """ Gets the depth of all atoms in the currently-loaded protein.
+
+    The following atoms are used for depth calculations:
+    RPKT: arg, lys, mly, kxc @ ce, pro @ cd, thr @ cb
+    MC: met @ sd, cys @ sg
+    All other residues: atom at lowest depth, excluding hydrogens.
+
+    For atoms that can be carbonylated (RPKT), we select the atom at which that
+    residue could be carbonylated. For MC, we select the oxidizable sulfur.
+
+    All other atoms would not be expected to be carbonylated, so their depth values
+    are used as an additional feature describing the relative solvent-accessibility
+    at a certain residue.
 
     Arguments:
     Requires:
@@ -288,78 +300,25 @@ def get_depth(all_atoms=False):
     with open("troubleshoot.txt", 'a') as file:
         file.write("Get_depth")
 
-    if all_atoms:
-        rc("select #0")
-        rc("~select #0:@")
-        rc(("measure distance :@ca"
-            " selection multiple true show true"))
-        r, distances = read_reply_log()
+    # Select all RPKT/MC atoms at the correct location
+    rc("~select")
+    rc("select :arg@cd|:lys@ce|:mly@ce|:kcx@ce|:pro@cd|:thr@cb|:cys@sg|:met@sd")
+    rpktmc_depths = get_depth_minimum()
 
-        rc("select protein")
-        all_atoms = [ExtendedAtom(atom)
-                     for atom in selection.currentAtoms()]
+    # Select all non-RPKTMC atoms that aren't hydrogen
+    rc("~select")
+    rc("select protein")
+    rc("~select :arg|:lys|:mly|:kcx|:pro|:thr|:cys|:met")
+    rc("~select element.H")
+    atoms_all_except_hydrogen_depths = get_depth_minimum()
 
-    else:
-        with open("troubleshoot.txt", 'a') as file:
-            file.write("Before rc")
-        rc("select :arg@cd|:lys@ce|:mly@ce|:kcx@ce|:pro@cd|:thr@cb|:met|:cys")
-        all_atoms = [ExtendedAtom(atom)
-                     for atom in selection.currentAtoms()]
-        rc("select #0")
-        rc("~select #0:@")
-        rc(("measure distance :arg@cd|:lys@ce|:mly@ce|:kcx@ce|:pro@cd|:thr@cb|:met|:cys"
-            " selection multiple true show true"))
-        r, distances = read_reply_log()
-
-        rc("select :arg@cd|:lys@ce|:mly@ce|:kcx@ce|:pro@cd|:thr@cb|:met|:cys")
-        with open("troubleshoot.txt", 'a') as file:
-            file.write("Before init atoms")
-        all_atoms = [ExtendedAtom(atom)
-                     for atom in selection.currentAtoms()]
-        with open("troubleshoot.txt", 'a') as file:
-            file.write("After init atoms")
-
-    with open("troubleshoot.txt", 'a') as file:
-        file.write("Get_depth after first block")
-
-    # Map between atom number and atom residue
-    atom_to_aa = {}
-    for atom in all_atoms:
-        atom_to_aa[atom.number] = atom.residue_1_letter
-
-    # Initalize the return depth dictionary
-    residue_to_depth = {}
-
-    # Loop through each line that Chimera outputs
-    for line in distances.splitlines():
-        line = line.rstrip()
-        if 'minimum distance from' in line:
-            # Delete 'minmum distance from'
-            line = line.replace('minimum distance from ', '')
-
-            # Seperate the residue and distance by a tab
-            line = re.sub(r" to #0:\? = ", "\t", line)
-
-            # Get the atom and depth from the line
-            atom, depth = line.split("\t")
-
-            # Get just the residue number from the residue identifier
-            atom_name = re.sub(r"#.+:", "", atom)
-            atom_number = re.sub(r"@.+", "", atom_name)
-            print(atom_to_aa)
-            # Get the residue name to include the 1-letter aa identifier
-            atom_with_aa = re.sub(
-                r'@', (" " + atom_to_aa[atom_number] + " "), atom)
-
-            residue_to_depth["{},{}".format(
-                atom_number.split(".")[0], atom_to_aa[atom_number])] = depth
-
-    print(residue_to_depth)
+    residue_to_depth = rpktmc_depths
+    residue_to_depth.update(atoms_all_except_hydrogen_depths)
 
     return(residue_to_depth)
 
 
-def get_depth_minimum(all_atoms=False):
+def get_depth_minimum():
     """ Gets the depth of all RPKT to the surface
 
     Arguments:
@@ -374,35 +333,20 @@ def get_depth_minimum(all_atoms=False):
     # Read and clear the reply log before measuring distance
     # save_and_clear_reply_log(logfile_name)
 
-    if all_atoms:
-        rc("select #0")
-        rc("~select #0:@")
-        rc(("measure distance protein"
-            " selection multiple true show true"))
-        r, distances = read_reply_log()
+    save_and_clear_reply_log("temp_depth_log.txt")
+    # Note: requires a selection to be made before calling
+    # Measures distance between current selection and the surface
+    rc(("measure distance selection"
+        " #0&~@* multiple true show true"))
+    r, distances = read_reply_log()
 
-        rc("select protein")
-        all_atoms = [ExtendedAtom(atom)
-                     for atom in selection.currentAtoms()]
-
-    else:
-        rc("select :arg@cd|:lys@ce|:mly@ce|:kcx@ce|:pro@cd|:thr@cb|:met|:cys")
-        all_atoms = [ExtendedAtom(atom)
-                     for atom in selection.currentAtoms()]
-        rc("select #0")
-        rc("~select #0:@")
-        rc(("measure distance :arg@cd|:lys@ce|:mly@ce|:kcx@ce|:pro@cd|:thr@cb|:met|:cys"
-            " selection multiple true show true"))
-        r, distances = read_reply_log()
-
-        rc("select :arg@cd|:lys@ce|:mly@ce|:kcx@ce|:pro@cd|:thr@cb|:met|:cys")
-        all_atoms = [ExtendedAtom(atom)
-                     for atom in selection.currentAtoms()]
-
+    all_atoms = [ExtendedAtom(atom) for atom in selection.currentAtoms()]
     # Map between atom number and atom residue
     atom_to_aa = {}
     for atom in all_atoms:
         atom_to_aa[atom.number] = atom.residue_1_letter
+
+    print(atom_to_aa)
 
     # Initalize the return depth dictionary
     residue_to_depth = {}
@@ -411,29 +355,33 @@ def get_depth_minimum(all_atoms=False):
     for line in distances.splitlines():
         line = line.rstrip()
         if 'minimum distance from' in line:
+            print("working on:")
+            print(line)
             # Delete 'minmum distance from'
             line = line.replace('minimum distance from ', '')
 
-            # Seperate the residue and distance by a tab
+            # Seperate the residue and depth by a tab
             line = re.sub(r" to #0:\? = ", "\t", line)
 
             # Get the atom and depth from the line
             atom, depth = line.split("\t")
 
             residue_name, atom_type = atom.split("@")
-            residue_name = re.sub(r"#.+:", "", atom)
+            residue_name = re.sub(r"#.+:", "", residue_name)
+            residue_number = residue_name.split(".")[0]
 
-            # Get just the residue number from the residue identifier
-            atom_name = re.sub(r"#.+:", "", atom)
-            atom_number = re.sub(r"@.+", "", atom_name)
-            print(atom_to_aa)
-            # Get the residue name to include the 1-letter aa identifier
-            atom_with_aa = re.sub(
-                r'@', (" " + atom_to_aa[atom_number] + " "), atom)
+            # Get the minimum depth
+            depth_key = "{},{}".format(
+                residue_number, atom_to_aa[residue_name])
 
-            residue_to_depth["{},{}".format(
-                atom_number.split(".")[0], atom_to_aa[atom_number])] = depth
-
-    print(residue_to_depth)
+            # Only put this depth in the dictionary if this depth is:
+            # (1) the first depth seen for this key, or
+            # (2) smaller than the last depth seen for this key
+            if depth_key in residue_to_depth:
+                old_depth = residue_to_depth[depth_key]
+                if old_depth > depth:
+                    residue_to_depth[depth_key] = depth
+            else:
+                residue_to_depth[depth_key] = depth
 
     return(residue_to_depth)

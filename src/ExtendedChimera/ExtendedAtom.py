@@ -65,6 +65,11 @@ class ExtendedResidue():
                                                    self.residue_1_letter)]
             else:
                 self.depth = float("NaN")
+                print(depths)
+                print("{},{}".format(self.number.split(".")[0],
+                                     self.residue_1_letter))
+                print("{},{}".format(self.number.split(".")[0],
+                                     self.residue_1_letter) in depths)
 
         # All metals in this structure
         self.all_metals = all_metals
