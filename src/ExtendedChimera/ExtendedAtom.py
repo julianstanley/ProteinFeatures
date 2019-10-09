@@ -4,6 +4,7 @@ from Utils import get_AAindex_df, charge_index_dict, aa_3_to_1, \
 from ChimeraUtils import set_metal_contacts
 import re
 import chimera
+import math
 
 # Import the AAindex dictionary from Utils
 AAindex_df = get_AAindex_df()
@@ -157,17 +158,20 @@ class ExtendedAtom(ExtendedResidue, object):
 
     def set_atom_contacts(self, atoms, radius):
         ''' From the atoms given, returns a list of the atoms that are within
-        a "radius" distance from this Extended Atom
+        a "radius" distance from this Extended Atom. Does not include self.
+
+        Takes in extended atoms
         '''
         contacts = []
         for atom in atoms:
-            if self.distance(atom) <= radius and self.distance(atom) >= 0:
+            if self.distance(atom) <= radius and self.distance(atom) >= 0 and \
+                    atom.name != self.name:
                 contacts.append(atom)
                 print("here atom")
                 print("The distance between {} and {} is {}").format(
                     self.name,
                     atom.name,
-                    self.distance(atom))
+                    self.distance_regular(atom))
         self.atom_contacts = contacts
 
     def set_residue_contacts(self, residues, radius):
@@ -213,6 +217,12 @@ class ExtendedAtom(ExtendedResidue, object):
         return(chimera.distance(self.atom.xformCoord(),
                                 other_atom.atom.xformCoord()))
 
+    def distance_regular(self, other_atom):
+        ''' Gets the distance between this and a regular atom
+        '''
+        return(chimera.distance(self.atom.xformCoord(),
+                                other_atom.xformCoord()))
+
     def distances(self, list_other_eAtoms):
         '''
         Computes the iteratomic distances between this Extended Atom
@@ -232,4 +242,48 @@ class ExtendedAtom(ExtendedResidue, object):
         distances = {}
         for eAtom in list_other_eAtoms:
             distances[eAtom.name] = self.distance(eAtom)
-        return(distances)
+        return distances
+
+    def get_circular_variance(self):
+        ''' Gets the circular variance between this atom and all of it's
+        current atomic neighbors
+        '''
+
+        def unitVec(self_xformCoord, neighbor_xformCoord, index):
+            ''' Local function for defining unit vectors
+            '''
+            return(
+                (neighbor_xformCoord[index] - self_xformCoord[index]) /
+                math.sqrt((neighbor_xformCoord[0] - self_xformCoord[0])**2 + (
+                    neighbor_xformCoord[1] - self_xformCoord[1])**2 +
+                    (neighbor_xformCoord[2] - self_xformCoord[2])**2)
+            )
+
+        # Accumulator vector
+        sumUnitVectors = [0, 0, 0]
+
+        # Get the vector for all neighbors
+        neighbors = self.atom_contacts
+        for neighbor in neighbors:
+            self_xformCoord = [float(coord)
+                               for coord in str(
+                self.atom.xformCoord()).split(" ")]
+
+            neighbor_xformCoord = [float(coord)
+                                   for coord in str(
+                neighbor.atom.xformCoord()).split(" ")]
+
+            unitVecAB_x = unitVec(self_xformCoord, neighbor_xformCoord, 0)
+            unitVecAB_y = unitVec(self_xformCoord, neighbor_xformCoord, 1)
+            unitVecAB_z = unitVec(self_xformCoord, neighbor_xformCoord, 2)
+
+            # Accumulate the vector with this neighbor
+            sumUnitVectors = [sumUnitVectors[0] + unitVecAB_x,
+                              sumUnitVectors[1] + unitVecAB_y,
+                              sumUnitVectors[2] + unitVecAB_z]
+
+        magSumUnitVectors = math.sqrt(
+            (sumUnitVectors[0])**2 + (sumUnitVectors[1])**2 + (sumUnitVectors[2])**2)
+
+        # The circular variance is 1 - the unit vector magnitude, normalized to count
+        return (1 - (magSumUnitVectors / len(neighbors)))
