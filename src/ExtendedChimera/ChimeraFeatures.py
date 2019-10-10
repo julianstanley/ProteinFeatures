@@ -245,9 +245,18 @@ def compute_global_attributes_residues(eResidues):
     return features
 
 
-def compute_bubble_attributes_residues(base_atom, compared_residues, radius):
+def compute_global_circular_variance(base_atom, compared_atoms):
+    # Get all contacts in the protein
+    base_atom.set_atom_contacts(compared_atoms, float("Inf"))
+    return {"circularVariance_global": base_atom.get_circular_variance()}
+
+
+def compute_bubble_attributes_residues(
+    base_atom, compared_residues, compared_atoms, radius
+):
     base_atom.set_residue_contacts(compared_residues, radius)
     base_atom.set_metal_contacts(radius)
+    base_atom.set_atom_contacts(compared_atoms, radius)
     bubble_features = get_residues_features_sums(base_atom.residue_contacts)
 
     # Add the base features to the bubble features, if we're at a radius of 0
@@ -290,6 +299,9 @@ def compute_bubble_attributes_residues(base_atom, compared_residues, radius):
             "ZN": metal_types.count("ZN"),
         }
     )
+
+    # Update the features dictionary with the circular variance from this atom
+    bubble_features.update({"circularVariance": base_atom.get_circular_variance()})
 
     return bubble_features
 

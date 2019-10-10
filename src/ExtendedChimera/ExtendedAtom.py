@@ -190,7 +190,7 @@ class ExtendedAtom(ExtendedResidue, object):
                 contacts.append(atom)
                 print("here atom")
                 print("The distance between {} and {} is {}").format(
-                    self.name, atom.name, self.distance_regular(atom)
+                    self.name, atom.name, self.distance(atom)
                 )
         self.atom_contacts = contacts
 
@@ -311,4 +311,12 @@ class ExtendedAtom(ExtendedResidue, object):
         )
 
         # The circular variance is 1 - the unit vector magnitude, normalized to count
-        return 1 - (magSumUnitVectors / len(neighbors))
+        # try-except is necessary for when bubble attributes are calculated at a radius
+        # of zero.
+        try:
+            cv = 1 - (magSumUnitVectors / len(neighbors))
+        except Exception as e:
+            print(e)
+            cv = 0
+
+        return cv

@@ -2,7 +2,7 @@ from ExtendedChimera.ChimeraFeatures import (
     get_depths,
     compute_bubble_attributes_residues,
     compute_global_attributes_residues,
-    get_residue_features,
+    compute_global_circular_variance,
 )
 from ExtendedChimera.MetalAtom import MetalAtom
 from ExtendedChimera.ChimeraUtils import (
@@ -106,9 +106,7 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12], metal_binding_sites
         for residue in selection.currentResidues()
     ]
     print("done")
-    # all_atoms = [ExtendedAtom(atom) for atom in selection.currentAtoms()]
-    # atoms_near_rpkt = [ExtendedAtom(atom) for
-    # atom in selection.currentAtoms()]
+    atoms_near_rpkt = [ExtendedAtom(atom) for atom in selection.currentAtoms()]
 
     print("getting global attributes")
     global_attributes = compute_global_attributes_residues(all_residues)
@@ -149,26 +147,37 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12], metal_binding_sites
             if atom.name in atom_radius_features:
                 atom_radius_features[atom.name][
                     radius
-                ] = compute_bubble_attributes_residues(atom, residues_near_rpkt, radius)
+                ] = compute_bubble_attributes_residues(
+                    atom, residues_near_rpkt, atoms_near_rpkt, radius
+                )
             else:
                 # This must be the first radius the loop has seen.
                 # atom_radius_features[atom.name] should point to a dict
                 # with radii for keys, bubble attributes for values
                 atom_radius_features[atom.name] = {
                     radius: compute_bubble_attributes_residues(
-                        atom, residues_near_rpkt, radius
+                        atom, residues_near_rpkt, atoms_near_rpkt, radius
                     )
                 }
 
     print("getting atom-level attributes")
+    all_atoms = [ExtendedAtom(atom) for atom in selection.currentAtoms()]
     atom_features = {}
     for atom in rpkt_atoms:
         eResidue = ExtendedResidue(atom.residue, [], [])
         atom_features[atom.name] = compute_bubble_attributes_residues(
-            atom, all_residues, 0
+            atom, all_residues, all_atoms, 0
         )
+
+        # Add global circular variance
+        atom_features[atom.name].update(
+            compute_global_circular_variance(atom, all_atoms)
+        )
+
+        # Format each feature with _res to match labels of original pipeline data
+        # Ignore circular variance, since that's global.
         for key in atom_features[atom.name]:
-            if "res" not in key:
+            if "res" not in key and "circular" not in key:
                 atom_features[atom.name]["{}_res".format(key)] = atom_features[
                     atom.name
                 ].pop(key)
