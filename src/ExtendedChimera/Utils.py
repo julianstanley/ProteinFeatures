@@ -1,54 +1,145 @@
 import pandas as pd
 
-reactivity_index_dict = ({'A': 0, 'C': 0, 'D': 0, 'E': 0, 'F': 0,
-                          'G': 0, 'H': 0, 'I': 0, 'K': 1.009211433,
-                          'L': 0, 'M': 0, 'N': 0, 'P': 1.296184165, 'Q': 0,
-                          'R': 0.900412937, 'S': 0, 'T': 0.830171969,
-                          'V': 0, 'W': 0, 'Y': 0})
+reactivity_index_dict = {
+    "A": 0,
+    "C": 0,
+    "D": 0,
+    "E": 0,
+    "F": 0,
+    "G": 0,
+    "H": 0,
+    "I": 0,
+    "K": 1.009211433,
+    "L": 0,
+    "M": 0,
+    "N": 0,
+    "P": 1.296184165,
+    "Q": 0,
+    "R": 0.900412937,
+    "S": 0,
+    "T": 0.830171969,
+    "V": 0,
+    "W": 0,
+    "Y": 0,
+}
 
-charge_index_dict = ({'A': 0, 'C': 0, 'D': -1, 'E': -1, 'F': 0, 'G': 0, 'H': 0,
-                      'I': 0, 'K': 1, 'L': 0, 'M': 0, 'N': 0, 'P': 0,
-                      'Q': 0, 'R': 1, 'S': 0, 'T': 0, 'V': 0, 'W': 0, 'Y': 0})
+charge_index_dict = {
+    "A": 0,
+    "C": 0,
+    "D": -1,
+    "E": -1,
+    "F": 0,
+    "G": 0,
+    "H": 0,
+    "I": 0,
+    "K": 1,
+    "L": 0,
+    "M": 0,
+    "N": 0,
+    "P": 0,
+    "Q": 0,
+    "R": 1,
+    "S": 0,
+    "T": 0,
+    "V": 0,
+    "W": 0,
+    "Y": 0,
+}
 
-OHrxnConst_index_dict = ({'A': 77000000, 'C': 34000000000, 'D': 75000000,
-                          'E': 230000000, 'F': 6500000000, 'G': 17000000,
-                          'H': 13000000000, 'I': 1800000000, 'K': 340000000,
-                          'L': 1700000000, 'M': 8300000000, 'N': 49000000,
-                          'P': 480000000, 'Q': 540000000, 'R': 3500000000,
-                          'S': 320000000, 'T': 510000000, 'V': 760000000,
-                          'W': 13000000000, 'Y': 13000000000})
+OHrxnConst_index_dict = {
+    "A": 77000000,
+    "C": 34000000000,
+    "D": 75000000,
+    "E": 230000000,
+    "F": 6500000000,
+    "G": 17000000,
+    "H": 13000000000,
+    "I": 1800000000,
+    "K": 340000000,
+    "L": 1700000000,
+    "M": 8300000000,
+    "N": 49000000,
+    "P": 480000000,
+    "Q": 540000000,
+    "R": 3500000000,
+    "S": 320000000,
+    "T": 510000000,
+    "V": 760000000,
+    "W": 13000000000,
+    "Y": 13000000000,
+}
 
 
-aa_3_to_1 = aaDict = dict({'ALA': 'A', 'ARG': 'R', 'ASN': 'N', 'ASP': 'D',
-                           'CYS': 'C', 'GLN': 'Q', 'GLU': 'E', 'GLY': 'G',
-                           'HIS': 'H', 'ILE': 'I',
-                           'LEU': 'L', 'LYS': 'K', 'MET': 'M', 'PHE': 'F',
-                           'PRO': 'P', 'SER': 'S',
-                           'THR': 'T', 'TRP': 'W', 'TYR': 'Y', 'VAL': 'V',
-                           'PTR': 'Y', 'CSX': 'C',
-                           'CSO': 'C', 'CSD': 'C', 'KCX': 'K', 'UNK': 'X',
-                           'MLY': 'K', 'PVH': 'H'})
+aa_3_to_1 = aaDict = dict(
+    {
+        "ALA": "A",
+        "ARG": "R",
+        "ASN": "N",
+        "ASP": "D",
+        "CYS": "C",
+        "GLN": "Q",
+        "GLU": "E",
+        "GLY": "G",
+        "HIS": "H",
+        "ILE": "I",
+        "LEU": "L",
+        "LYS": "K",
+        "MET": "M",
+        "PHE": "F",
+        "PRO": "P",
+        "SER": "S",
+        "THR": "T",
+        "TRP": "W",
+        "TYR": "Y",
+        "VAL": "V",
+        "PTR": "Y",
+        "CSX": "C",
+        "CSO": "C",
+        "CSD": "C",
+        "KCX": "K",
+        "UNK": "X",
+        "MLY": "K",
+        "PVH": "H",
+    }
+)
 
 ionicRadiusDict = dict(
-    {'CA': 1.00, 'CO': 0.65, 'CU': 0.73, 'FE': 0.61, 'K': 1.38, 'MG': 0.72,
-     'MN': 0.83, 'MO': 0.65, 'NA': 1.02, 'NI': 0.69, 'ZN': 0.74})
+    {
+        "CA": 1.00,
+        "CO": 0.65,
+        "CU": 0.73,
+        "FE": 0.61,
+        "K": 1.38,
+        "MG": 0.72,
+        "MN": 0.83,
+        "MO": 0.65,
+        "NA": 1.02,
+        "NI": 0.69,
+        "ZN": 0.74,
+    }
+)
 
 
 def median(lst):
     n = len(lst)
     s = sorted(lst)
-    return \
-        (sum(s[n // 2 - 1:n // 2 + 1]) / 2.0, s[n // 2])[n % 2] if n else None
+    return (sum(s[n // 2 - 1 : n // 2 + 1]) / 2.0, s[n // 2])[n % 2] if n else None
 
 
 def is_nonstandard_residue(residue):
-    return('MSE' in str(residue) or 'CSX' in str(residue) or
-           'UNK' in str(residue) or 'CSD' in str(residue) or
-           'CSO' in str(residue) or 'KCX' in str(residue))
+    return (
+        "MSE" in str(residue)
+        or "CSX" in str(residue)
+        or "UNK" in str(residue)
+        or "CSD" in str(residue)
+        or "CSO" in str(residue)
+        or "KCX" in str(residue)
+    )
 
 
-def make_standard(protein, constant_features, atomic_features, atom_names,
-                  check_atomic_features=True):
+def make_standard(
+    protein, constant_features, atomic_features, atom_names, check_atomic_features=True
+):
     """
     Format:
     Keys: (Protein Name, Atom Name, Feature Name)
@@ -64,10 +155,14 @@ def make_standard(protein, constant_features, atomic_features, atom_names,
                 try:
                     atomic_feature["Value"][atom_name]
                 except Exception:
-                    raise Exception("""
+                    raise Exception(
+                        """
               The atomic feature {} doesn't have an
               entry for the atom {}.
-              """.format(atomic_feature["Name"], atom_name))
+              """.format(
+                            atomic_feature["Name"], atom_name
+                        )
+                    )
                     print("Checked atomic features")
 
     # We need an entry for each atom name
@@ -85,14 +180,14 @@ def make_standard(protein, constant_features, atomic_features, atom_names,
             feature_value = atom_to_feature[atom_name]
             features[(protein, atom_name, feature_name)] = feature_value
 
-            return(features)
+            return features
 
 
 def get_AAindex_df():
-    '''
+    """
     Returns: (Pandas DataFrame Object) - Columns represent AAindex
     characteristics, rows represent amino acids
-    '''
+    """
     AAindex_mat = [
         [-0.591, -1.302, -0.733, 1.57, -0.146],
         [-1.343, 0.465, -0.862, -1.020, -0.255],
@@ -113,15 +208,38 @@ def get_AAindex_df():
         [-0.032, 0.326, 2.213, 0.908, 1.313],
         [-1.337, -0.279, -0.544, 1.242, -1.262],
         [-0.595, 0.009, 0.672, -2.128, -0.184],
-        [0.26, 0.83, 3.097, -0.838, 1.512]
+        [0.26, 0.83, 3.097, -0.838, 1.512],
     ]
 
     AAindex_df = pd.DataFrame(AAindex_mat)
-    AAindex_df["AAs"] = ['A', 'C', 'E', 'D', 'G',
-                         'F', 'I', 'H', 'K', 'M', 'L',
-                         'N', 'Q', 'P', 'S', 'R', 'T',
-                         'W', 'V', 'Y']
+    AAindex_df["AAs"] = [
+        "A",
+        "C",
+        "E",
+        "D",
+        "G",
+        "F",
+        "I",
+        "H",
+        "K",
+        "M",
+        "L",
+        "N",
+        "Q",
+        "P",
+        "S",
+        "R",
+        "T",
+        "W",
+        "V",
+        "Y",
+    ]
     AAindex_df.set_index("AAs", inplace=True)
-    AAindex_df.columns = ["AAindPolarity", "AAindSS",
-                          "AAindMolVol", "AAindCodonDiv", "AAindElecCharge"]
-    return(AAindex_df)
+    AAindex_df.columns = [
+        "AAindPolarity",
+        "AAindSS",
+        "AAindMolVol",
+        "AAindCodonDiv",
+        "AAindElecCharge",
+    ]
+    return AAindex_df

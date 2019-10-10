@@ -7,19 +7,54 @@ from ExtendedAtom import ExtendedAtom
 from Utils import median
 
 # All of the features that we care about
-features = ['AAindCodonDiv', 'AAindMolVol', 'AAindPolarity', 'AAindSS',
-            "AAindElecCharge", "netCharge", "posCharge", "negCharge",
-            "sumMetals", "CO", "CU", "FE", "K", "M", "MN", "MO", "NA",
-            "NI", "ZN", "contacts", "RPKT", "Arg", "Lys", "Pro", "Thr",
-            "surfMC", "surfM", "surfC", "hydro", "OHRxnConst", "SS", "helix",
-            "sheet", "disord", "disordScore", "protBindSPPIDER",
-            "protBindDISOPREDscore", "areaSAS", "reactivity",
-            "circularVariance", "depth"]
+features = [
+    "AAindCodonDiv",
+    "AAindMolVol",
+    "AAindPolarity",
+    "AAindSS",
+    "AAindElecCharge",
+    "netCharge",
+    "posCharge",
+    "negCharge",
+    "sumMetals",
+    "CO",
+    "CU",
+    "FE",
+    "K",
+    "M",
+    "MN",
+    "MO",
+    "NA",
+    "NI",
+    "ZN",
+    "contacts",
+    "RPKT",
+    "Arg",
+    "Lys",
+    "Pro",
+    "Thr",
+    "surfMC",
+    "surfM",
+    "surfC",
+    "hydro",
+    "OHRxnConst",
+    "SS",
+    "helix",
+    "sheet",
+    "disord",
+    "disordScore",
+    "protBindSPPIDER",
+    "protBindDISOPREDscore",
+    "areaSAS",
+    "reactivity",
+    "circularVariance",
+    "depth",
+]
 
 
 def get_atom_features(eAtom):
-    ''' Get the features associated with this ExtendedAtom
-    '''
+    """ Get the features associated with this ExtendedAtom
+    """
     atom_features = {
         "AA": eAtom.residue_1_letter,
         "Position": eAtom.number,
@@ -32,8 +67,9 @@ def get_atom_features(eAtom):
         "posCharge": (1 if eAtom.charge == 1 else 0),
         "negCharge": (-1 if eAtom.charge == -1 else 0),
         # Keep sumMetals as NaN, since metals sum isn't strictly addative
-        "sumMetals": len(list(set(
-            [metal.site_number for metal in eAtom.metal_contacts]))),
+        "sumMetals": len(
+            list(set([metal.site_number for metal in eAtom.metal_contacts]))
+        ),
         "CA": eAtom.metal_contacts.count("CA"),
         "CO": eAtom.metal_contacts.count("CO"),
         "CU": eAtom.metal_contacts.count("CU"),
@@ -45,41 +81,41 @@ def get_atom_features(eAtom):
         "NA": eAtom.metal_contacts.count("NA"),
         "NI": eAtom.metal_contacts.count("NI"),
         "ZN": eAtom.metal_contacts.count("ZN"),
-        'RPKT': (1 if eAtom.residue_1_letter in ["R", "K", "P", "T"] else 0),
+        "RPKT": (1 if eAtom.residue_1_letter in ["R", "K", "P", "T"] else 0),
         "Arg": (1 if eAtom.residue_1_letter == "R" else 0),
         "Lys": (1 if eAtom.residue_1_letter == "K" else 0),
         "Pro": (1 if eAtom.residue_1_letter == "P" else 0),
         "Thr": (1 if eAtom.residue_1_letter == "T" else 0),
-        "surfMC": float('NaN'),
-        "surfM": float('NaN'),
-        "surfC": float('NaN'),
+        "surfMC": float("NaN"),
+        "surfM": float("NaN"),
+        "surfC": float("NaN"),
         "hydro": eAtom.hydrophobicity,
         "OHRxnConst": eAtom.hydroxyl_constant,
         "SS": (1 if eAtom.isSheet or eAtom.isHelix else 0),
         "helix": (1 if eAtom.isHelix else 0),
         "sheet": (1 if eAtom.isSheet else 0),
-        "disord": float('NaN'),
-        "disordScore": float('NaN'),
-        "protBindSPPIDER": float('NaN'),
-        "protBindDISOPREDscore": float('NaN'),
+        "disord": float("NaN"),
+        "disordScore": float("NaN"),
+        "protBindSPPIDER": float("NaN"),
+        "protBindDISOPREDscore": float("NaN"),
         "areaSAS": eAtom.area_sas,
         "reactivity": eAtom.reactivity,
         "circularVariance": eAtom.get_circular_variance(),
         "depth": eAtom.depth,
-        "contacts": 1
+        "contacts": 1,
     }
 
     # Make sure that we get all of the features
     for feature_name in features:
         if feature_name not in atom_features:
-            atom_features[feature_name] = float('NaN')
+            atom_features[feature_name] = float("NaN")
 
     return atom_features
 
 
 def get_residue_features(eResidue):
-    ''' Get the features associated with this ExtendedResidue.
-    '''
+    """ Get the features associated with this ExtendedResidue.
+    """
     residue_features = {
         "AA": eResidue.residue_1_letter,
         "Position": eResidue.number,
@@ -92,8 +128,9 @@ def get_residue_features(eResidue):
         "posCharge_res": (1 if eResidue.charge == 1 else 0),
         "negCharge_res": (-1 if eResidue.charge == -1 else 0),
         # Keep sumMetals as NaN, since metals sum isn't strictly addative
-        "sumMetals_res": len(list(set(
-            [metal.site_number for metal in eResidue.metal_contacts]))),
+        "sumMetals_res": len(
+            list(set([metal.site_number for metal in eResidue.metal_contacts]))
+        ),
         "CA_res": eResidue.metal_contacts.count("CA"),
         "CO_res": eResidue.metal_contacts.count("CO"),
         "CU_res": eResidue.metal_contacts.count("CU"),
@@ -105,44 +142,43 @@ def get_residue_features(eResidue):
         "NA_res": eResidue.metal_contacts.count("NA"),
         "NI_res": eResidue.metal_contacts.count("NI"),
         "ZN_res": eResidue.metal_contacts.count("ZN"),
-        'RPKT_res': (1 if eResidue.residue_1_letter in ["R", "K", "P", "T"]
-                     else 0),
+        "RPKT_res": (1 if eResidue.residue_1_letter in ["R", "K", "P", "T"] else 0),
         "Arg_res": (1 if eResidue.residue_1_letter == "R" else 0),
         "Lys_res": (1 if eResidue.residue_1_letter == "K" else 0),
         "Pro_res": (1 if eResidue.residue_1_letter == "P" else 0),
         "Thr_res": (1 if eResidue.residue_1_letter == "T" else 0),
-        "surfMC_res": float('NaN'),
-        "surfM_res": float('NaN'),
-        "surfC_res": float('NaN'),
+        "surfMC_res": float("NaN"),
+        "surfM_res": float("NaN"),
+        "surfC_res": float("NaN"),
         "hydro_res": eResidue.hydrophobicity,
         "OHRxnConst_res": eResidue.hydroxyl_constant,
         "SS_res": (1 if eResidue.isSheet or eResidue.isHelix else 0),
         "helix_res": (1 if eResidue.isHelix else 0),
         "sheet_res": (1 if eResidue.isSheet else 0),
-        "disord_res": float('NaN'),
-        "disordScore_res": float('NaN'),
-        "protBindSPPIDER_res": float('NaN'),
-        "protBindDISOPREDscore_res": float('NaN'),
+        "disord_res": float("NaN"),
+        "disordScore_res": float("NaN"),
+        "protBindSPPIDER_res": float("NaN"),
+        "protBindDISOPREDscore_res": float("NaN"),
         "areaSAS_res": eResidue.area_sas,
         "reactivity_res": eResidue.reactivity,
-        "circularVariance_res": float('NaN'),
+        "circularVariance_res": float("NaN"),
         "depth_res": eResidue.depth,
-        "contacts_res": 1
+        "contacts_res": 1,
     }
 
     # Make sure that we get all of the features
     for feature_name in features:
         res_feature_name = "{}_res".format(feature_name)
         if res_feature_name not in residue_features:
-            residue_features[res_feature_name] = float('NaN')
+            residue_features[res_feature_name] = float("NaN")
 
     return residue_features
 
 
 def get_residues_features_sums(eResidues):
-    ''' Get the sum of all the features for the residues in the given
+    """ Get the sum of all the features for the residues in the given
     list of ExtendedResidues.
-    '''
+    """
     residues_features = dict.fromkeys(features, 0)
 
     for residue in eResidues:
@@ -151,8 +187,7 @@ def get_residues_features_sums(eResidues):
         # Add this residue's features to the accumulating features
         for feature in residues_features:
             single_feature = "{}_res".format(feature)
-            residues_features[feature] +=\
-                single_residue_features[single_feature]
+            residues_features[feature] += single_residue_features[single_feature]
 
     return residues_features
 
@@ -182,26 +217,32 @@ def compute_global_attributes_residues(eResidues):
     # Metal binding features at a global level will not vary residue-to-residue,
     # so just get all of the metals infinite distance from one of the residues
     eResidue = eResidues[0]
-    eResidue.set_metal_contacts(float('Inf'))
+    eResidue.set_metal_contacts(float("Inf"))
     metal_types = [metal.type for metal in eResidue.metal_contacts]
 
     # Update the features dictionary with contacts from this residue
-    features.update({
-        "sumMetals": len(
-            list(set([metal.site_number for metal in eResidue.metal_contacts]))),
-        "CA": metal_types.count("CA"),
-        "CO": metal_types.count("CO"),
-        "CU": metal_types.count("CU"),
-        "FE": metal_types.count("FE"),
-        "K": metal_types.count("K"),
-        "MG": metal_types.count("MG"),
-        "MN": metal_types.count("MN"),
-        "MO": metal_types.count("MO"),
-        "NA": metal_types.count("NA"),
-        "NI": metal_types.count("NI"),
-        "ZN": metal_types.count("ZN")})
+    features.update(
+        {
+            "sumMetals": len(
+                list(set([metal.site_number for metal in eResidue.metal_contacts]))
+            ),
+            "CA": metal_types.count("CA"),
+            "CO": metal_types.count("CO"),
+            "CU": metal_types.count("CU"),
+            "FE": metal_types.count("FE"),
+            "K": metal_types.count("K"),
+            "MG": metal_types.count("MG"),
+            "MN": metal_types.count("MN"),
+            "MO": metal_types.count("MO"),
+            "NA": metal_types.count("NA"),
+            "NI": metal_types.count("NI"),
+            "ZN": metal_types.count("ZN"),
+        }
+    )
 
-    return(features)
+    # Overwrite circular variance features
+
+    return features
 
 
 def compute_bubble_attributes_residues(base_atom, compared_residues, radius):
@@ -214,8 +255,14 @@ def compute_bubble_attributes_residues(base_atom, compared_residues, radius):
         base_features = get_atom_features(base_atom)
         for key in bubble_features:
             # Don't include self in measurement of RPKT and contacts
-            if key in base_features and key not in ["R", "K", "P", "T", "RPKT",
-                                                    "contacts"]:
+            if key in base_features and key not in [
+                "R",
+                "K",
+                "P",
+                "T",
+                "RPKT",
+                "contacts",
+            ]:
                 bubble_features[key] = bubble_features[key] + base_features[key]
 
     # Overwrite metal binding features
@@ -225,26 +272,30 @@ def compute_bubble_attributes_residues(base_atom, compared_residues, radius):
     metal_types = [metal.type for metal in base_atom.metal_contacts]
 
     # Update the features dictionary with contacts from this residue
-    bubble_features.update({
-        "sumMetals": len(
-            list(set([metal.site_number for metal in base_atom.metal_contacts]))),
-        "CA": metal_types.count("CA"),
-        "CO": metal_types.count("CO"),
-        "CU": metal_types.count("CU"),
-        "FE": metal_types.count("FE"),
-        "K": metal_types.count("K"),
-        "MG": metal_types.count("MG"),
-        "MN": metal_types.count("MN"),
-        "MO": metal_types.count("MO"),
-        "NA": metal_types.count("NA"),
-        "NI": metal_types.count("NI"),
-        "ZN": metal_types.count("ZN")})
+    bubble_features.update(
+        {
+            "sumMetals": len(
+                list(set([metal.site_number for metal in base_atom.metal_contacts]))
+            ),
+            "CA": metal_types.count("CA"),
+            "CO": metal_types.count("CO"),
+            "CU": metal_types.count("CU"),
+            "FE": metal_types.count("FE"),
+            "K": metal_types.count("K"),
+            "MG": metal_types.count("MG"),
+            "MN": metal_types.count("MN"),
+            "MO": metal_types.count("MO"),
+            "NA": metal_types.count("NA"),
+            "NI": metal_types.count("NI"),
+            "ZN": metal_types.count("ZN"),
+        }
+    )
 
-    return(bubble_features)
+    return bubble_features
 
 
 def get_depths(times=1):
-    with open("troubleshoot.txt", 'a') as file:
+    with open("troubleshoot.txt", "a") as file:
         file.write("In get_depths")
 
     depths_lists = {}
@@ -257,17 +308,16 @@ def get_depths(times=1):
             else:
                 depths_lists[atom_name] = [depth]
 
-    with open("troubleshoot.txt", 'a') as file:
+    with open("troubleshoot.txt", "a") as file:
         file.write("First loop")
 
     for atom_name, depths_list in depths_lists.items():
-        depths_return[atom_name] = median(
-            [float(depth) for depth in depths_list])
+        depths_return[atom_name] = median([float(depth) for depth in depths_list])
 
-    with open("troubleshoot.txt", 'a') as file:
+    with open("troubleshoot.txt", "a") as file:
         file.write("Second loop")
 
-    return(depths_return)
+    return depths_return
 
 
 def get_depth():
@@ -297,7 +347,7 @@ def get_depth():
     # Read and clear the reply log before measuring distance
     # save_and_clear_reply_log(logfile_name)
 
-    with open("troubleshoot.txt", 'a') as file:
+    with open("troubleshoot.txt", "a") as file:
         file.write("Get_depth")
 
     # Select all RPKT/MC atoms at the correct location
@@ -315,7 +365,7 @@ def get_depth():
     residue_to_depth = rpktmc_depths
     residue_to_depth.update(atoms_all_except_hydrogen_depths)
 
-    return(residue_to_depth)
+    return residue_to_depth
 
 
 def get_depth_minimum():
@@ -336,8 +386,7 @@ def get_depth_minimum():
     save_and_clear_reply_log("temp_depth_log.txt")
     # Note: requires a selection to be made before calling
     # Measures distance between current selection and the surface
-    rc(("measure distance selection"
-        " #0&~@* multiple true show true"))
+    rc(("measure distance selection" " #0&~@* multiple true show true"))
     r, distances = read_reply_log()
 
     all_atoms = [ExtendedAtom(atom) for atom in selection.currentAtoms()]
@@ -354,11 +403,11 @@ def get_depth_minimum():
     # Loop through each line that Chimera outputs
     for line in distances.splitlines():
         line = line.rstrip()
-        if 'minimum distance from' in line:
+        if "minimum distance from" in line:
             print("working on:")
             print(line)
             # Delete 'minmum distance from'
-            line = line.replace('minimum distance from ', '')
+            line = line.replace("minimum distance from ", "")
 
             # Seperate the residue and depth by a tab
             line = re.sub(r" to #0:\? = ", "\t", line)
@@ -371,8 +420,7 @@ def get_depth_minimum():
             residue_number = residue_name.split(".")[0]
 
             # Get the minimum depth
-            depth_key = "{},{}".format(
-                residue_number, atom_to_aa[residue_name])
+            depth_key = "{},{}".format(residue_number, atom_to_aa[residue_name])
 
             # Only put this depth in the dictionary if this depth is:
             # (1) the first depth seen for this key, or
@@ -384,4 +432,4 @@ def get_depth_minimum():
             else:
                 residue_to_depth[depth_key] = depth
 
-    return(residue_to_depth)
+    return residue_to_depth
