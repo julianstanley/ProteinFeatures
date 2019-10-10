@@ -64,7 +64,7 @@ def get_atom_features(eAtom):
         "protBindDISOPREDscore": float('NaN'),
         "areaSAS": eAtom.area_sas,
         "reactivity": eAtom.reactivity,
-        "circularVariance": float('NaN'),
+        "circularVariance": eAtom.get_circular_variance(),
         "depth": eAtom.depth,
         "contacts": 1
     }
