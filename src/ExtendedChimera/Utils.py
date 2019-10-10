@@ -123,7 +123,7 @@ ionicRadiusDict = dict(
 def median(lst):
     n = len(lst)
     s = sorted(lst)
-    return (sum(s[n // 2 - 1 : n // 2 + 1]) / 2.0, s[n // 2])[n % 2] if n else None
+    return (sum(s[n // 2 - 1: n // 2 + 1]) / 2.0, s[n // 2])[n % 2] if n else None
 
 
 def is_nonstandard_residue(residue):
@@ -141,10 +141,10 @@ def make_standard(
     protein, constant_features, atomic_features, atom_names, check_atomic_features=True
 ):
     """
-    Format:
-    Keys: (Protein Name, Atom Name, Feature Name)
-    Values: Value of this feature for this atom in this protein
-    """
+  Format:
+  Keys: (Protein Name, Atom Name, Feature Name)
+  Values: Value of this feature for this atom in this protein
+  """
     features = {}
 
     # Check the atomic features to make sure all of their keys are in atom_name
@@ -185,9 +185,9 @@ def make_standard(
 
 def get_AAindex_df():
     """
-    Returns: (Pandas DataFrame Object) - Columns represent AAindex
-    characteristics, rows represent amino acids
-    """
+  Returns: (Pandas DataFrame Object) - Columns represent AAindex
+  characteristics, rows represent amino acids
+  """
     AAindex_mat = [
         [-0.591, -1.302, -0.733, 1.57, -0.146],
         [-1.343, 0.465, -0.862, -1.020, -0.255],
