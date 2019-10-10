@@ -6,6 +6,7 @@ from .pdb protein files.
 
 This script and the associated package are formatted with black pypy.org/project/black
 """
+
 # Use a try block for importing chimeraFeatureExtraction so that you
 # can run ./run_ChimeraFeatureExtraction_core.py --help
 # (Since Chimera can't be imported without running via chimera)
@@ -49,7 +50,7 @@ default_metalfile = "input/metalBindingSiteData_01-13-2017.txt"
 )
 @click.option(
     "--attempts_limit",
-    default="5",
+    default="1",
     help="Number of re-attempts to generate features after failure",
 )
 @click.option(
@@ -79,7 +80,6 @@ def featureWrapper(
     Effect:
         Writes a .csv file to "outfile"
     """
-
     # If we fail, how many times are we going to retry? This is passed as a string
     # from the command line, but should be an int.
     attempts_limit = int(attempts_limit)
@@ -105,41 +105,27 @@ def featureWrapper(
     all_features = {}
     for file in pdb_files:
         file_name_short = file.split("/")[-1]
-        # Get the metal binding sites associated with the file, if it exists
+        # Get the metal binding sites associated with the file, if they exist
         if file_name_short in metal_binding:
             metal_binding_sites = metal_binding[file_name_short]
         else:
             metal_binding_sites = []
 
-        # The attempts limit was passed via command line as a string
-        # attempts_limit = int(attempts_limit)
         attempts = 0
         while attempts < attempts_limit:
+            # Extract features using the chimeraFeatureExtraction script
             features = chimeraFeatureExtraction(
                 file, [int(radius) for radius in radii.split()], metal_binding_sites
             )
 
+            # Re-format features so that they're easier to write
             all_features.update(format_single_features(features, file))
-            attempts += 1
-            # try:
-            #     features = chimeraFeatureExtraction(
-            #         file, [int(radius) for radius in radii.split()],
-            #         metal_binding_sites)
 
-            #     all_features.update(format_single_features(features, file))
-            #     break
+            # We got the features we were looking for, so no need to repeat
+            break
 
-            # except Exception as e:
-            #     rc("close all")
-            #     with open(logfile, 'w+') as log:
-            #         log.write("Begin exception log:")
-            #         save_and_clear_reply_log(logfile)
-            #         log.write("""Feature extraction for {} failed {} times.
-            #         The most recent exception thrown was {}""".format(
-            #             file, attempts_limit, e))
-            #     # continue
-            #     break
-
+    # We really just need features from RPKT atoms, so put those into one dictionary
+    # and then write them to file
     rpkt_features = {}
     for atom_name, features in all_features.items():
         if atom_name.split()[1] in ["R", "P", "K", "T"]:
@@ -148,16 +134,17 @@ def featureWrapper(
     write_all_features(rpkt_features, outfile)
 
 
-def get_metal_binding(metal_site_file):
-    """
-    Returns: TODO: {File --> [List-of-Dicts]}
-    Where the list of dicts correspond to each metal binding site
-    in that file
-    Where [of-Dicts] is in format: {Metal --> 'Zn, Ca, etc',
-    Residues --> 'C208, H1, etc'}
+def get_metal_binding(metal_file_path):
+    """ Parses a file with metal binding data
+    Arguments:
+        metal_file_path (str): A directory path to the file with metal binding data
+    Returns:
+        file_to_metals (dict): A dictionary of metal binding data
+            Format: {File Name: str, Site Number: str, Metal ID: str, Residues: str}
+    Effect: None
     """
     file_to_metals = {}
-    with open(metal_site_file, "r") as f:
+    with open(metal_file_path, "r") as f:
         for line in f:
             # The metal binding file contains:
             # Protein file name, site number, metal (Zn, Mg, etc)
@@ -180,27 +167,15 @@ def get_metal_binding(metal_site_file):
     return file_to_metals
 
 
-def write_all_features(all_features, outfile):
-    """ Writes Chimera features to the given outfile .csv
-    Arguments:
-        all_features (dictionary)
-            format: {Atom Name --> Feature Object (NamedTuple),
-            'Protein' --> Protein File Name (Str)}: All Chimera features
-        outfile (string) A filename for the features .csv file
-    Returns:
-        Void
-    Effect:
-        Creates a file at 'outfile'
-    """
-    features_df = pd.DataFrame(all_features).transpose()
-    features_df.to_csv(outfile)
-
-
 def format_single_features(single_features, file_name):
     """ Puts global, bubble, and residue-specific features into a single,
     uniformally-formatted dictionary.
     Arguments:
+        single_features(tuple, length 3): The global, residue-level, and bubble-level
+        features of a protein
+        file_name(str): The name of the protein file name that we're processing
     Returns:
+        atom_to_features(dict): A dictionary mapping atoms to their features
     """
     global_features = single_features[0]
     residue_features = single_features[1]
@@ -253,6 +228,22 @@ def format_single_features(single_features, file_name):
         atom_to_features[atom] = features
 
     return atom_to_features
+
+
+def write_all_features(all_features, outfile):
+    """ Writes Chimera features to the given outfile .csv
+    Arguments:
+        all_features (dictionary)
+            format: {Atom Name --> Feature Object (NamedTuple),
+            'Protein' --> Protein File Name (Str)}: All Chimera features
+        outfile (string) A filename for the features .csv file
+    Returns:
+        Void
+    Effect:
+        Creates a file at 'outfile'
+    """
+    features_df = pd.DataFrame(all_features).transpose()
+    features_df.to_csv(outfile)
 
 
 if __name__ == "__main__":
