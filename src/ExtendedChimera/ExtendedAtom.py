@@ -37,8 +37,6 @@ class ExtendedResidue:
             )
         self.name = str(residue)
         self.number = re.sub(r"#.+ .+ ", "", str(residue))  # .split(".")[0]
-        print("Number here")
-        print(self.number)
 
         # AAind attributes
         self.aaind_reactivity = reactivity_index_dict[self.residue_1_letter]
@@ -79,12 +77,6 @@ class ExtendedResidue:
                 ]
             else:
                 self.depth = float("NaN")
-                print(depths)
-                print("{},{}".format(self.number.split(".")[0], self.residue_1_letter))
-                print(
-                    "{},{}".format(self.number.split(".")[0], self.residue_1_letter)
-                    in depths
-                )
 
         # All metals in this structure
         self.all_metals = all_metals
@@ -188,10 +180,6 @@ class ExtendedAtom(ExtendedResidue, object):
                 and atom.name != self.name
             ):
                 contacts.append(atom)
-                print("here atom")
-                print("The distance between {} and {} is {}").format(
-                    self.name, atom.name, self.distance(atom)
-                )
         self.atom_contacts = contacts
 
     def set_residue_contacts(self, residues, radius):

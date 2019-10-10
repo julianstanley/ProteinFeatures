@@ -175,18 +175,6 @@ def get_residue_features(eResidue):
         if res_feature_name not in residue_features:
             residue_features[res_feature_name] = float("NaN")
 
-    if math.isnan(residue_features["surfM_res"]):
-        raise Exception(
-            "Here! Residue depth: {}, letter; {}, expression: {}, dict: {}".format(
-                eResidue.depth,
-                eResidue.residue_1_letter,
-                (eResidue.residue_1_letter == "M") and (eResidue.depth - 1.782) < 0.01,
-            )
-        )
-
-    if not math.isnan(residue_features["disordScore_res"]):
-        raise Exception("Nan checking not working")
-
     return residue_features
 
 
@@ -381,9 +369,6 @@ def get_depth():
     # Read and clear the reply log before measuring distance
     # save_and_clear_reply_log(logfile_name)
 
-    with open("troubleshoot.txt", "a") as file:
-        file.write("Get_depth")
-
     # Select all RPKT/MC atoms at the correct location
     rc("~select")
     rc("select :arg@cd|:lys@ce|:mly@ce|:kcx@ce|:pro@cd|:thr@cb|:cys@sg|:met@sd")
@@ -415,11 +400,9 @@ def get_depth_minimum():
     between an atom and the surface without runCommand.
     """
     # Read and clear the reply log before measuring distance
-    # save_and_clear_reply_log(logfile_name)
-
-    save_and_clear_reply_log("temp_depth_log.txt")
     # Note: requires a selection to be made before calling
     # Measures distance between current selection and the surface
+    save_and_clear_reply_log("clear_depth.log")
     rc(("measure distance selection" " #0&~@* multiple true show true"))
     r, distances = read_reply_log()
 
@@ -429,8 +412,6 @@ def get_depth_minimum():
     for atom in all_atoms:
         atom_to_aa[atom.number] = atom.residue_1_letter
 
-    print(atom_to_aa)
-
     # Initalize the return depth dictionary
     residue_to_depth = {}
 
@@ -438,8 +419,6 @@ def get_depth_minimum():
     for line in distances.splitlines():
         line = line.rstrip()
         if "minimum distance from" in line:
-            print("working on:")
-            print(line)
             # Delete 'minmum distance from'
             line = line.replace("minimum distance from ", "")
 

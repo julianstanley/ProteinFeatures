@@ -24,8 +24,6 @@ class MetalAtom:
         nearby_residues: A list of strings in the format:
         residuenumber ("C208", "H271", etc.)
         """
-        with open("chimera_outlog_pre_metals.txt", "a") as f:
-            f.write("Started: {}".format(self))
 
         if metal_type in ionic_radii:
             self.radius = ionic_radii[metal_type]
@@ -36,9 +34,6 @@ class MetalAtom:
         self.nearby_residues = nearby_residues
         self.location = location
         self.site_number = site_number
-
-        with open("chimera_outlog_pre_metals.txt", "a") as f:
-            f.write("Completed: {}".format(self))
 
     def __repr__(self):
         return str(self.__dict__)

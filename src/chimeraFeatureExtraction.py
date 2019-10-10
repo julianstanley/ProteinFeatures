@@ -18,7 +18,9 @@ from chimera import runCommand as rc
 import re
 
 
-def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12], metal_binding_sites=[]):
+def chimeraFeatureExtraction(
+    pdb_file, radii=[5, 8, 10, 12], metal_binding_sites=[], logfile="log.txt"
+):
     """
     Arguments:
     metal_binding_sites: List of metal binding sites, each in dictionary
@@ -52,7 +54,7 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12], metal_binding_sites
         rc("~select @n,ca,c,o")
 
         # Clear the reply log, since we'll need it in a minute
-        save_and_clear_reply_log("chimera_outlog_pre_metals.txt")
+        save_and_clear_reply_log(logfile)
 
         # Define a centroid around the currently selected residues
         rc(
@@ -71,17 +73,15 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12], metal_binding_sites
         coords = re.sub(r"\n", "", coords)
         coords = re.sub(r"\r", "", coords)
         coords = ",".join(coords.split())
-        save_and_clear_reply_log("chimera_outlog_pre_metals.txt")
+        save_and_clear_reply_log(logfile)
 
         metals.append(MetalAtom(metal_type, residues, coords, site_number))
 
     # Depths
-    print("Getting depths")
-    save_and_clear_reply_log("chimera_outlog_pre_depths.txt")
     depths = get_depths()
 
     # New
-    save_and_clear_reply_log("chimera_outlog_post_depths.txt")
+    save_and_clear_reply_log(logfile)
 
     # Get RPKT atoms and residues
     rc("~select")
@@ -90,12 +90,12 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12], metal_binding_sites
     #                 for residue in selection.currentResidues()]
     print("getting all {} rpkt residues".format(len(selection.currentResidues())))
     # New
-    save_and_clear_reply_log("troubleshoot.txt")
+    save_and_clear_reply_log(logfile)
     rpkt_atoms = [
         ExtendedAtom(atom, depths, metals) for atom in selection.currentAtoms()
     ]
     print("done")
-    save_and_clear_reply_log("troubleshoot.txt")
+    save_and_clear_reply_log(logfile)
 
     # Get all atoms and residues
     rc("~select")
@@ -112,7 +112,7 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12], metal_binding_sites
     global_attributes = compute_global_attributes_residues(all_residues)
     global_attributes.pop("circularVariance")
 
-    save_and_clear_reply_log("chimera_outlog_pre_bubble.txt")
+    save_and_clear_reply_log(logfile)
 
     print("getting bubble attributes")
     atom_radius_features = {}

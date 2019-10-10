@@ -115,7 +115,10 @@ def featureWrapper(
         while attempts < attempts_limit:
             # Extract features using the chimeraFeatureExtraction script
             features = chimeraFeatureExtraction(
-                file, [int(radius) for radius in radii.split()], metal_binding_sites
+                file,
+                [int(radius) for radius in radii.split()],
+                metal_binding_sites,
+                logfile
             )
 
             # Re-format features so that they're easier to write
@@ -221,7 +224,7 @@ def format_single_features(single_features, file_name):
             for bubble_feature_name, feature_value in bubble_features.items():
                 if (
                     all([excl not in bubble_feature_name for excl in sum_excluded])
-                    or feature_name == "RKPT"
+                    or bubble_feature_name == "RKPT"
                 ):
                     feature_name = "{bubble}_{radius}A_sum".format(
                         bubble=bubble_feature_name, radius=radius
