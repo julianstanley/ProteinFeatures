@@ -8,23 +8,26 @@ def pairwiseGlobalAlignment(seqs, matDir="../matricies/HIJACK30"):
     """ Align a set of amino acid sequences pairwise/amongst themselves
 
     Args:
-        seqs (List[str]): A list of amino acid sequences of equal length 
+        seqs (List[str]): A list of amino acid sequences of equal length
         for pairwise alignment
-        
+
         matDir (str, optional): The directory containing the alignment matrix
 
     Returns:
         List[ndarray(float)]: Two returns in a list
-        [0]: Alignment scores (ndarray(float)) of size len(seqs) x len(seqs). 
-        The i,j entry of this array represents the alignment between seqs[i] and seqs[j].
-        [1]: Lengths of size len(seqs) x len(seqs). 
-        The i,j entry of this array represents the minimum length of seqs[i] and seqs[j].
-    
+        [0]: Alignment scores (ndarray(float)) of size len(seqs) x len(seqs).
+        The i,j entry of this array represents the alignment between seqs[i]
+        and seqs[j].
+        [1]: Lengths of size len(seqs) x len(seqs).
+        The i,j entry of this array represents the minimum length of seqs[i]
+        and seqs[j].
+
     Notes:
-    This uses the HIJACK30 matrix, which must be included in the working directory of this function. 
-    The matrix is in standard NCBI format and is a modified BLOSUM30 matrix such that a '*' to '*' 
-    match has a score of 1000 and all matches with 'X' have a score of 0. 
-    
+    This uses the HIJACK30 matrix, which must be included in the working directory
+    of this function. The matrix is in standard NCBI format and is a modified BLOSUM30
+    matrix such that a '*' to '*' match has a score of 1000 and all matches with 'X'
+    have a score of 0.
+
     """
 
     # Read the HIJACK30 matrix from file, then collapse into a dictionary format
@@ -43,7 +46,8 @@ def pairwiseGlobalAlignment(seqs, matDir="../matricies/HIJACK30"):
     scores = np.zeros((numSeqs, numSeqs))
     lengths = np.zeros((numSeqs, numSeqs))
 
-    # Compare all sequences with themselves (without replacement, so like an upper triangular matrix)
+    # Compare all sequences with themselves (without replacement,
+    # so like an upper triangular matrix)
     for i, j in combinations_with_replacement(range(numSeqs), 2):
         # Get the two sequences to align
         # Note: working with strings as lists, since lists are mutable
@@ -66,9 +70,12 @@ def pairwiseGlobalAlignment(seqs, matDir="../matricies/HIJACK30"):
         seq1[seq1CenterIndex] = "*"
         seq2[seq2CenterIndex] = "*"
 
-        # Calculate the alignment score for both the sequences and the center residue using the HIJACK30 matrix
-        # The gap opening and extension penalities of -8 and penalize_end_gaps=False parameter let the pairwise.align
-        # function with similarly (within +/-1.5E-14) to the glocal parameter in MATLAB on 979 unique 21-mers
+        # Calculate the alignment score for both the sequences and the center residue
+        # using the HIJACK30 matrix.
+        # The gap opening and extension penalities of -8
+        # and penalize_end_gaps=False parameter
+        # let the pairwise.align function with similarly (within +/-1.5E-14)
+        # to the glocal parameter in MATLAB on 979 unique 21-mers
         score = pairwise2.align.globalds(
             "".join(seq1),
             "".join(seq2),
@@ -92,7 +99,8 @@ def pairwiseGlobalAlignment(seqs, matDir="../matricies/HIJACK30"):
         scoreScaled = 0.2 * score
         scoreScaledCenter = 0.2 * scoreCenter
 
-        # Correct the alignment score (remove the *-* alignment and add a center-center alignment)
+        # Correct the alignment score (remove the *-* alignment and add a
+        # center-center alignment)
         scoreCorrected = scoreScaled + scoreScaledCenter - 1000 * 0.2
         scores[i, j] = scoreCorrected
         scores[j, i] = scoreCorrected
