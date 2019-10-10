@@ -178,7 +178,7 @@ def format_single_features(single_features, file_name):
         atom_to_features(dict): A dictionary mapping atoms to their features
     """
     global_features = single_features[0]
-    residue_features = single_features[1]
+    atom_features = single_features[1]
     atom_radius_features = single_features[2]
 
     atom_to_features = {}
@@ -188,11 +188,8 @@ def format_single_features(single_features, file_name):
         features["Protein"] = file_name.split("/")[-1]
         for feature_name, feature_value in global_features.items():
             features["{}_global_sum".format(feature_name)] = feature_value
-            # if 'contacts' not in feature_name:
-            #     features["{}_global_avg".format(feature_name)] = \
-            #         feature_value / global_features["contacts"]
 
-        for feature_name, feature_value in residue_features[atom].items():
+        for feature_name, feature_value in atom_features[atom].items():
             features[feature_name] = feature_value
 
         for radius, bubble_features in radius_to_bubble_features.items():
