@@ -183,34 +183,46 @@ def format_single_features(single_features, file_name):
 
     atom_to_features = {}
 
+    sum_excluded = [
+        "circularVariance",
+        "sumMetals",
+        "CA",
+        "CO",
+        "CU",
+        "FE",
+        "K",
+        "MG",
+        "MN",
+        "MO",
+        "NA",
+        "NI",
+        "ZN",
+    ]
+
     for atom, radius_to_bubble_features in atom_radius_features.items():
         features = {}
         features["Protein"] = file_name.split("/")[-1]
         for feature_name, feature_value in global_features.items():
-            features["{}_global_sum".format(feature_name)] = feature_value
+            if (
+                all([excl not in feature_name for excl in sum_excluded])
+                or feature_name == "RKPT"
+            ):
+                if feature_name == "contacts":
+                    features["residues_global_sum"] = feature_value
+                else:
+                    features["{}_global_sum".format(feature_name)] = feature_value
+            else:
+                features["{}_global".format(feature_name)] = feature_value
 
         for feature_name, feature_value in atom_features[atom].items():
             features[feature_name] = feature_value
 
         for radius, bubble_features in radius_to_bubble_features.items():
             for bubble_feature_name, feature_value in bubble_features.items():
-                sum_excluded = [
-                    "circular",
-                    "sumMetals",
-                    "CA",
-                    "CO",
-                    "CU",
-                    "FE",
-                    "K",
-                    "MG",
-                    "MN",
-                    "MO",
-                    "NA",
-                    "NI",
-                    "ZN",
-                ]
-
-                if any([excl not in bubble_feature_name for excl in sum_excluded]):
+                if (
+                    all([excl not in bubble_feature_name for excl in sum_excluded])
+                    or feature_name == "RKPT"
+                ):
                     feature_name = "{bubble}_{radius}A_sum".format(
                         bubble=bubble_feature_name, radius=radius
                     )
@@ -222,6 +234,7 @@ def format_single_features(single_features, file_name):
                 # if 'contacts' not in feature_name:
                 #     features[feature_name.replace("sum", "avg")] =\
                 #         feature_value / bubble_features["contacts"]
+
         atom_to_features[atom] = features
 
     return atom_to_features

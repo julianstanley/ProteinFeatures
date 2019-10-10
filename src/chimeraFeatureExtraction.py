@@ -165,25 +165,25 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12], metal_binding_sites
     all_atoms = [ExtendedAtom(atom) for atom in selection.currentAtoms()]
     atom_features = {}
     for atom in rpkt_atoms:
-        eResidue = ExtendedResidue(atom.residue, [], [])
+        eResidue = ExtendedResidue(atom.residue, depths, metals)
         atom_features[atom.name] = compute_bubble_attributes_residues(
-            atom, all_residues, all_atoms, 0
+            atom,
+            all_residues,
+            [ExtendedAtom(a, depths, metals) for a in eResidue.atoms],
+            0,
         )
 
-        atom_features[atom.name].pop('circularVariance')
+        # Format each feature with _res to match labels of original pipeline data
+        for key in atom_features[atom.name]:
+            if "res" not in key:
+                atom_features[atom.name]["{}_res".format(key)] = atom_features[
+                    atom.name
+                ].pop(key)
 
         # Add global circular variance
         atom_features[atom.name].update(
             compute_global_circular_variance(atom, all_atoms)
         )
-
-        # Format each feature with _res to match labels of original pipeline data
-        # Ignore circular variance, since that's global.
-        for key in atom_features[atom.name]:
-            if "res" not in key and "circular" not in key:
-                atom_features[atom.name]["{}_res".format(key)] = atom_features[
-                    atom.name
-                ].pop(key)
 
         atom_features[atom.name].update(
             {"AA": eResidue.residue_1_letter, "Position": eResidue.number}

@@ -28,7 +28,7 @@ features = [
     "NI",
     "ZN",
     "contacts",
-    "RPKT",
+    "RKPT",
     "Arg",
     "Lys",
     "Pro",
@@ -81,7 +81,7 @@ def get_atom_features(eAtom):
         "NA": eAtom.metal_contacts.count("NA"),
         "NI": eAtom.metal_contacts.count("NI"),
         "ZN": eAtom.metal_contacts.count("ZN"),
-        "RPKT": (1 if eAtom.residue_1_letter in ["R", "K", "P", "T"] else 0),
+        "RKPT": (1 if eAtom.residue_1_letter in ["R", "K", "P", "T"] else 0),
         "Arg": (1 if eAtom.residue_1_letter == "R" else 0),
         "Lys": (1 if eAtom.residue_1_letter == "K" else 0),
         "Pro": (1 if eAtom.residue_1_letter == "P" else 0),
@@ -142,15 +142,17 @@ def get_residue_features(eResidue):
         "NA_res": eResidue.metal_contacts.count("NA"),
         "NI_res": eResidue.metal_contacts.count("NI"),
         "ZN_res": eResidue.metal_contacts.count("ZN"),
-        "RPKT_res": (1 if eResidue.residue_1_letter in ["R", "K", "P", "T"] else 0),
+        "RKPT_res": (1 if eResidue.residue_1_letter in ["R", "K", "P", "T"] else 0),
         "Arg_res": (1 if eResidue.residue_1_letter == "R" else 0),
         "Lys_res": (1 if eResidue.residue_1_letter == "K" else 0),
         "Pro_res": (1 if eResidue.residue_1_letter == "P" else 0),
         "Thr_res": (1 if eResidue.residue_1_letter == "T" else 0),
         "surfMC_res": eResidue.residue_1_letter in ["M", "C"]
         and (eResidue.depth - 1.782) < 0.01,
-        "surfM_res": (eResidue.residue_1_letter == "M") and (eResidue.depth - 1.782) < 0.01,
-        "surfC_res": (eResidue.residue_1_letter == "C") and (eResidue.depth - 1.782) < 0.01,
+        "surfM_res": (eResidue.residue_1_letter == "M")
+        and (eResidue.depth - 1.782) < 0.01,
+        "surfC_res": (eResidue.residue_1_letter == "C")
+        and (eResidue.depth - 1.782) < 0.01,
         "hydro_res": eResidue.hydrophobicity,
         "OHRxnConst_res": eResidue.hydroxyl_constant,
         "SS_res": (1 if eResidue.isSheet or eResidue.isHelix else 0),
@@ -162,7 +164,6 @@ def get_residue_features(eResidue):
         "protBindDISOPREDscore_res": float("NaN"),
         "areaSAS_res": eResidue.area_sas,
         "reactivity_res": eResidue.reactivity,
-        # A residue does not have a circular variance, that's an atomic feature
         "circularVariance_res": float("NaN"),
         "depth_res": eResidue.depth,
         "contacts_res": 1,
@@ -177,9 +178,10 @@ def get_residue_features(eResidue):
     if math.isnan(residue_features["surfM_res"]):
         raise Exception(
             "Here! Residue depth: {}, letter; {}, expression: {}, dict: {}".format(
-                eResidue.depth, eResidue.residue_1_letter,
+                eResidue.depth,
+                eResidue.residue_1_letter,
                 (eResidue.residue_1_letter == "M") and (eResidue.depth - 1.782) < 0.01,
-                )
+            )
         )
 
     if not math.isnan(residue_features["disordScore_res"]):
@@ -269,7 +271,14 @@ def compute_bubble_attributes_residues(
 ):
     base_atom.set_residue_contacts(compared_residues, radius)
     base_atom.set_metal_contacts(radius)
-    base_atom.set_atom_contacts(compared_atoms, radius)
+
+    # If radius is 0, circular variance of this residue means of the atoms in the
+    # residue
+    if radius < 0.001:
+        base_atom.set_atom_contacts(compared_atoms, float("Inf"))
+    else:
+        base_atom.set_atom_contacts(compared_atoms, radius)
+
     bubble_features = get_residues_features_sums(base_atom.residue_contacts)
 
     # Add the base features to the bubble features, if we're at a radius of 0
