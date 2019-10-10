@@ -110,6 +110,7 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12], metal_binding_sites
 
     print("getting global attributes")
     global_attributes = compute_global_attributes_residues(all_residues)
+    global_attributes.pop("circularVariance")
 
     save_and_clear_reply_log("chimera_outlog_pre_bubble.txt")
 
@@ -168,6 +169,8 @@ def chimeraFeatureExtraction(pdb_file, radii=[5, 8, 10, 12], metal_binding_sites
         atom_features[atom.name] = compute_bubble_attributes_residues(
             atom, all_residues, all_atoms, 0
         )
+
+        atom_features[atom.name].pop('circularVariance')
 
         # Add global circular variance
         atom_features[atom.name].update(

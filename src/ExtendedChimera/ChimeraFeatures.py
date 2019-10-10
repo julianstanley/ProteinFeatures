@@ -5,6 +5,7 @@ from chimera import selection
 from chimera import runCommand as rc
 from ExtendedAtom import ExtendedAtom
 from Utils import median
+import math
 
 # All of the features that we care about
 features = [
@@ -21,7 +22,6 @@ features = [
     "CU",
     "FE",
     "K",
-    "M",
     "MN",
     "MO",
     "NA",
@@ -86,9 +86,9 @@ def get_atom_features(eAtom):
         "Lys": (1 if eAtom.residue_1_letter == "K" else 0),
         "Pro": (1 if eAtom.residue_1_letter == "P" else 0),
         "Thr": (1 if eAtom.residue_1_letter == "T" else 0),
-        "surfMC": float("NaN"),
-        "surfM": float("NaN"),
-        "surfC": float("NaN"),
+        "surfMC": eAtom.residue_1_letter in ["M", "C"] and (eAtom.depth - 1.782) < 0.01,
+        "surfM": eAtom.residue_1_letter == "M" and (eAtom.depth - 1.782) < 0.01,
+        "surfC": eAtom.residue_1_letter == "C" and (eAtom.depth - 1.782) < 0.01,
         "hydro": eAtom.hydrophobicity,
         "OHRxnConst": eAtom.hydroxyl_constant,
         "SS": (1 if eAtom.isSheet or eAtom.isHelix else 0),
@@ -147,9 +147,10 @@ def get_residue_features(eResidue):
         "Lys_res": (1 if eResidue.residue_1_letter == "K" else 0),
         "Pro_res": (1 if eResidue.residue_1_letter == "P" else 0),
         "Thr_res": (1 if eResidue.residue_1_letter == "T" else 0),
-        "surfMC_res": float("NaN"),
-        "surfM_res": float("NaN"),
-        "surfC_res": float("NaN"),
+        "surfMC_res": eResidue.residue_1_letter in ["M", "C"]
+        and (eResidue.depth - 1.782) < 0.01,
+        "surfM_res": (eResidue.residue_1_letter == "M") and (eResidue.depth - 1.782) < 0.01,
+        "surfC_res": (eResidue.residue_1_letter == "C") and (eResidue.depth - 1.782) < 0.01,
         "hydro_res": eResidue.hydrophobicity,
         "OHRxnConst_res": eResidue.hydroxyl_constant,
         "SS_res": (1 if eResidue.isSheet or eResidue.isHelix else 0),
@@ -161,6 +162,7 @@ def get_residue_features(eResidue):
         "protBindDISOPREDscore_res": float("NaN"),
         "areaSAS_res": eResidue.area_sas,
         "reactivity_res": eResidue.reactivity,
+        # A residue does not have a circular variance, that's an atomic feature
         "circularVariance_res": float("NaN"),
         "depth_res": eResidue.depth,
         "contacts_res": 1,
@@ -171,6 +173,17 @@ def get_residue_features(eResidue):
         res_feature_name = "{}_res".format(feature_name)
         if res_feature_name not in residue_features:
             residue_features[res_feature_name] = float("NaN")
+
+    if math.isnan(residue_features["surfM_res"]):
+        raise Exception(
+            "Here! Residue depth: {}, letter; {}, expression: {}, dict: {}".format(
+                eResidue.depth, eResidue.residue_1_letter,
+                (eResidue.residue_1_letter == "M") and (eResidue.depth - 1.782) < 0.01,
+                )
+        )
+
+    if not math.isnan(residue_features["disordScore_res"]):
+        raise Exception("Nan checking not working")
 
     return residue_features
 
