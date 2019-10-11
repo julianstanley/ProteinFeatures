@@ -317,9 +317,6 @@ def compute_bubble_attributes_residues(
 
 
 def get_depths(times=1):
-    with open("troubleshoot.txt", "a") as file:
-        file.write("In get_depths")
-
     depths_lists = {}
     depths_return = {}
     for time in range(times):
@@ -330,14 +327,8 @@ def get_depths(times=1):
             else:
                 depths_lists[atom_name] = [depth]
 
-    with open("troubleshoot.txt", "a") as file:
-        file.write("First loop")
-
     for atom_name, depths_list in depths_lists.items():
         depths_return[atom_name] = median([float(depth) for depth in depths_list])
-
-    with open("troubleshoot.txt", "a") as file:
-        file.write("Second loop")
 
     return depths_return
 
