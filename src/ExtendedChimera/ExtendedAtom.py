@@ -21,7 +21,15 @@ class ExtendedResidue:
     of its first atom.
     """
 
-    def __init__(self, residue, depths=None, all_metals=[]):
+    def __init__(
+        self,
+        residue,
+        depths=None,
+        all_metals=[],
+        disopred_disorder=[],
+        disopred_binding=[],
+        sppider_binding=[],
+    ):
         # Identifier attributes
         self.atoms = residue.atoms
         self.residue = residue
@@ -62,6 +70,32 @@ class ExtendedResidue:
         self.charge = charge_index_dict[self.residue_1_letter]
         self.hydrophobicity = residue.kdHydrophobicity
         self.reactivity = reactivity_index_dict[self.residue_1_letter]
+
+        # Disorder
+        for score in disopred_disorder:
+            if score["pos"] == self.number.split(".")[0]:
+                self.disorder_score = score["Disorder Score"]
+                self.disorder_call = score["Disorder Call"]
+                if score["aa"] != self.residue_1_letter:
+                    raise Exception("Mismatch: {}, {}".format(score, self.number))
+                break
+
+        # Disopred binding
+        for d_binding in disopred_binding:
+            if d_binding["pos"] == self.number.split(".")[0]:
+                self.disopred_binding_score = d_binding["Binding Score"]
+                self.disopred_binding_call = d_binding["Binding Call"]
+                if score["aa"] != self.residue_1_letter:
+                    raise Exception("Mismatch: {}, {}".format(d_binding, self.number))
+                break
+
+        # SPPIDER binding
+        for s_binding in sppider_binding:
+            if s_binding["pos"] == self.number.split(".")[0]:
+                self.sppider_binding_call = s_binding["Binding Call"]
+                if score["aa"] != self.residue_1_letter:
+                    raise Exception("Mismatch: {}, {}".format(s_binding, self.number))
+                break
 
         # Depth
         self.depths = depths
@@ -116,9 +150,24 @@ class ExtendedAtom(ExtendedResidue, object):
     extending the atom class (since extension of the atom class is not allowed)
     """
 
-    def __init__(self, atom, depths=None, all_metals=[]):
+    def __init__(
+        self,
+        atom,
+        depths=None,
+        all_metals=[],
+        disopred_disorder=[],
+        disopred_binding=[],
+        sppider_binding=[],
+    ):
         # This atom should have all of the attributes of its parent residue
-        super(ExtendedAtom, self).__init__(atom.residue, depths, all_metals)
+        super(ExtendedAtom, self).__init__(
+            atom.residue,
+            depths,
+            all_metals,
+            disopred_disorder,
+            disopred_binding,
+            sppider_binding,
+        )
 
         # Identifier attributes
         self.atom = atom

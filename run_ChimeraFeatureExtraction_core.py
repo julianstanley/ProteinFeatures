@@ -31,6 +31,9 @@ default_logfile = "chimeraFeatureExtraction_log_{date:%Y%m%d_%H%M%S}.txt".format
     date=datetime.datetime.now()
 )
 default_metalfile = "input/metalBindingSiteData_01-13-2017.txt"
+default_sppider_binding = "input/sppider_binding.csv"
+default_disopred_binding = "input/disopred_binding.csv"
+default_disopred_disorder = "input/disopred_disorder.csv"
 
 
 # Set command-line parameters, to be passed to the "featureWrapper" function
@@ -61,8 +64,32 @@ default_metalfile = "input/metalBindingSiteData_01-13-2017.txt"
     default=default_metalfile,
     help="Path containing the metal binding data file",
 )
+@click.option(
+    "--disopred_disorder_file",
+    default=default_disopred_disorder,
+    help="Path containing the disopred disorder data file",
+)
+@click.option(
+    "--disopred_binding_file",
+    default=default_disopred_binding,
+    help="Path containing the disopred protein binding data file",
+)
+@click.option(
+    "--sppider_binding_file",
+    default=default_sppider_binding,
+    help="Path containing the SPPIDER protein binding data file",
+)
 def featureWrapper(
-    pdbfile, pdbdir, outfile, radii, attempts_limit, logfile, metals_file
+    pdbfile,
+    pdbdir,
+    outfile,
+    radii,
+    attempts_limit,
+    logfile,
+    metals_file,
+    disopred_disorder_file,
+    disopred_binding_file,
+    sppider_binding_file,
 ):
     """ Takes in the command line arguments, checks to make sure pdb files
     were passed, and then loops through each pdb file, grabs features from
@@ -94,6 +121,8 @@ def featureWrapper(
     if pdbfile == "" and pdbdir == "":
         raise ValueError("Must supply either a pdbfile or a pdbdir")
 
+    pdb_files_short = [file.split("/")[-1] for file in pdb_files]
+
     # Get metal binding information, or default to empty if you cant find them
     try:
         metal_binding = get_metal_binding(metals_file)
@@ -103,13 +132,65 @@ def featureWrapper(
             log.write("Metal binding file({}) not found: {}".format(metals_file, e))
 
     all_features = {}
-    for file in pdb_files:
-        file_name_short = file.split("/")[-1]
+
+    # Get disopred disorder information, or default to empty if you can't find them
+    # try:
+    disopred_disorder = get_disopred_disorder(disopred_disorder_file, pdb_files_short)
+    # except Exception as e:
+    #     disopred_disorder = {}
+    #     with open(logfile, "w+") as log:
+    #         log.write(
+    #             "DISOPRED disorder file({}) not found: {}".format(
+    #                 disopred_disorder_file, e
+    #             )
+    #         )
+
+    # Get disopred binding information, or default to empty if you can't find them
+    # try:
+    disopred_binding = get_disopred_binding(disopred_binding_file, pdb_files_short)
+    # except Exception as e:
+    #     disopred_binding = {}
+    #     with open(logfile, "w+") as log:
+    #         log.write(
+    #             "DISOPRED binding file({}) not found: {}".format(
+    #                 disopred_binding_file, e
+    #             )
+    #         )
+
+    # Get sppider binding information, or default to empty if you can't find them
+    # try:
+    sppider_binding = get_sppider_binding(sppider_binding_file, pdb_files_short)
+    # except Exception as e:
+    #     sppider_binding = {}
+    #     with open(logfile, "w+") as log:
+    #         log.write(
+    #             "SPPIDER binding file({}) not found: {}".format(sppider_binding_file, e)
+    #         )
+
+    for file_name_short in pdb_files_short:
         # Get the metal binding sites associated with the file, if they exist
         if file_name_short in metal_binding:
             metal_binding_sites = metal_binding[file_name_short]
         else:
             metal_binding_sites = []
+
+        # Get the disopred disorder info associated with the file, if it exists
+        if file_name_short in disopred_disorder:
+            disopred_disorder_map = disopred_disorder[file_name_short]
+        else:
+            disopred_disorder_map = []
+
+        # Get the disopred binding info associated with the file, if it exists
+        if file_name_short in disopred_binding:
+            disopred_binding_map = disopred_binding[file_name_short]
+        else:
+            disopred_binding_map = []
+
+        # Get the sppider binding info associated with the file, if it exists
+        if file_name_short in sppider_binding:
+            sppider_binding_map = sppider_binding[file_name_short]
+        else:
+            sppider_binding_map = []
 
         attempts = 0
         while attempts < attempts_limit:
@@ -118,7 +199,10 @@ def featureWrapper(
                 file,
                 [int(radius) for radius in radii.split()],
                 metal_binding_sites,
-                logfile
+                disopred_disorder_map,
+                disopred_binding_map,
+                sppider_binding_map,
+                logfile,
             )
 
             # Re-format features so that they're easier to write
@@ -168,6 +252,87 @@ def get_metal_binding(metal_file_path):
                 )
 
     return file_to_metals
+
+
+def get_disopred_disorder(disopred_disorder_file, pdb_files_short):
+    file_to_disorder = {}
+    with open(disopred_disorder_file, "r") as f:
+        for line in f:
+            line = line.strip()
+            # The disopred disorder file contains:
+            # Protein file name, amino acid, position, disorder call, disorder score
+            file_name, aa, pos, disorder_call, disorder_score = line.split(",")
+            if file_name in pdb_files_short:
+                if file_name not in file_to_disorder:
+                    file_to_disorder[file_name] = []
+
+                try:
+                    file_to_disorder[file_name].append(
+                        {
+                            "File Name": file_name,
+                            "aa": aa,
+                            "pos": pos,
+                            "Disorder Call": int(disorder_call),
+                            "Disorder Score": float(disorder_score),
+                        }
+                    )
+                except Exception as e:
+                    continue
+
+    return file_to_disorder
+
+
+def get_disopred_binding(disopred_binding_file, pdb_files_short):
+    file_to_binding = {}
+    with open(disopred_binding_file, "r") as f:
+        for line in f:
+            # The disopred disorder file contains:
+            # Protein file name, amino acid, position, binding call, binding score
+            file_name, aa, pos, binding_call, binding_score = line.split(",")
+            if file_name in pdb_files_short:
+                if file_name not in file_to_binding:
+                    file_to_binding[file_name] = []
+
+                try:
+                    file_to_binding[file_name].append(
+                        {
+                            "File Name": file_name,
+                            "aa": aa,
+                            "pos": pos,
+                            "Binding Call": int(binding_call),
+                            "Binding Score": float(binding_score),
+                        }
+                    )
+                except Exception as e:
+                    continue
+
+    return file_to_binding
+
+
+def get_sppider_binding(sppider_binding_file, pdb_files_short):
+    file_to_binding = {}
+    with open(sppider_binding_file, "r") as f:
+        for line in f:
+            # The disopred disorder file contains:
+            # Protein file name, amino acid, position, binding call
+            file_name, aa, pos, binding_call = line.split(",")
+            if file_name in pdb_files_short:
+                if file_name not in file_to_binding:
+                    file_to_binding[file_name] = []
+
+                try:
+                    file_to_binding[file_name].append(
+                        {
+                            "File Name": file_name,
+                            "aa": aa,
+                            "pos": pos,
+                            "Binding Call": int(binding_call),
+                        }
+                    )
+                except Exception as e:
+                    continue
+
+    return file_to_binding
 
 
 def format_single_features(single_features, file_name):

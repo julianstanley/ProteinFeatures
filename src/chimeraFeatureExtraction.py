@@ -19,7 +19,13 @@ import re
 
 
 def chimeraFeatureExtraction(
-    pdb_file, radii=[5, 8, 10, 12], metal_binding_sites=[], logfile="log.txt"
+    pdb_file,
+    radii=[5, 8, 10, 12],
+    metal_binding_sites=[],
+    disopred_disorder_map=[],
+    disopred_binding_map=[],
+    sppider_binding_map=[],
+    logfile="log.txt",
 ):
     """
     Arguments:
@@ -92,7 +98,15 @@ def chimeraFeatureExtraction(
     # New
     save_and_clear_reply_log(logfile)
     rpkt_atoms = [
-        ExtendedAtom(atom, depths, metals) for atom in selection.currentAtoms()
+        ExtendedAtom(
+            atom,
+            depths,
+            metals,
+            disopred_disorder_map,
+            disopred_binding_map,
+            sppider_binding_map,
+        )
+        for atom in selection.currentAtoms()
     ]
     print("done")
     save_and_clear_reply_log(logfile)
@@ -102,11 +116,29 @@ def chimeraFeatureExtraction(
     rc("select protein")
     print("getting all {} residues".format(len(selection.currentResidues())))
     all_residues = [
-        ExtendedResidue(residue, depths, metals)
+        ExtendedResidue(
+            residue,
+            depths,
+            metals,
+            disopred_disorder_map,
+            disopred_binding_map,
+            sppider_binding_map,
+        )
         for residue in selection.currentResidues()
     ]
+
     print("done")
-    atoms_near_rpkt = [ExtendedAtom(atom) for atom in selection.currentAtoms()]
+    atoms_near_rpkt = [
+        ExtendedAtom(
+            atom,
+            depths,
+            metals,
+            disopred_disorder_map,
+            disopred_binding_map,
+            sppider_binding_map,
+        )
+        for atom in selection.currentAtoms()
+    ]
 
     print("getting global attributes")
     global_attributes = compute_global_attributes_residues(all_residues)
@@ -136,7 +168,14 @@ def chimeraFeatureExtraction(
         residues_near_rpkt = []
         for residue in selection.currentResidues():
             try:
-                eResidue = ExtendedResidue(residue, depths, metals)
+                eResidue = ExtendedResidue(
+                    residue,
+                    depths,
+                    metals,
+                    disopred_disorder_map,
+                    disopred_binding_map,
+                    sppider_binding_map,
+                )
                 residues_near_rpkt.append(eResidue)
             except Exception:
                 continue
@@ -162,7 +201,17 @@ def chimeraFeatureExtraction(
                 }
 
     print("getting atom-level attributes")
-    all_atoms = [ExtendedAtom(atom) for atom in selection.currentAtoms()]
+    all_atoms = [
+        ExtendedAtom(
+            atom,
+            depths,
+            metals,
+            disopred_disorder_map,
+            disopred_binding_map,
+            sppider_binding_map,
+        )
+        for atom in selection.currentAtoms()
+    ]
     atom_features = {}
     for atom in rpkt_atoms:
         eResidue = ExtendedResidue(atom.residue, depths, metals)
