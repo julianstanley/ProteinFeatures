@@ -12,6 +12,7 @@ This script and the associated package are formatted with black pypy.org/project
 # (Since Chimera can't be imported without running via chimera)
 try:
     from src.chimeraFeatureExtraction import chimeraFeatureExtraction
+    from chimera import runCommand as rc
 except Exception as e:
     print(e)
     pass
@@ -169,10 +170,18 @@ def featureWrapper(
     #     sppider_binding = {}
     #     with open(logfile, "w+") as log:
     #         log.write(
-    #             "SPPIDER binding file({}) not found: {}".format(sppider_binding_file, e)
+    #             "SPPIDER binding file({}) not found: {}"
+    # .format(sppider_binding_file, e)
     #         )
 
-    for file_name_short in pdb_files_short:
+    with open("chimera_progress.log", 'a') as progress_log:
+        progress_log.write("Beginning to process {} files\n".format(len(pdb_files)))
+
+    for file in pdb_files:
+        with open("chimera_progress.log", 'a') as progress_log:
+            progress_log.write("Processing: {}\n".format(file))
+
+        file_name_short = file.split("/")[-1]
         # Get the metal binding sites associated with the file, if they exist
         if file_name_short in metal_binding:
             metal_binding_sites = metal_binding[file_name_short]
@@ -199,22 +208,33 @@ def featureWrapper(
 
         attempts = 0
         while attempts < attempts_limit:
-            # Extract features using the chimeraFeatureExtraction script
-            features = chimeraFeatureExtraction(
-                file,
-                [int(radius) for radius in radii.split()],
-                metal_binding_sites,
-                disopred_disorder_map,
-                disopred_binding_map,
-                sppider_binding_map,
-                logfile,
-            )
+            try:
+                # Extract features using the chimeraFeatureExtraction script
+                features = chimeraFeatureExtraction(
+                    file,
+                    [int(radius) for radius in radii.split()],
+                    metal_binding_sites,
+                    disopred_disorder_map,
+                    disopred_binding_map,
+                    sppider_binding_map,
+                    logfile,
+                )
 
-            # Re-format features so that they're easier to write
-            all_features.update(format_single_features(features, file))
+                # Re-format features so that they're easier to write
+                all_features.update(format_single_features(features, file))
 
-            # We got the features we were looking for, so no need to repeat
-            break
+                # We got the features we were looking for, so no need to repeat
+                with open("chimera_progress.log", "a") as progress_log:
+                    progress_log.write("Success processing: {}".format(file))
+                rc("close all")
+                break
+            except Exception as e:
+                with open(logfile, "w+") as log:
+                    log.write("Feature extraction failed {}, {}\n".format(file, e))
+                with open("chimera_progress.log", 'a') as progress_log:
+                    progress_log.write("Failure processing: {}\n".format(file))
+                rc("close all")
+                break
 
     # We really just need features from RPKT atoms, so put those into one dictionary
     # and then write them to file

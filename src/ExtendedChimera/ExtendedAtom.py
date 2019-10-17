@@ -77,7 +77,15 @@ class ExtendedResidue:
                 self.disorder_score = score["Disorder Score"]
                 self.disorder_call = score["Disorder Call"]
                 if score["aa"] != self.residue_1_letter:
-                    raise Exception("Mismatch: {}, {}".format(score, self.number))
+                    raise Exception(
+                        "Mismatch: {}, {}, {}, {}, {}".format(
+                            score,
+                            self.number,
+                            self.residue_1_letter,
+                            residue.type,
+                            aa_3_to_1,
+                        )
+                    )
                 break
 
         # Disopred binding
