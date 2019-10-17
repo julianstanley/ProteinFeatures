@@ -123,6 +123,8 @@ def featureWrapper(
 
     pdb_files_short = [file.split("/")[-1] for file in pdb_files]
 
+    print("Loading metal binding information into memory")
+
     # Get metal binding information, or default to empty if you cant find them
     try:
         metal_binding = get_metal_binding(metals_file)
@@ -135,6 +137,7 @@ def featureWrapper(
 
     # Get disopred disorder information, or default to empty if you can't find them
     # try:
+    print("Loading disopred disorder information into memory")
     disopred_disorder = get_disopred_disorder(disopred_disorder_file, pdb_files_short)
     # except Exception as e:
     #     disopred_disorder = {}
@@ -147,6 +150,7 @@ def featureWrapper(
 
     # Get disopred binding information, or default to empty if you can't find them
     # try:
+    print("Loading disopred binding information into memory")
     disopred_binding = get_disopred_binding(disopred_binding_file, pdb_files_short)
     # except Exception as e:
     #     disopred_binding = {}
@@ -159,6 +163,7 @@ def featureWrapper(
 
     # Get sppider binding information, or default to empty if you can't find them
     # try:
+    print("Loading sppider binding information into memory")
     sppider_binding = get_sppider_binding(sppider_binding_file, pdb_files_short)
     # except Exception as e:
     #     sppider_binding = {}
