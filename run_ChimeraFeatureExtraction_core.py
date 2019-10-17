@@ -22,6 +22,7 @@ import click
 import datetime
 import os
 import pandas as pd
+import time
 
 # Set default names for the log and outfile (exported) as well as the
 # metal binding site file (imported)
@@ -174,12 +175,13 @@ def featureWrapper(
     # .format(sppider_binding_file, e)
     #         )
 
-    with open("chimera_progress.log", 'a') as progress_log:
+    with open("chimera_progress.log", "a") as progress_log:
         progress_log.write("Beginning to process {} files\n".format(len(pdb_files)))
 
     for file in pdb_files:
-        with open("chimera_progress.log", 'a') as progress_log:
+        with open("chimera_progress.log", "a") as progress_log:
             progress_log.write("Processing: {}\n".format(file))
+        start_time = time.time()
 
         file_name_short = file.split("/")[-1]
         # Get the metal binding sites associated with the file, if they exist
@@ -225,13 +227,16 @@ def featureWrapper(
 
                 # We got the features we were looking for, so no need to repeat
                 with open("chimera_progress.log", "a") as progress_log:
-                    progress_log.write("Success processing: {}".format(file))
+                    progress_log.write("Success processing: {}\n".format(file))
+                    progress_log.write(
+                        "Time: %s seconds\n" % round(time.time() - start_time, 2)
+                    )
                 rc("close all")
                 break
             except Exception as e:
                 with open(logfile, "w+") as log:
                     log.write("Feature extraction failed {}, {}\n".format(file, e))
-                with open("chimera_progress.log", 'a') as progress_log:
+                with open("chimera_progress.log", "a") as progress_log:
                     progress_log.write("Failure processing: {}\n".format(file))
                 rc("close all")
                 break
