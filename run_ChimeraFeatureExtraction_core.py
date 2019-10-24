@@ -23,6 +23,7 @@ import datetime
 import os
 import pandas as pd
 import time
+import os
 
 # Set default names for the log and outfile (exported) as well as the
 # metal binding site file (imported)
@@ -32,6 +33,7 @@ default_outfile = "chimeraFeatureExtraction_out_{date:%Y%m%d_%H%M%S}.csv".format
 default_logfile = "chimeraFeatureExtraction_log_{date:%Y%m%d_%H%M%S}.txt".format(
     date=datetime.datetime.now()
 )
+default_outdir = "ChimeraOut_{date:%Y%m%d_%H%M%S}".format(date=datetime.datetime.now())
 default_metalfile = "input/metalBindingSiteData_01-13-2017.txt"
 default_sppider_binding = "input/sppider_binding.csv"
 default_disopred_binding = "input/disopred_binding.csv"
@@ -55,7 +57,7 @@ default_disopred_disorder = "input/disopred_disorder.csv"
 )
 @click.option(
     "--attempts_limit",
-    default="1",
+    default="5",
     help="Number of re-attempts to generate features after failure",
 )
 @click.option(
@@ -81,6 +83,10 @@ default_disopred_disorder = "input/disopred_disorder.csv"
     default=default_sppider_binding,
     help="Path containing the SPPIDER protein binding data file",
 )
+@click.option(
+    "--outdir", default=default_outdir, help="Folder for all of the output files"
+)
+@click.option("--individual", default=True, help="Output individual files?")
 def featureWrapper(
     pdbfile,
     pdbdir,
@@ -92,6 +98,8 @@ def featureWrapper(
     disopred_disorder_file,
     disopred_binding_file,
     sppider_binding_file,
+    outdir,
+    individual,
 ):
     """ Takes in the command line arguments, checks to make sure pdb files
     were passed, and then loops through each pdb file, grabs features from
@@ -109,6 +117,14 @@ def featureWrapper(
     Effect:
         Writes a .csv file to "outfile"
     """
+    # Setup output directory
+    if not os.path.exists(outdir):
+        os.makedirs(outdir)
+
+    if individual:
+        if not os.path.exists(outdir + "/individual"):
+            os.makedirs(outdir + "/individual")
+
     # If we fail, how many times are we going to retry? This is passed as a string
     # from the command line, but should be an int.
     attempts_limit = int(attempts_limit)
@@ -178,6 +194,11 @@ def featureWrapper(
     with open("chimera_progress.log", "a") as progress_log:
         progress_log.write("Beginning to process {} files\n".format(len(pdb_files)))
 
+    # TODO: Can we multithread this loop? That might be significantly faster
+    # on the cloud. Questions: How does output get returned when you're
+    # running a function multhreadered? Might be good to abstract out this loop
+    # and have it return the single dictionary of features. In parellel: would
+    # these be returned in a big list? Then we could combine them.
     for file in pdb_files:
         with open("chimera_progress.log", "a") as progress_log:
             progress_log.write("Processing: {}\n".format(file))
@@ -223,7 +244,24 @@ def featureWrapper(
                 )
 
                 # Re-format features so that they're easier to write
-                all_features.update(format_single_features(features, file))
+                formatted_features = format_single_features(features, file)
+
+                # Add these completed features to the accumulating dictionary
+                all_features.update(formatted_features)
+
+                if individual:
+                    # Write the formatted features to their indiv files if parameter set
+                    single_rpkt_features = {}
+                    for atom_name, features in formatted_features.items():
+                        if atom_name.split()[1] in ["R", "P", "K", "T"]:
+                            single_rpkt_features[atom_name] = features
+
+                    write_all_features(
+                        single_rpkt_features,
+                        "{}/individual/{}.csv".format(
+                            outdir, file_name_short.split(".")[0]
+                        ),
+                    )
 
                 # We got the features we were looking for, so no need to repeat
                 with open("chimera_progress.log", "a") as progress_log:
@@ -238,8 +276,10 @@ def featureWrapper(
                     log.write("Feature extraction failed {}, {}\n".format(file, e))
                 with open("chimera_progress.log", "a") as progress_log:
                     progress_log.write("Failure processing: {}\n".format(file))
+
+                attempts += 1
+
                 rc("close all")
-                break
 
     # We really just need features from RPKT atoms, so put those into one dictionary
     # and then write them to file
