@@ -94,6 +94,9 @@ def generate_surface():
         Attempts to split the current protein and then generates a
         surface for each part of the protein
     """
+    # Clear the reply log first
+    r, r_text = read_reply_log()
+    r.Clear()
     # Select and split the protein
     rc("select protein")
     rc("split")
@@ -106,7 +109,7 @@ def generate_surface():
     r, r_text = read_reply_log()
     if "connected surface components" not in r_text:
         rc("close all")
-        raise Exception("Surface computation failed")
+        raise Exception("Surface computation failed; {}".format(r_text))
 
 
 def add_hydrogens_prep():

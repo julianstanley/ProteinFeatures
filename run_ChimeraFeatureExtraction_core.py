@@ -20,9 +20,10 @@ except Exception as e:
 # Use the click module to set command line arguments
 import click
 import datetime
-import os
+import os, sys
 import pandas as pd
 import time
+from collections import deque
 
 # Set default names for the log and outfile (exported) as well as the
 # metal binding site file (imported)
@@ -149,7 +150,7 @@ def featureWrapper(
         metal_binding = get_metal_binding(metals_file)
     except Exception as e:
         metal_binding = {}
-        with open(logfile, "w+") as log:
+        with open(logfile, "a") as log:
             log.write("Metal binding file({}) not found: {}".format(metals_file, e))
 
     all_features = {}
@@ -160,7 +161,7 @@ def featureWrapper(
     disopred_disorder = get_disopred_disorder(disopred_disorder_file, pdb_files_short)
     # except Exception as e:
     #     disopred_disorder = {}
-    #     with open(logfile, "w+") as log:
+    #     with open(logfile, "a") as log:
     #         log.write(
     #             "DISOPRED disorder file({}) not found: {}".format(
     #                 disopred_disorder_file, e
@@ -173,7 +174,7 @@ def featureWrapper(
     disopred_binding = get_disopred_binding(disopred_binding_file, pdb_files_short)
     # except Exception as e:
     #     disopred_binding = {}
-    #     with open(logfile, "w+") as log:
+    #     with open(logfile, "a") as log:
     #         log.write(
     #             "DISOPRED binding file({}) not found: {}".format(
     #                 disopred_binding_file, e
@@ -186,7 +187,7 @@ def featureWrapper(
     sppider_binding = get_sppider_binding(sppider_binding_file, pdb_files_short)
     # except Exception as e:
     #     sppider_binding = {}
-    #     with open(logfile, "w+") as log:
+    #     with open(logfile, "a") as log:
     #         log.write(
     #             "SPPIDER binding file({}) not found: {}"
     # .format(sppider_binding_file, e)
@@ -201,21 +202,50 @@ def featureWrapper(
     # and have it return the single dictionary of features. In parellel: would
     # these be returned in a big list? Then we could combine them.
 
-    for file in pdb_files:
-        formatted_features = compute_features(
-            file,
-            metal_binding,
-            disopred_disorder,
-            disopred_binding,
-            sppider_binding,
-            attempts_limit,
-            radii,
-            logfile,
-            individual,
-            outdir,
-        )
+    # Convert pdb files into a big deque
+    pdb_files = deque(pdb_files)
 
-        all_features.update(formatted_features)
+    while len(pdb_files) > 1:
+        file = pdb_files.pop()
+        try:
+            with open("chimera_progress.log", "a") as progress_log:
+                progress_log.write("Processing: {}\n".format(file))
+            start_time = time.time()
+
+            formatted_features = compute_features(
+                file,
+                metal_binding,
+                disopred_disorder,
+                disopred_binding,
+                sppider_binding,
+                attempts_limit,
+                radii,
+                logfile,
+                individual,
+                outdir,
+            )
+            all_features.update(formatted_features)
+            with open("chimera_process.log", "a") as progress_log:
+                progress_log.write("Success processing: {}\n".format(file))
+                progress_log.write(
+                    "Time: %s seconds\n" % round(time.time() - start_time, 2)
+                )
+            with open(logfile, "a") as log:
+                log.write("Feature extraction success: {}\n".format(file))
+
+        except Exception as e:
+            # Write error to logs
+            with open(logfile, "a") as log:
+                log.write(
+                    "Feature extraction failed {},{},{}\n\n".format(
+                        file, e, sys.exc_info()
+                    )
+                )
+            with open("chimera_progress.log", "a") as progress_log:
+                progress_log.write("Failure processing: {}\n".format(file))
+
+            # Add pdb_file to the back of the deque
+            pdb_files.appendleft(file)
 
     # We really just need features from RPKT atoms, so put those into one dictionary
     # and then write them to file
@@ -239,84 +269,66 @@ def compute_features(
     individual,
     outdir,
 ):
-    with open("chimera_progress.log", "a") as progress_log:
-        progress_log.write("Processing: {}\n".format(file))
-    start_time = time.time()
+    try:
+        file_name_short = file.split("/")[-1]
+        # Get the metal binding sites associated with the file, if they exist
+        if file_name_short in metal_binding:
+            metal_binding_sites = metal_binding[file_name_short]
+        else:
+            metal_binding_sites = []
 
-    file_name_short = file.split("/")[-1]
-    # Get the metal binding sites associated with the file, if they exist
-    if file_name_short in metal_binding:
-        metal_binding_sites = metal_binding[file_name_short]
-    else:
-        metal_binding_sites = []
+        # Get the disopred disorder info associated with the file, if it exists
+        if file_name_short in disopred_disorder:
+            disopred_disorder_map = disopred_disorder[file_name_short]
+        else:
+            disopred_disorder_map = []
 
-    # Get the disopred disorder info associated with the file, if it exists
-    if file_name_short in disopred_disorder:
-        disopred_disorder_map = disopred_disorder[file_name_short]
-    else:
-        disopred_disorder_map = []
+        # Get the disopred binding info associated with the file, if it exists
+        if file_name_short in disopred_binding:
+            disopred_binding_map = disopred_binding[file_name_short]
+        else:
+            disopred_binding_map = []
 
-    # Get the disopred binding info associated with the file, if it exists
-    if file_name_short in disopred_binding:
-        disopred_binding_map = disopred_binding[file_name_short]
-    else:
-        disopred_binding_map = []
+        # Get the sppider binding info associated with the file, if it exists
+        if file_name_short in sppider_binding:
+            sppider_binding_map = sppider_binding[file_name_short]
+        else:
+            sppider_binding_map = []
 
-    # Get the sppider binding info associated with the file, if it exists
-    if file_name_short in sppider_binding:
-        sppider_binding_map = sppider_binding[file_name_short]
-    else:
-        sppider_binding_map = []
+        # Extract features using the chimeraFeatureExtraction script
+        features = chimeraFeatureExtraction(
+            file,
+            [int(radius) for radius in radii.split()],
+            metal_binding_sites,
+            disopred_disorder_map,
+            disopred_binding_map,
+            sppider_binding_map,
+            logfile,
+        )
 
-    attempts = 0
-    while attempts < attempts_limit:
-        try:
-            # Extract features using the chimeraFeatureExtraction script
-            features = chimeraFeatureExtraction(
-                file,
-                [int(radius) for radius in radii.split()],
-                metal_binding_sites,
-                disopred_disorder_map,
-                disopred_binding_map,
-                sppider_binding_map,
-                logfile,
+        # Re-format features so that they're easier to write
+        formatted_features = format_single_features(features, file)
+
+        if individual:
+            # Write the formatted features to their indiv files if parameter set
+            single_rpkt_features = {}
+            for atom_name, features in formatted_features.items():
+                if atom_name.split()[1] in ["R", "P", "K", "T"]:
+                    single_rpkt_features[atom_name] = features
+
+            write_all_features(
+                single_rpkt_features,
+                "{}/individual/{}.csv".format(outdir, file_name_short.split(".")[0]),
             )
 
-            # Re-format features so that they're easier to write
-            formatted_features = format_single_features(features, file)
+        rc("close all")
 
-            if individual:
-                # Write the formatted features to their indiv files if parameter set
-                single_rpkt_features = {}
-                for atom_name, features in formatted_features.items():
-                    if atom_name.split()[1] in ["R", "P", "K", "T"]:
-                        single_rpkt_features[atom_name] = features
+        return formatted_features
 
-                write_all_features(
-                    single_rpkt_features,
-                    "{}/individual/{}.csv".format(
-                        outdir, file_name_short.split(".")[0]
-                    ),
-                )
-
-            # We got the features we were looking for, so no need to repeat
-            with open("chimera_progress.log", "a") as progress_log:
-                progress_log.write("Success processing: {}\n".format(file))
-                progress_log.write(
-                    "Time: %s seconds\n" % round(time.time() - start_time, 2)
-                )
-            rc("close all")
-            break
-        except Exception as e:
-            with open(logfile, "w+") as log:
-                log.write("Feature extraction failed {}, {}\n".format(file, e))
-            with open("chimera_progress.log", "a") as progress_log:
-                progress_log.write("Failure processing: {}\n".format(file))
-
-            attempts += 1
-            rc("close all")
-
-    return formatted_features
+    # Catch exception so we can close all windows before throwing the error
+    except Exception as e:
+        rc("close all")
+        raise Exception(e)
 
 
 def get_metal_binding(metal_file_path):
