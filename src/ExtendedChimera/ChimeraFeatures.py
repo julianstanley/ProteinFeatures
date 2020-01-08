@@ -189,13 +189,15 @@ def get_residues_features_sums(eResidues):
     residues_features = dict.fromkeys(features, 0)
 
     for residue in eResidues:
-        # Get the features for this single residue
-        single_residue_features = get_residue_features(residue)
-        # Add this residue's features to the accumulating features
-        for feature in residues_features:
-            single_feature = "{}_res".format(feature)
-            residues_features[feature] += single_residue_features[single_feature]
-
+        try:
+            # Get the features for this single residue
+            single_residue_features = get_residue_features(residue)
+            # Add this residue's features to the accumulating features
+            for feature in residues_features:
+                single_feature = "{}_res".format(feature)
+                residues_features[feature] += single_residue_features[single_feature]
+        except Exception as e:
+            continue
     return residues_features
 
 
