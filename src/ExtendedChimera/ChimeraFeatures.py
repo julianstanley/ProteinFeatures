@@ -403,7 +403,13 @@ def get_depth_minimum():
     rc(("measure distance selection" " #0&~@* multiple true show true"))
     r, distances = read_reply_log()
 
-    all_atoms = [ExtendedAtom(atom) for atom in selection.currentAtoms()]
+    all_atoms = []
+    for atom in selection.currentAtoms():
+        try:
+            all_atoms.append(ExtendedAtom(atom))
+        except Exception as e:
+            continue
+
     # Map between atom number and atom residue
     atom_to_aa = {}
     for atom in all_atoms:
@@ -430,7 +436,11 @@ def get_depth_minimum():
             residue_number = residue_name.split(".")[0]
 
             # Get the minimum depth
-            depth_key = "{},{}".format(residue_number, atom_to_aa[residue_name])
+            try:
+                depth_key = "{},{}".format(residue_number, atom_to_aa[residue_name])
+            except Exception as e:
+                continue
+                
 
             # Only put this depth in the dictionary if this depth is:
             # (1) the first depth seen for this key, or

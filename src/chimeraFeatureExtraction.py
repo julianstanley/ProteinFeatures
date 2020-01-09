@@ -72,7 +72,8 @@ def chimeraFeatureExtraction(
 
         # Get the x,y,z coordinates of the metal from the reply log
         r, coords = read_reply_log()
-        coords = re.sub(r"centroid name, ID, center: centroid: c1 \( *", "", coords)
+        coords = re.sub(
+            r"centroid name, ID, center: centroid: c1 \( *", "", coords)
         coords = re.sub(r"\)", "", coords)
         coords = re.sub(r",", "", coords)
         coords = re.sub(r" +", " ", coords)
@@ -94,7 +95,8 @@ def chimeraFeatureExtraction(
     rc("select :arg@cd|:lys@ce|:mly@ce|:kcx@ce|:pro@cd|:thr@cb")
     # rpkt_residues = [ExtendedResidue(residue)
     #                 for residue in selection.currentResidues()]
-    print("getting all {} rpkt residues".format(len(selection.currentResidues())))
+    print("getting all {} rpkt residues".format(
+        len(selection.currentResidues())))
     # New
     save_and_clear_reply_log(logfile)
     rpkt_atoms = []
@@ -179,7 +181,8 @@ def chimeraFeatureExtraction(
             ).format(radius=radius_plus_bit)
         )
         print(
-            "getting all {} residues near rpkt".format(len(selection.currentResidues()))
+            "getting all {} residues near rpkt".format(
+                len(selection.currentResidues()))
         )
 
         # Added try-except due to error on 09/18
@@ -206,21 +209,24 @@ def chimeraFeatureExtraction(
 
         # Get bubble attributes
         for atom in rpkt_atoms:
-            if atom.name in atom_radius_features:
-                atom_radius_features[atom.name][
-                    radius
-                ] = compute_bubble_attributes_residues(
-                    atom, residues_near_rpkt, atoms_near_rpkt, radius
-                )
-            else:
-                # This must be the first radius the loop has seen.
-                # atom_radius_features[atom.name] should point to a dict
-                # with radii for keys, bubble attributes for values
-                atom_radius_features[atom.name] = {
-                    radius: compute_bubble_attributes_residues(
+            try:
+                if atom.name in atom_radius_features:
+                    atom_radius_features[atom.name][
+                        radius
+                    ] = compute_bubble_attributes_residues(
                         atom, residues_near_rpkt, atoms_near_rpkt, radius
                     )
-                }
+                else:
+                    # This must be the first radius the loop has seen.
+                    # atom_radius_features[atom.name] should point to a dict
+                    # with radii for keys, bubble attributes for values
+                    atom_radius_features[atom.name] = {
+                        radius: compute_bubble_attributes_residues(
+                            atom, residues_near_rpkt, atoms_near_rpkt, radius
+                        )
+                    }
+            except Exception as e:
+                continue
 
     print("getting atom-level attributes")
     all_atoms = []
@@ -243,21 +249,21 @@ def chimeraFeatureExtraction(
 
     atom_features = {}
     for atom in rpkt_atoms:
-        eResidue = ExtendedResidue(atom.residue, depths, metals)
-        extended_atoms = []
-        for a in eResidue.atoms:
-            try:
-                extended_atoms.append(ExtendedAtom(a, depths, metals))
-            except Exception as e:
-                with open("atom_exceptions", "a") as f:
-                    f.write("atom_rpkt,{},{}\n".format(str(a), e))
-                continue
-        atom_features[atom.name] = compute_bubble_attributes_residues(
-            atom,
-            all_residues,
-            extended_atoms,
-            0,
-        )
+        try:
+            eResidue = ExtendedResidue(atom.residue, depths, metals)
+            extended_atoms = []
+            for a in eResidue.atoms:
+                try:
+                    extended_atoms.append(ExtendedAtom(a, depths, metals))
+                except Exception as e:
+                    with open("atom_exceptions", "a") as f:
+                        f.write("atom_rpkt,{},{}\n".format(str(a), e))
+                    continue
+            atom_features[atom.name] = compute_bubble_attributes_residues(
+                atom, all_residues, extended_atoms, 0
+            )
+        except Exception as e:
+            continue
 
         # Format each feature with _res to match labels of original pipeline data
         for key in atom_features[atom.name]:
@@ -276,3 +282,6 @@ def chimeraFeatureExtraction(
         )
 
     return (global_attributes, atom_features, atom_radius_features)
+
+
+test = [2, 3, 2 3, 4]

@@ -24,6 +24,7 @@ import os, sys
 import pandas as pd
 import time
 from collections import deque
+import traceback
 
 # Set default names for the log and outfile (exported) as well as the
 # metal binding site file (imported)
@@ -237,8 +238,8 @@ def featureWrapper(
             # Write error to logs
             with open(logfile, "a") as log:
                 log.write(
-                    "Feature extraction failed {},{},{}\n\n".format(
-                        file, e, sys.exc_info()
+                    "Feature extraction failed {},{},{},{},{}\n\n".format(
+                        file, e, sys.exc_info(), PrintException(), traceback.format_exc()
                     )
                 )
             with open("chimera_progress.log", "a") as progress_log:
@@ -255,6 +256,19 @@ def featureWrapper(
             rpkt_features[atom_name] = features
 
     write_all_features(rpkt_features, outdir + "/" + outfile)
+
+
+import linecache
+import sys
+
+def PrintException():
+    exc_type, exc_obj, tb = sys.exc_info()
+    f = tb.tb_frame
+    lineno = tb.tb_lineno
+    filename = f.f_code.co_filename
+    linecache.checkcache(filename)
+    line = linecache.getline(filename, lineno, f.f_globals)
+    return 'EXCEPTION IN ({}, LINE {} "{}"): {}'.format(filename, lineno, line.strip(), exc_obj)
 
 
 def compute_features(
@@ -328,7 +342,7 @@ def compute_features(
     # Catch exception so we can close all windows before throwing the error
     except Exception as e:
         rc("close all")
-        raise Exception(e)
+        raise
 
 
 def get_metal_binding(metal_file_path):
