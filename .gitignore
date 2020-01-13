@@ -2,3 +2,7 @@
 *.csv
 *.txt
 *.log
+scratch/
+.vscode
+data/
+old_logs/
