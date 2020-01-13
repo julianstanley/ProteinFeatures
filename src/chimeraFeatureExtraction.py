@@ -26,6 +26,7 @@ def chimeraFeatureExtraction(
     disopred_binding_map=[],
     sppider_binding_map=[],
     logfile="log.txt",
+    attempts_limit=5,
 ):
     """
     Arguments:
@@ -35,8 +36,19 @@ def chimeraFeatureExtraction(
     """
     # Open the pdb file, generate a surface, then perform DockPrep
     # (Add hydrogens, etc).
-    rc("open " + pdb_file)
-    generate_surface()
+
+    # Try, in case surface generation fails.
+    attempts = 0
+    while attempts < attempts_limit:
+        try:
+            rc("open " + pdb_file)
+            generate_surface()
+            break
+        except Exception as e:
+            attempts += 1
+            if attempts >= attempts_limit:
+                raise Exception("Surface computation failed {} times".format(attempts))
+
     rc("~select")
     add_hydrogens_prep()
 
@@ -72,8 +84,7 @@ def chimeraFeatureExtraction(
 
         # Get the x,y,z coordinates of the metal from the reply log
         r, coords = read_reply_log()
-        coords = re.sub(
-            r"centroid name, ID, center: centroid: c1 \( *", "", coords)
+        coords = re.sub(r"centroid name, ID, center: centroid: c1 \( *", "", coords)
         coords = re.sub(r"\)", "", coords)
         coords = re.sub(r",", "", coords)
         coords = re.sub(r" +", " ", coords)
@@ -87,78 +98,95 @@ def chimeraFeatureExtraction(
     # Depths
     depths = get_depths()
 
-    # New
-    save_and_clear_reply_log(logfile)
-
     # Get RPKT atoms and residues
     rc("~select")
     rc("select :arg@cd|:lys@ce|:mly@ce|:kcx@ce|:pro@cd|:thr@cb")
-    # rpkt_residues = [ExtendedResidue(residue)
-    #                 for residue in selection.currentResidues()]
-    print("getting all {} rpkt residues".format(
-        len(selection.currentResidues())))
-    # New
-    save_and_clear_reply_log(logfile)
-    rpkt_atoms = []
-    for atom in selection.currentAtoms():
-        try:
-            rpkt_atoms.append(
-                ExtendedAtom(
-                    atom,
-                    depths,
-                    metals,
-                    disopred_disorder_map,
-                    disopred_binding_map,
-                    sppider_binding_map,
-                )
-            )
-        except Exception as e:
-            with open("atom_exceptions", "a") as f:
-                f.write("atom,{},{}\n".format(str(atom), e))
-            continue
-    print("done")
-    save_and_clear_reply_log(logfile)
+    print("getting all {} rpkt residues".format(len(selection.currentResidues())))
 
-    # Get all atoms and residues
+    rpkt_residues = [
+        ExtendedResidue(
+            residue,
+            depths,
+            metals,
+            disopred_disorder_map,
+            disopred_binding_map,
+            sppider_binding_map,
+        )
+        for residue in selection.currentResidues()
+    ]
+    rpkt_atoms = [
+        ExtendedAtom(
+            atom,
+            depths,
+            metals,
+            disopred_disorder_map,
+            disopred_binding_map,
+            sppider_binding_map,
+        )
+        for atom in selection.currentAtoms()
+    ]
+
+    print("done")
+
+    # Get atoms and residues near RPKT
+    # Efficiency technique: include already-calculated RPKT atoms, delete those from selection
     rc("~select")
     rc("select protein")
-    print("getting all {} residues".format(len(selection.currentResidues())))
-    all_residues = []
-    for residue in selection.currentResidues():
-        try:
-            all_residues.append(
-                ExtendedResidue(
-                    residue,
-                    depths,
-                    metals,
-                    disopred_disorder_map,
-                    disopred_binding_map,
-                    sppider_binding_map,
-                )
-            )
-        except Exception as e:
-            with open("residue_exceptions", "a") as f:
-                f.write("residue,{},{}\n".format(str(residue), e))
-            continue
+    rc(
+        "select :arg@cd z<12|:lys@ce z<12|:mly@ce z<12|:kcx@ce z<12|:pro@cd z<12|:thr@cb z<12"
+    )
+    rc("~select :arg@cd|:lys@ce|:mly@ce|:kcx@ce|:pro@cd|:thr@cb")
 
-    print("done")
-    atoms_near_rpkt = []
-    for atom in selection.currentAtoms():
-        try:
-            atoms_near_rpkt.append(
-                ExtendedAtom(
-                    atom,
-                    depths,
-                    metals,
-                    disopred_disorder_map,
-                    disopred_binding_map,
-                    sppider_binding_map,
-                )
+    residues_near_rpkt = rpkt_residues[:]
+    for residue in selection.currentResidues():
+        residues_near_rpkt.append(
+            ExtendedResidue(
+                residue,
+                depths,
+                metals,
+                disopred_disorder_map,
+                disopred_binding_map,
+                sppider_binding_map,
             )
-        except Exception as e:
-            with open("atom_exceptions", "a") as f:
-                f.write("atom,{},{}\n".format(str(atom), e))
-            continue
+        )
+
+    atoms_near_rpkt = rpkt_atoms[:]
+    for atom in selection.currentAtoms():
+        atoms_near_rpkt.append(
+            ExtendedAtom(
+                atom,
+                depths,
+                metals,
+                disopred_disorder_map,
+                disopred_binding_map,
+                sppider_binding_map,
+            )
+        )
+
+    # Get all atoms and residues
+    # Efficiency technique: include already-calculated atoms near RPKT, delete those from selection
+    rc("~select")
+    rc("select protein")
+    rc(
+        "~select :arg@cd z<12|:lys@ce z<12|:mly@ce z<12|:kcx@ce z<12|:pro@cd z<12|:thr@cb z<12"
+    )
+    rc("~select :arg@cd|:lys@ce|:mly@ce|:kcx@ce|:pro@cd|:thr@cb")
+    print("getting all {} additional residues".format(len(selection.currentResidues())))
+    all_residues = residues_near_rpkt[:]
+    for residue in selection.currentResidues():
+        all_residues.append(
+            ExtendedResidue(
+                residue,
+                depths,
+                metals,
+                disopred_disorder_map,
+                disopred_binding_map,
+                sppider_binding_map,
+            )
+        )
+
+    # No need to get all atoms within 12A.
+    print("done")
 
     print("getting global attributes")
     global_attributes = compute_global_attributes_residues(all_residues)
@@ -180,61 +208,19 @@ def chimeraFeatureExtraction(
                 ":thr@cb z<{radius}"
             ).format(radius=radius_plus_bit)
         )
+        rc("~select :arg@cd|:lys@ce|:mly@ce|:kcx@ce|:pro@cd|:thr@cb")
         print(
-            "getting all {} residues near rpkt".format(
-                len(selection.currentResidues()))
+            "getting all {} non-RPKT residues near rpkt".format(
+                len(selection.currentResidues())
+            )
         )
 
-        # Added try-except due to error on 09/18
-        residues_near_rpkt = []
+        # Get all residues in the selection (near RPKT, building on previous RPKT list)
+        residues_near_rpkt = rpkt_residues[:]
         for residue in selection.currentResidues():
-            try:
-                residues_near_rpkt.append(
-                    ExtendedResidue(
-                        residue,
-                        depths,
-                        metals,
-                        disopred_disorder_map,
-                        disopred_binding_map,
-                        sppider_binding_map,
-                    )
-                )
-
-            except Exception as e:
-                with open("residue_exceptions", "a") as f:
-                    f.write("residue,{},{}\n".format(str(residue), e))
-                continue
-
-        print("done")
-
-        # Get bubble attributes
-        for atom in rpkt_atoms:
-            try:
-                if atom.name in atom_radius_features:
-                    atom_radius_features[atom.name][
-                        radius
-                    ] = compute_bubble_attributes_residues(
-                        atom, residues_near_rpkt, atoms_near_rpkt, radius
-                    )
-                else:
-                    # This must be the first radius the loop has seen.
-                    # atom_radius_features[atom.name] should point to a dict
-                    # with radii for keys, bubble attributes for values
-                    atom_radius_features[atom.name] = {
-                        radius: compute_bubble_attributes_residues(
-                            atom, residues_near_rpkt, atoms_near_rpkt, radius
-                        )
-                    }
-            except Exception as e:
-                continue
-
-    print("getting atom-level attributes")
-    all_atoms = []
-    for atom in selection.currentAtoms():
-        try:
-            all_atoms.append(
-                ExtendedAtom(
-                    atom,
+            residues_near_rpkt.append(
+                ExtendedResidue(
+                    residue,
                     depths,
                     metals,
                     disopred_disorder_map,
@@ -242,28 +228,39 @@ def chimeraFeatureExtraction(
                     sppider_binding_map,
                 )
             )
-        except Exception as e:
-            with open("atom_exceptions", "a") as f:
-                f.write("atom,{},{}\n".format(str(atom), e))
-            continue
+
+        print("done")
+
+        # Get bubble attributes
+        for atom in rpkt_atoms:
+            if atom.name in atom_radius_features:
+                atom_radius_features[atom.name][
+                    radius
+                ] = compute_bubble_attributes_residues(
+                    atom, residues_near_rpkt, atoms_near_rpkt, radius
+                )
+            else:
+                # This must be the first radius the loop has seen.
+                # atom_radius_features[atom.name] should point to a dict
+                # with radii for keys, bubble attributes for values
+                atom_radius_features[atom.name] = {
+                    radius: compute_bubble_attributes_residues(
+                        atom, residues_near_rpkt, atoms_near_rpkt, radius
+                    )
+                }
+
+    print("getting atom-level attributes")
 
     atom_features = {}
     for atom in rpkt_atoms:
-        try:
-            eResidue = ExtendedResidue(atom.residue, depths, metals)
-            extended_atoms = []
-            for a in eResidue.atoms:
-                try:
-                    extended_atoms.append(ExtendedAtom(a, depths, metals))
-                except Exception as e:
-                    with open("atom_exceptions", "a") as f:
-                        f.write("atom_rpkt,{},{}\n".format(str(a), e))
-                    continue
-            atom_features[atom.name] = compute_bubble_attributes_residues(
-                atom, all_residues, extended_atoms, 0
-            )
-        except Exception as e:
-            continue
+        eResidue = ExtendedResidue(atom.residue, depths, metals)
+        extended_atoms = []
+        for a in eResidue.atoms:
+            extended_atoms.append(ExtendedAtom(a, depths, metals))
+
+        atom_features[atom.name] = compute_bubble_attributes_residues(
+            atom, residues_near_rpkt, extended_atoms, 0
+        )
 
         # Format each feature with _res to match labels of original pipeline data
         for key in atom_features[atom.name]:
@@ -274,7 +271,7 @@ def chimeraFeatureExtraction(
 
         # Add global circular variance
         atom_features[atom.name].update(
-            compute_global_circular_variance(atom, all_atoms)
+            compute_global_circular_variance(atom, atoms_near_rpkt)
         )
 
         atom_features[atom.name].update(
@@ -282,6 +279,3 @@ def chimeraFeatureExtraction(
         )
 
     return (global_attributes, atom_features, atom_radius_features)
-
-
-test = [2, 3, 2 3, 4]

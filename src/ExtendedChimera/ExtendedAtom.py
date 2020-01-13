@@ -6,6 +6,7 @@ from Utils import (
     OHrxnConst_index_dict,
     is_nonstandard_residue,
     ionicRadiusDict,
+    kd_hydrophobicity,
 )
 from ChimeraUtils import set_metal_contacts
 import re
@@ -33,84 +34,69 @@ class ExtendedResidue:
         # Identifier attributes
         self.atoms = residue.atoms
         self.residue = residue
-        try:
-            self.residue_1_letter = aa_3_to_1[residue.type]
-        # Better exception formatting
-        except Exception as e:
-            raise Exception(
-                "{type} not found in residue {name}, {e}".format(
-                    type=residue.type, name=str(residue)
-                ),
-                e=e,
-            )
+        self.residue_1_letter = aa_3_to_1.get(residue.type, None)
         self.name = str(residue)
         self.number = re.sub(r"#.+ .+ ", "", str(residue))  # .split(".")[0]
 
         # AAind attributes
-        self.aaind_reactivity = reactivity_index_dict[self.residue_1_letter]
-        self.aaind_charge = AAindex_df.loc[self.residue_1_letter, "AAindElecCharge"]
-        self.aaind_codon_diversity = AAindex_df.loc[
-            self.residue_1_letter, "AAindCodonDiv"
-        ]
-        self.aaind_molecular_volume = AAindex_df.loc[
-            self.residue_1_letter, "AAindMolVol"
-        ]
-        self.aaind_secondary_structure = AAindex_df.loc[
-            self.residue_1_letter, "AAindSS"
-        ]
-        self.aaind_polarity = AAindex_df.loc[self.residue_1_letter, "AAindPolarity"]
+        self.aaind_reactivity = reactivity_index_dict.get(self.residue_1_letter, None)
+
+        if self.residue_1_letter == "X":
+            self.aaind_charge = None
+            self.aaind_codon_diversity = None
+            self.aaind_molecular_volume = None
+            self.aaind_secondary_structure = None
+            self.aaind_polarity = None
+        else:
+            self.aaind_charge = AAindex_df.loc[self.residue_1_letter, "AAindElecCharge"]
+            self.aaind_codon_diversity = AAindex_df.loc[
+                self.residue_1_letter, "AAindCodonDiv"
+            ]
+            self.aaind_molecular_volume = AAindex_df.loc[
+                self.residue_1_letter, "AAindMolVol"
+            ]
+            self.aaind_secondary_structure = AAindex_df.loc[
+                self.residue_1_letter, "AAindSS"
+            ]
+            self.aaind_polarity = AAindex_df.loc[self.residue_1_letter, "AAindPolarity"]
 
         # Residue structural attributes
         self.isSheet = residue.isSheet
         self.isHelix = residue.isHelix
         try:
-            self.area_sas = 0 if atom.areaSAS is None else atom.areaSAS
-        except Exception:
+            self.area_sas = 0 if residue.areaSAS is None else residue.areaSAS
+        except Exception as e:
             self.area_sas = 0
 
         # Misc. Attributes
-        self.hydroxyl_constant = OHrxnConst_index_dict[self.residue_1_letter]
-        self.charge = charge_index_dict[self.residue_1_letter]
-        self.hydrophobicity = residue.kdHydrophobicity
-        self.reactivity = reactivity_index_dict[self.residue_1_letter]
+        self.hydroxyl_constant = OHrxnConst_index_dict.get(self.residue_1_letter, None)
+        self.charge = charge_index_dict.get(self.residue_1_letter, None)
+        self.hydrophobicity = kd_hydrophobicity.get(self.residue_1_letter, None)
+        self.reactivity = reactivity_index_dict.get(self.residue_1_letter, None)
 
         # Disorder
-        self.disorder_score=0
-        self.disorder_call=0
+        self.disorder_score = None
+        self.disorder_call = None
         for score in disopred_disorder:
             if score["pos"] == self.number.split(".")[0]:
                 self.disorder_score = score["Disorder Score"]
                 self.disorder_call = score["Disorder Call"]
-                # if score["aa"] != self.residue_1_letter:
-                #     raise Exception(
-                #         "Mismatch: {}, {}, {}, {}, {}".format(
-                #             score,
-                #             self.number,
-                #             self.residue_1_letter,
-                #             residue.type,
-                #             aa_3_to_1,
-                #         )
-                #     )
                 break
 
         # Disopred binding
-        self.disopred_binding_score = 0
-        self.disopred_binding_call = 0
+        self.disopred_binding_score = None
+        self.disopred_binding_call = None
         for d_binding in disopred_binding:
             if d_binding["pos"] == self.number.split(".")[0]:
                 self.disopred_binding_score = d_binding["Binding Score"]
                 self.disopred_binding_call = d_binding["Binding Call"]
-                # if score["aa"] != self.residue_1_letter:
-                #     raise Exception("Mismatch: {}, {}".format(d_binding, self.number))
                 break
 
         # SPPIDER binding
-        self.sppider_binding_call = 0
+        self.sppider_binding_call = None
         for s_binding in sppider_binding:
             if s_binding["pos"] == self.number.split(".")[0]:
                 self.sppider_binding_call = s_binding["Binding Call"]
-                # if score["aa"] != self.residue_1_letter:
-                #     raise Exception("Mismatch: {}, {}".format(s_binding, self.number))
                 break
 
         # Depth
@@ -151,7 +137,7 @@ class ExtendedResidue:
                 )
                 # If we're within the distance expected, add this metal
                 # to the list and move to the next
-                if distance - ionicRadiusDict[metal.type] <= radius:
+                if distance - ionicRadiusDict.get(metal.type, None) <= radius:
                     contacts.append(metal)
                     break
 
@@ -282,7 +268,7 @@ class ExtendedAtom(ExtendedResidue, object):
                 self.atom.xformCoord(),
                 chimera.Point(metal_coords[0], metal_coords[1], metal_coords[2]),
             )
-            if distance - ionicRadiusDict[metal.type] <= radius:
+            if distance - ionicRadiusDict.get(metal.type, None) <= radius:
                 contacts.append(metal)
         self.metal_contacts = contacts
 

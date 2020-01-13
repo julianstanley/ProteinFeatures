@@ -1,4 +1,3 @@
-# re for regular expression substitution
 import re
 from ChimeraUtils import read_reply_log, save_and_clear_reply_log
 from chimera import selection
@@ -110,7 +109,7 @@ def get_atom_features(eAtom):
     # Make sure that we get all of the features
     for feature_name in features:
         if feature_name not in atom_features:
-            atom_features[feature_name] = float("NaN")
+            raise Exception("Feature missing: {}".format(feature_name))
 
     return atom_features
 
@@ -177,7 +176,7 @@ def get_residue_features(eResidue):
     for feature_name in features:
         res_feature_name = "{}_res".format(feature_name)
         if res_feature_name not in residue_features:
-            residue_features[res_feature_name] = float("NaN")
+            raise Exception("Feature missing: {}".format(res_feature_name))
 
     return residue_features
 
@@ -187,17 +186,28 @@ def get_residues_features_sums(eResidues):
     list of ExtendedResidues.
     """
     residues_features = dict.fromkeys(features, 0)
+    residues_features_copy = dict.fromkeys(features, 0)
+
+    # Initalize features to found "None"s found in each feature
+    for feature in residues_features_copy:
+        none_feature = "{}_None".format(feature)
+        residues_features[none_feature] = 0
+        
 
     for residue in eResidues:
-        try:
-            # Get the features for this single residue
-            single_residue_features = get_residue_features(residue)
-            # Add this residue's features to the accumulating features
-            for feature in residues_features:
-                single_feature = "{}_res".format(feature)
+        # Get the features for this single residue
+        single_residue_features = get_residue_features(residue)
+        # Add this residue's features to the accumulating features
+        for feature in residues_features_copy:
+            single_feature = "{}_res".format(feature)
+            if single_residue_features[single_feature] is not None:
                 residues_features[feature] += single_residue_features[single_feature]
-        except Exception as e:
-            continue
+            else:
+                # If this feature doesn't exist for this residue, then it will be None.
+                # We should keep track of features like this in a seperate feature.
+                none_feature = "{}_None".format(feature)
+                residues_features[none_feature] += 1
+
     return residues_features
 
 
@@ -266,9 +276,8 @@ def compute_bubble_attributes_residues(
     base_atom.set_residue_contacts(compared_residues, radius)
     base_atom.set_metal_contacts(radius)
 
-    # If radius is 0, circular variance of this residue means of the atoms in the
-    # residue
-    if radius < 0.001:
+    # We'll need atom contacts if we're at a radius of 0, but just get all compared atoms
+    if radius < 1e-20:
         base_atom.set_atom_contacts(compared_atoms, float("Inf"))
     else:
         base_atom.set_atom_contacts(compared_atoms, radius)
@@ -288,12 +297,12 @@ def compute_bubble_attributes_residues(
                 "RPKT",
                 "contacts",
             ]:
-                bubble_features[key] = bubble_features[key] + base_features[key]
+                if base_features[key] is not None:
+                    bubble_features[key] = bubble_features[key] + base_features[key]
 
     # Overwrite metal binding features
     # Metal binding features at a bubble level does not depend on compared residues,
     # just the base atom
-    base_atom.set_metal_contacts(radius)
     metal_types = [metal.type for metal in base_atom.metal_contacts]
 
     # Update the features dictionary with contacts from this residue
@@ -405,10 +414,7 @@ def get_depth_minimum():
 
     all_atoms = []
     for atom in selection.currentAtoms():
-        try:
-            all_atoms.append(ExtendedAtom(atom))
-        except Exception as e:
-            continue
+        all_atoms.append(ExtendedAtom(atom))
 
     # Map between atom number and atom residue
     atom_to_aa = {}
@@ -436,11 +442,7 @@ def get_depth_minimum():
             residue_number = residue_name.split(".")[0]
 
             # Get the minimum depth
-            try:
-                depth_key = "{},{}".format(residue_number, atom_to_aa[residue_name])
-            except Exception as e:
-                continue
-                
+            depth_key = "{},{}".format(residue_number, atom_to_aa[residue_name])
 
             # Only put this depth in the dictionary if this depth is:
             # (1) the first depth seen for this key, or

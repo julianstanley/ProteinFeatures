@@ -1,33 +1,36 @@
+#!/usr/bin/env chimera
+# run_chimeraFeatureExtraction_core.py
+
 """
 runChimeraFeatureExtraction_core.py
 
-This script is meant to take in command line arguments and use those to extract features
-from .pdb protein files.
+This script is a delagator. It takes in command line arguments, loop through each PDB
+file passed by the user, and comandeers the main ChimeraFeatures package scripts
+to get the features from that file, and then formats those features nicely for the user.
 
-This script and the associated package are formatted with black pypy.org/project/black
+(This script and the associated package are formatted with black pypy.org/project/black)
 """
 
-# Use a try block for importing chimeraFeatureExtraction so that you
-# can run ./run_ChimeraFeatureExtraction_core.py --help
-# (Since Chimera can't be imported without running via chimera)
+# Chimera-specific hackery below:
+# Allows script to run without a chimera python interpreter, so users can run --help.
 try:
     from src.chimeraFeatureExtraction import chimeraFeatureExtraction
     from chimera import runCommand as rc
 except Exception as e:
+    raise
     print(e)
     pass
 
-# Use the click module to set command line arguments
 import click
 import datetime
-import os, sys
+import os
+import sys
 import pandas as pd
 import time
 from collections import deque
 import traceback
 
-# Set default names for the log and outfile (exported) as well as the
-# metal binding site file (imported)
+# Set default names for output files, directories, etc.
 default_outfile = "chimeraFeatureExtraction_out_{date:%Y%m%d_%H%M%S}.csv".format(
     date=datetime.datetime.now()
 )
@@ -41,7 +44,7 @@ default_disopred_binding = "input/disopred_binding.csv"
 default_disopred_disorder = "input/disopred_disorder.csv"
 
 
-# Set command-line parameters, to be passed to the "featureWrapper" function
+# Configure the command line parameters that this script can take in
 @click.command()
 @click.option("--pdbfile", default="", help="(Optional) PDB file to analyze")
 @click.option("--pdbdir", default="", help="(Optional) directory of PDB files")
@@ -58,8 +61,9 @@ default_disopred_disorder = "input/disopred_disorder.csv"
 )
 @click.option(
     "--attempts_limit",
-    default="5",
-    help="Number of re-attempts to generate features after failure",
+    default="10",
+    type=int,
+    help="Number of re-attempts to generate surface computation after failure",
 )
 @click.option(
     "--logfile", default=default_logfile, help="The log file for errors/comments/etc."
@@ -104,11 +108,9 @@ def featureWrapper(
     individual,
     threads,
 ):
-    """ Takes in the command line arguments, checks to make sure pdb files
-    were passed, and then loops through each pdb file, grabs features from
-    chimeraFeatureExtraction.py, formats those features with
-    format_single_features, and then writes those features
-    with write_all_features()
+    """ Uses command line arguments to loop through user-required pdb files.
+    Then gets features for each pdb file passed and writes features to file.
+
     Arguments:
         pdbfile (str): Command line argument. Path to single pdb file.
         pdbdir (str): Command line argument. Path to directory of pdb files
@@ -118,9 +120,9 @@ def featureWrapper(
     Returns:
         Void
     Effect:
-        Writes a .csv file to "outfile"
+        Writes a .csv file to "outfile" and (maybe) individual .csv files to outdir/individual
     """
-    # Setup output directory
+    # Setup output directory (for .csv files)
     if not os.path.exists(outdir):
         os.makedirs(outdir)
 
@@ -128,11 +130,8 @@ def featureWrapper(
         if not os.path.exists(outdir + "/individual"):
             os.makedirs(outdir + "/individual")
 
-    # If we fail, how many times are we going to retry? This is passed as a string
-    # from the command line, but should be an int.
-    attempts_limit = int(attempts_limit)
-
     # Get the PDB files for this run, or throw an error if you can't find them
+    # pdbdir overwrites pdbfile
     if pdbfile != "":
         pdb_files = [pdbfile]
     if pdbdir != "":
@@ -142,79 +141,77 @@ def featureWrapper(
     if pdbfile == "" and pdbdir == "":
         raise ValueError("Must supply either a pdbfile or a pdbdir")
 
+    # Just the main filename, no path
     pdb_files_short = [file.split("/")[-1] for file in pdb_files]
 
     print("Loading metal binding information into memory")
-
     # Get metal binding information, or default to empty if you cant find them
     try:
         metal_binding = get_metal_binding(metals_file)
     except Exception as e:
         metal_binding = {}
-        with open(logfile, "a") as log:
-            log.write("Metal binding file({}) not found: {}".format(metals_file, e))
-
-    all_features = {}
+        log_message(
+            logfile,
+            "Metal binding file({}) not found: {}, default to empty dictionary".format(
+                metals_file, e
+            ),
+        )
 
     # Get disopred disorder information, or default to empty if you can't find them
     # try:
     print("Loading disopred disorder information into memory")
-    disopred_disorder = get_disopred_disorder(disopred_disorder_file, pdb_files_short)
-    # except Exception as e:
-    #     disopred_disorder = {}
-    #     with open(logfile, "a") as log:
-    #         log.write(
-    #             "DISOPRED disorder file({}) not found: {}".format(
-    #                 disopred_disorder_file, e
-    #             )
-    #         )
+    try:
+        disopred_disorder = get_disopred_disorder(
+            disopred_disorder_file, pdb_files_short
+        )
+    except Exception as e:
+        disopred_binding = {}
+        log_message(
+            logfile,
+            "DISOPRED binding file({}) not found: {}".format(disopred_binding_file, e),
+        )
 
     # Get disopred binding information, or default to empty if you can't find them
     # try:
     print("Loading disopred binding information into memory")
-    disopred_binding = get_disopred_binding(disopred_binding_file, pdb_files_short)
-    # except Exception as e:
-    #     disopred_binding = {}
-    #     with open(logfile, "a") as log:
-    #         log.write(
-    #             "DISOPRED binding file({}) not found: {}".format(
-    #                 disopred_binding_file, e
-    #             )
-    #         )
+    try:
+        disopred_binding = get_disopred_binding(disopred_binding_file, pdb_files_short)
+    except Exception as e:
+        disopred_binding = {}
+        log_message(
+            logfile,
+            "DISOPRED binding file({}) not found: {}".format(disopred_binding_file, e),
+        )
 
     # Get sppider binding information, or default to empty if you can't find them
     # try:
     print("Loading sppider binding information into memory")
-    sppider_binding = get_sppider_binding(sppider_binding_file, pdb_files_short)
-    # except Exception as e:
-    #     sppider_binding = {}
-    #     with open(logfile, "a") as log:
-    #         log.write(
-    #             "SPPIDER binding file({}) not found: {}"
-    # .format(sppider_binding_file, e)
-    #         )
+    try:
+        sppider_binding = get_sppider_binding(sppider_binding_file, pdb_files_short)
+    except Exception as e:
+        sppider_binding = {}
+        log_message(
+            logfile,
+            "SPPIDER binding file({}) not found: {}".format(sppider_binding_file, e),
+        )
 
-    with open("chimera_progress.log", "a") as progress_log:
-        progress_log.write("Beginning to process {} files\n".format(len(pdb_files)))
+    log_message(logfile, "Beginning to process {} files\n".format(len(pdb_files)))
 
-    # TODO: Can we multithread this loop? That might be significantly faster
-    # on the cloud. Questions: How does output get returned when you're
-    # running a function multhreadered? Might be good to abstract out this loop
-    # and have it return the single dictionary of features. In parellel: would
-    # these be returned in a big list? Then we could combine them.
+    # Note: Cannot figure out how to multithread the processing of these files. I think it's a
+    #       bit weird because each requires a chimera instance, so multithreading would have to happen
+    #       at a higher level, but then each higher level would use a lot of memory.
 
-    # Convert pdb files into a big deque
+    # Now time to process all of the pdb files.
     pdb_files = deque(pdb_files)
-
-    while len(pdb_files) > 1:
-        file = pdb_files.pop()
+    all_features = {}
+    while len(pdb_files) >= 1:
+        current_pdb = pdb_files.pop()
         try:
-            with open("chimera_progress.log", "a") as progress_log:
-                progress_log.write("Processing: {}\n".format(file))
+            log_message("chimera_progress.log", "Processing: {}\n".format(current_pdb))
             start_time = time.time()
 
             formatted_features = compute_features(
-                file,
+                current_pdb,
                 metal_binding,
                 disopred_disorder,
                 disopred_binding,
@@ -226,27 +223,26 @@ def featureWrapper(
                 outdir,
             )
             all_features.update(formatted_features)
-            with open("chimera_process.log", "a") as progress_log:
-                progress_log.write("Success processing: {}\n".format(file))
+            with open("chimera_progress.log", "a") as progress_log:
+                progress_log.write("Success processing: {}\n".format(current_pdb))
                 progress_log.write(
                     "Time: %s seconds\n" % round(time.time() - start_time, 2)
                 )
-            with open(logfile, "a") as log:
-                log.write("Feature extraction success: {}\n".format(file))
+
+            log_message(logfile, "Feature extraction success: {}\n".format(current_pdb))
 
         except Exception as e:
             # Write error to logs
-            with open(logfile, "a") as log:
-                log.write(
-                    "Feature extraction failed {},{},{},{},{}\n\n".format(
-                        file, e, sys.exc_info(), PrintException(), traceback.format_exc()
-                    )
-                )
-            with open("chimera_progress.log", "a") as progress_log:
-                progress_log.write("Failure processing: {}\n".format(file))
+            log_message(
+                logfile,
+                "Feature extraction failed {},{},{},{}\n\n".format(
+                    current_pdb, e, sys.exc_info(), traceback.format_exc()
+                ),
+            )
+            log_message("chimera_progress.log", "Failure processing: {}\n".format(current_pdb))
+            log_message("chimera_errors.log", "{}\t{}\n".format(current_pdb, traceback.format_exc().strip()))
 
-            # Add pdb_file to the back of the deque
-            pdb_files.appendleft(file)
+            continue
 
     # We really just need features from RPKT atoms, so put those into one dictionary
     # and then write them to file
@@ -256,19 +252,6 @@ def featureWrapper(
             rpkt_features[atom_name] = features
 
     write_all_features(rpkt_features, outdir + "/" + outfile)
-
-
-import linecache
-import sys
-
-def PrintException():
-    exc_type, exc_obj, tb = sys.exc_info()
-    f = tb.tb_frame
-    lineno = tb.tb_lineno
-    filename = f.f_code.co_filename
-    linecache.checkcache(filename)
-    line = linecache.getline(filename, lineno, f.f_globals)
-    return 'EXCEPTION IN ({}, LINE {} "{}"): {}'.format(filename, lineno, line.strip(), exc_obj)
 
 
 def compute_features(
@@ -318,6 +301,7 @@ def compute_features(
             disopred_binding_map,
             sppider_binding_map,
             logfile,
+            attempts_limit,
         )
 
         # Re-format features so that they're easier to write
@@ -332,7 +316,9 @@ def compute_features(
 
             write_all_features(
                 single_rpkt_features,
-                "{}/individual/{}.csv".format(outdir, file_name_short.split(".")[0]),
+                "{}/individual/{}.csv".format(
+                    outdir, file_name_short.replace(".pdb", "")
+                ),
             )
 
         rc("close all")
@@ -546,6 +532,11 @@ def write_all_features(all_features, outfile):
     """
     features_df = pd.DataFrame(all_features).transpose()
     features_df.to_csv(outfile)
+
+
+def log_message(logfile, message):
+    with open(logfile, "a") as log:
+        log.write(message)
 
 
 if __name__ == "__main__":
