@@ -135,9 +135,8 @@ def chimeraFeatureExtraction(
     rc(
         "select :arg@cd z<12|:lys@ce z<12|:mly@ce z<12|:kcx@ce z<12|:pro@cd z<12|:thr@cb z<12"
     )
-    rc("~select :arg@cd|:lys@ce|:mly@ce|:kcx@ce|:pro@cd|:thr@cb")
 
-    residues_near_rpkt = rpkt_residues[:]
+    residues_near_rpkt = list()
     for residue in selection.currentResidues():
         residues_near_rpkt.append(
             ExtendedResidue(
@@ -150,7 +149,7 @@ def chimeraFeatureExtraction(
             )
         )
 
-    atoms_near_rpkt = rpkt_atoms[:]
+    atoms_near_rpkt = list()
     for atom in selection.currentAtoms():
         atoms_near_rpkt.append(
             ExtendedAtom(
@@ -172,7 +171,7 @@ def chimeraFeatureExtraction(
     )
     rc("~select :arg@cd|:lys@ce|:mly@ce|:kcx@ce|:pro@cd|:thr@cb")
     print("getting all {} additional residues".format(len(selection.currentResidues())))
-    all_residues = residues_near_rpkt[:]
+    all_residues = list(residues_near_rpkt)
     for residue in selection.currentResidues():
         all_residues.append(
             ExtendedResidue(
@@ -216,11 +215,24 @@ def chimeraFeatureExtraction(
         )
 
         # Get all residues in the selection (near RPKT, building on previous RPKT list)
-        residues_near_rpkt = rpkt_residues[:]
+        residues_near_rpkt = list(rpkt_residues)
         for residue in selection.currentResidues():
             residues_near_rpkt.append(
                 ExtendedResidue(
                     residue,
+                    depths,
+                    metals,
+                    disopred_disorder_map,
+                    disopred_binding_map,
+                    sppider_binding_map,
+                )
+            )
+
+        atoms_near_rpkt = list(rpkt_atoms)
+        for atom in selection.currentAtoms():
+            atoms_near_rpkt.append(
+                ExtendedAtom(
+                    atom,
                     depths,
                     metals,
                     disopred_disorder_map,
@@ -237,7 +249,7 @@ def chimeraFeatureExtraction(
                 atom_radius_features[atom.name][
                     radius
                 ] = compute_bubble_attributes_residues(
-                    atom, residues_near_rpkt, atoms_near_rpkt, radius
+                    atom, all_residues, atoms_near_rpkt, radius
                 )
             else:
                 # This must be the first radius the loop has seen.
@@ -245,7 +257,7 @@ def chimeraFeatureExtraction(
                 # with radii for keys, bubble attributes for values
                 atom_radius_features[atom.name] = {
                     radius: compute_bubble_attributes_residues(
-                        atom, residues_near_rpkt, atoms_near_rpkt, radius
+                        atom, all_residues, atoms_near_rpkt, radius
                     )
                 }
 
