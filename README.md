@@ -65,3 +65,9 @@ Options:
   --metals_file TEXT     Path containing the metal binding data file
   --help                 Show this message and exit.
 ```
+
+### General pipeline overview (in progress: these are just notes)
+
+1. Run Chimera Feature Extraction script, which will generate .csv files in outdir/individual
+2. Combine individual csv files, if necessary (`awk 'FNR==1 && NR!=1{next;}{print}' *.csv >features_combined.csv`)
+3. Format the combined csv file. TODO: convert notebook into a proper script
