@@ -10,9 +10,35 @@ This project is currently under private, closed-source development.
 
 Created by the [Silver Lab](http://silver.med.harvard.edu/) at Harvard Medical School. 
 
+[Associated preprint](https://www.biorxiv.org/content/10.1101/2020.03.09.983213v1.abstract)
+
 Contacts:
 * Julian (Research Assistant, julian_stanley at hms dot harvard dot edu)
 * Dr. Roger Chang (Project Lead, roger_chang at hms dot harvard dot edu)
+
+### Overview
+
+This repository outlines the steps to covert a set of FASTA-formatted protein sequences, protein crystal 
+structures, or protein models into a feature matrix that can be used for protein carbonylation prediction.
+
+This pipeline consists of the following steps:
+
+1. Generate a PDB files with atom-level resolution of your protein of interest. Generally, x-ray crystal structures
+with <3.0A resolution are appropriate. In absense of such a structure, it can be modeled with MODELLER, I-TASSER,
+or QUARK (the de-novo folder on which I-TASSER is built). 
+
+2. Generate DISOPRED, SPPIDER, and findsitemetal features from PDB files and sequence. 
+
+3. Format DISOPRED, SPPIDER< and findsitemetal features.
+
+4. Determine the mapping between the residue numbering in the PDB file and the residue numbering
+in the cononical sequence.
+
+5. From cononical sequences, generate pairwise alignment features.
+
+6. From PDB structures, use Chimera to generate 3D structural features.
+
+7. Combine alignment-based and structure-based features into a single matrix. This will be the input matrix to the machine learning step. 
 
 ### Running examples
 
