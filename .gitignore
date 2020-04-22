@@ -6,8 +6,3 @@ scratch/
 .vscode
 data/
 old_logs/
-node_modules
-build
-yarn-error.log
-.docusaurus
-types
