@@ -1,9 +1,17 @@
 {
-  "docs": {
-    "Main intro": ["intro"],
-    "Chimera category": ["chimera"]
+  "docs-public": {
+    "Introduction": [
+      "intro_public",
+      "overview"
+    ],
+    "Quick Start": [
+      "quickstart"
+    ]
   },
-  "docs-other": {
-    "First Category": ["intro", "chimera"]
+  "docs-hms": {
+    "Introduction": [
+      "intro_hms",
+      "overview"
+    ]
   }
 }

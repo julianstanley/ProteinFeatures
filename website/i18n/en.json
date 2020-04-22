@@ -8,18 +8,30 @@
       "chimera": {
         "title": "Chimera"
       },
+      "intro_hms": {
+        "title": "Welcome!"
+      },
+      "intro_public": {
+        "title": "Welcome to the Docs!"
+      },
       "intro": {
         "title": "Welcome!"
+      },
+      "overview": {
+        "title": "Package Overview"
+      },
+      "quickstart": {
+        "title": "Quickstart"
       }
     },
     "links": {
-      "Docs": "Docs",
+      "Docs (Public)": "Docs (Public)",
+      "Docs (HMS)": "Docs (HMS)",
       "Help": "Help"
     },
     "categories": {
-      "Main intro": "Main intro",
-      "Chimera category": "Chimera category",
-      "First Category": "First Category"
+      "Introduction": "Introduction",
+      "Quick Start": "Quick Start"
     }
   },
   "pages-strings": {
