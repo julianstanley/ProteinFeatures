@@ -25,4 +25,4 @@ Contacts:
 
 ### Project Overview
 
-![The Project Overview Image](./website/static/img/Protein_Features.png)
+![The Project Overview Image](./docs/assets/Protein_Features.png)
