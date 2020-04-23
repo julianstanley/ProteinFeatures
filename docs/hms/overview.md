@@ -17,7 +17,7 @@ Before extracting any features, you will need a 3D structure. Or, if you only ha
 
 To get a 3D structure, you can use a modelling software (we use I-TASSER and/or QUARK or MODELLER) or, if available, you can use an available structure from the PDB.
 
-For info on that, see the `pre-requisities` section.
+For info on that, see the `Prerequisities` section.
 
 ## Chimera
 
