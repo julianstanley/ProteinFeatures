@@ -2,16 +2,16 @@
   "docs-public": {
     "Introduction": [
       "intro_public",
-      "overview"
+      "public/overview"
     ],
     "Quick Start": [
-      "quickstart"
+      "public/quickstart"
     ]
   },
   "docs-hms": {
     "Introduction": [
-      "intro_hms",
-      "overview"
+      "hms/intro_hms",
+      "hms/overview"
     ]
   }
 }

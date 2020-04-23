@@ -5,22 +5,25 @@
     "previous": "Previous",
     "tagline": "In development",
     "docs": {
-      "chimera": {
-        "title": "Chimera"
-      },
-      "intro_hms": {
+      "hms/intro_hms": {
         "title": "Welcome!"
       },
-      "intro_public": {
-        "title": "Welcome to the Docs!"
+      "hms/overview": {
+        "title": "Package Overview"
       },
-      "intro": {
+      "old/chimera": {
+        "title": "Chimera"
+      },
+      "old/intro": {
         "title": "Welcome!"
       },
       "overview": {
         "title": "Package Overview"
       },
-      "quickstart": {
+      "public/intro_public": {
+        "title": "Welcome to the Docs!"
+      },
+      "public/quickstart": {
         "title": "Quickstart"
       }
     },
