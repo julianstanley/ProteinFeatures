@@ -5,11 +5,32 @@
     "previous": "Previous",
     "tagline": "In development",
     "docs": {
+      "hms/chimera_overview": {
+        "title": "Chimera Overview"
+      },
+      "hms/disopred_overview": {
+        "title": "DISOPRED Overview"
+      },
       "hms/intro_hms": {
         "title": "Welcome!"
       },
+      "hms/lomets_overview": {
+        "title": "LOMETS Overview"
+      },
+      "hms/metal_overview": {
+        "title": "Metal Binding Overview"
+      },
       "hms/overview": {
         "title": "Package Overview"
+      },
+      "hms/prereq_overview": {
+        "title": "Prerequisites Overview"
+      },
+      "hms/sppider_overview": {
+        "title": "SPPIDER Overview"
+      },
+      "hms/ssm_overview": {
+        "title": "Sequence-Structure Mapping Overview"
       },
       "old/chimera": {
         "title": "Chimera"
@@ -17,7 +38,7 @@
       "old/intro": {
         "title": "Welcome!"
       },
-      "overview": {
+      "old/overview": {
         "title": "Package Overview"
       },
       "public/intro_public": {
@@ -30,11 +51,19 @@
     "links": {
       "Docs (Public)": "Docs (Public)",
       "Docs (HMS)": "Docs (HMS)",
+      "GitHub": "GitHub",
       "Help": "Help"
     },
     "categories": {
       "Introduction": "Introduction",
-      "Quick Start": "Quick Start"
+      "Quick Start": "Quick Start",
+      "Prerequisities": "Prerequisities",
+      "Chimera": "Chimera",
+      "LOMETS": "LOMETS",
+      "Metal Binding": "Metal Binding",
+      "SPPIDER": "SPPIDER",
+      "DISOPRED": "DISOPRED",
+      "Sequence-Structure Mapping": "Sequence-Structure Mapping"
     }
   },
   "pages-strings": {

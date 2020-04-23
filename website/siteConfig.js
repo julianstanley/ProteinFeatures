@@ -40,6 +40,7 @@ const siteConfig = {
   headerLinks: [
     { doc: 'public/intro_public', label: 'Docs (Public)' },
     { doc: 'hms/intro_hms', label: 'Docs (HMS)' },
+    { href: 'https://github.com/julianstanley/ProteinFeatures', label: 'GitHub' },
     // {doc: 'doc4', label: 'API'},
     { page: 'help', label: 'Help' },
     // {blog: false, label: 'Blog'},

@@ -12,6 +12,27 @@
     "Introduction": [
       "hms/intro_hms",
       "hms/overview"
+    ],
+    "Prerequisities": [
+      "hms/prereq_overview"
+    ],
+    "Chimera": [
+      "hms/chimera_overview"
+    ],
+    "LOMETS": [
+      "hms/lomets_overview"
+    ],
+    "Metal Binding": [
+      "hms/metal_overview"
+    ],
+    "SPPIDER": [
+      "hms/sppider_overview"
+    ],
+    "DISOPRED": [
+      "hms/disopred_overview"
+    ],
+    "Sequence-Structure Mapping": [
+      "hms/ssm_overview"
     ]
   }
 }
