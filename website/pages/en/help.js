@@ -13,8 +13,8 @@ const Container = CompLibrary.Container;
 const GridBlock = CompLibrary.GridBlock;
 
 function Help(props) {
-  const {config: siteConfig, language = ''} = props;
-  const {baseUrl, docsUrl} = siteConfig;
+  const { config: siteConfig, language = '' } = props;
+  const { baseUrl, docsUrl } = siteConfig;
   const docsPart = `${docsUrl ? `${docsUrl}/` : ''}`;
   const langPart = `${language ? `${language}/` : ''}`;
   const docUrl = doc => `${baseUrl}${docsPart}${langPart}${doc}`;
@@ -22,17 +22,17 @@ function Help(props) {
   const supportLinks = [
     {
       content: `Learn more using the [documentation on this site.](${docUrl(
-        'doc1.html',
+        'intro_public.html',
       )})`,
       title: 'Browse Docs',
     },
     {
-      content: 'Ask questions about the documentation and project',
-      title: 'Join the community',
+      content: 'Feel free to ask questions or raise issues on the [GitHub Repository](https://www.github.com/julianstanley/ProteinFeatures).',
+      title: 'Interact via GitHub',
     },
     {
-      content: "Find out what's new with this project",
-      title: 'Stay up to date',
+      content: "For inquiries, feel free to contact [Julian](mailto:julianstanleya@gmail.com), who created this documentation, or [Dr. Roger Chang](roger_chang@hms.harvard.edu), who spearheaded the project.",
+      title: 'Contact us Directly',
     },
   ];
 
@@ -43,7 +43,9 @@ function Help(props) {
           <header className="postHeader">
             <h1>Need help?</h1>
           </header>
-          <p>This project is maintained by a dedicated group of people.</p>
+          <p>This project is maintained by the Silver Lab at Harvard Medical School.</p>
+          <p>
+          </p>
           <GridBlock contents={supportLinks} layout="threeColumn" />
         </div>
       </Container>
