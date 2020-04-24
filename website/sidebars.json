@@ -14,7 +14,8 @@
       "hms/overview"
     ],
     "Prerequisities": [
-      "hms/prereq_overview"
+      "hms/prereq_overview",
+      "hms/running_itasser"
     ],
     "Chimera": [
       "hms/chimera_overview"

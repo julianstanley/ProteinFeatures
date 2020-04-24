@@ -26,6 +26,9 @@
       "hms/prereq_overview": {
         "title": "Prerequisites Overview"
       },
+      "hms/running_itasser": {
+        "title": "Creating and running I-TASSER jobs."
+      },
       "hms/sppider_overview": {
         "title": "SPPIDER Overview"
       },
@@ -42,7 +45,7 @@
         "title": "Package Overview"
       },
       "public/intro_public": {
-        "title": "Welcome to the Docs!"
+        "title": "Welcome to the Protein Features Docs!"
       },
       "public/quickstart": {
         "title": "Quickstart"
