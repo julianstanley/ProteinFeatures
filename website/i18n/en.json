@@ -29,6 +29,9 @@
       "hms/running_itasser": {
         "title": "Creating and running I-TASSER jobs."
       },
+      "hms/running_quark": {
+        "title": "Creating and running QUARK jobs."
+      },
       "hms/sppider_overview": {
         "title": "SPPIDER Overview"
       },
