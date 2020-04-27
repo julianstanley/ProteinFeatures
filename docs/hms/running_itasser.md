@@ -23,7 +23,7 @@ All of the tools for running I-TASSER are located in O2 at `/n/groups/drad/I-TAS
 
 Running I-TASSER is fairly straightforward, but it requires a lot of arguments. The main runscript is `/n/groups/drad/I-TASSER4.3/I-TASSERmod/runI-TASSER.pl`.
 
-The perl script takes requires a few arguments to run correctly:
+The perl script requires a few arguments to run correctly:
 
 * `-java_home`: Path to a java distribution. We use `/n/app/java/jdk-1.8u112`.
 * `-pkgdir`: Path to the main I-TASSER directory. So, `/n/groups/drad/I-TASSER4.3/`.
