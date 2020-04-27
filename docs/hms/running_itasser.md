@@ -5,6 +5,20 @@ title: Creating and running I-TASSER jobs.
 
 All of the tools for running I-TASSER are located in O2 at `/n/groups/drad/I-TASSER4.3/`.
 
+## Summary/Quickstart for most cases
+
+1. (On O2) create a folder for your set of jobs in `/n/groups/drad/I-TASSER4.3/BatchJobs`. Add a job description to the README.
+
+2. (On local computer) Create csv file with all fasta headers and sequences, scp to O2. 
+
+3. (This step and on are all on O2) Run `bash /n/groups/drad/I-TASSER4.3/BatchScripts/csv_to_fasta.sh your_sequences.csv`
+
+4. In your job folder (for example, `/n/groups/drad/I-TASSER4.3/BatchJobs/myjobs`), run`mkdir main` and `mkdir scripts`.
+
+5. Run `bash/n/groups/drad/I-TASSER4.3/BatchScripts/createITasserJobScripts.sh -i main -o scripts`.
+
+6. Run `bash /n/groups/drad/I-TASSER4.3/BatchScripts/runJobScripts.sh -s scripts`.
+
 ## Running I-TASSER once
 
 Running I-TASSER is fairly straightforward, but it requires a lot of arguments. The main runscript is `/n/groups/drad/I-TASSER4.3/I-TASSERmod/runI-TASSER.pl`.

@@ -3,7 +3,7 @@ id: intro_hms
 title: Welcome!
 ---
 
-**Last updated: April 23, 2020**
+**Last updated: April 27, 2020**
 
 Welcome to the documentation for ProteinFeatures. This is the welcome page for documentation specific to people working within the Silver Lab at HMS.
 
