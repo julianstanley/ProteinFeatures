@@ -5,37 +5,37 @@
     "previous": "Previous",
     "tagline": "In development",
     "docs": {
-      "hms/chimera_overview": {
+      "hms/chimera/chimera_overview": {
         "title": "Chimera Overview"
       },
-      "hms/disopred_overview": {
+      "hms/disopred/disopred_overview": {
         "title": "DISOPRED Overview"
       },
-      "hms/intro_hms": {
+      "hms/introduction/intro_hms": {
         "title": "Welcome!"
       },
-      "hms/lomets_overview": {
-        "title": "LOMETS Overview"
-      },
-      "hms/metal_overview": {
-        "title": "Metal Binding Overview"
-      },
-      "hms/overview": {
+      "hms/introduction/overview": {
         "title": "Package Overview"
       },
-      "hms/prereq_overview": {
+      "hms/lomets/lomets_overview": {
+        "title": "LOMETS Overview"
+      },
+      "hms/metal_binding/metal_overview": {
+        "title": "Metal Binding Overview"
+      },
+      "hms/prerequisites/prereq_overview": {
         "title": "Prerequisites Overview"
       },
-      "hms/running_itasser": {
+      "hms/prerequisites/running_itasser": {
         "title": "Creating and running I-TASSER jobs."
       },
-      "hms/running_quark": {
+      "hms/prerequisites/running_quark": {
         "title": "Creating and running QUARK jobs."
       },
-      "hms/sppider_overview": {
+      "hms/sppider/sppider_overview": {
         "title": "SPPIDER Overview"
       },
-      "hms/ssm_overview": {
+      "hms/ssm/ssm_overview": {
         "title": "Sequence-Structure Mapping Overview"
       },
       "old/chimera": {
@@ -63,7 +63,7 @@
     "categories": {
       "Introduction": "Introduction",
       "Quick Start": "Quick Start",
-      "Prerequisities": "Prerequisities",
+      "Prerequisites": "Prerequisites",
       "Chimera": "Chimera",
       "LOMETS": "LOMETS",
       "Metal Binding": "Metal Binding",

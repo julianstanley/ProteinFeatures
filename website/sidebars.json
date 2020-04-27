@@ -10,31 +10,31 @@
   },
   "docs-hms": {
     "Introduction": [
-      "hms/intro_hms",
-      "hms/overview"
+      "hms/introduction/intro_hms",
+      "hms/introduction/overview"
     ],
-    "Prerequisities": [
-      "hms/prereq_overview",
-      "hms/running_itasser",
-      "hms/running_quark"
+    "Prerequisites": [
+      "hms/prerequisites/prereq_overview",
+      "hms/prerequisites/running_itasser",
+      "hms/prerequisites/running_quark"
     ],
     "Chimera": [
-      "hms/chimera_overview"
+      "hms/chimera/chimera_overview"
     ],
     "LOMETS": [
-      "hms/lomets_overview"
+      "hms/lomets/lomets_overview"
     ],
     "Metal Binding": [
-      "hms/metal_overview"
+      "hms/metal_binding/metal_overview"
     ],
     "SPPIDER": [
-      "hms/sppider_overview"
+      "hms/sppider/sppider_overview"
     ],
     "DISOPRED": [
-      "hms/disopred_overview"
+      "hms/disopred/disopred_overview"
     ],
     "Sequence-Structure Mapping": [
-      "hms/ssm_overview"
+      "hms/ssm/ssm_overview"
     ]
   }
 }

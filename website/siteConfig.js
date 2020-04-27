@@ -39,7 +39,7 @@ const siteConfig = {
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
     { doc: 'public/intro_public', label: 'Docs (Public)' },
-    { doc: 'hms/intro_hms', label: 'Docs (HMS)' },
+    { doc: 'hms/introduction/intro_hms', label: 'Docs (HMS)' },
     { href: 'https://github.com/julianstanley/ProteinFeatures', label: 'GitHub' },
     // {doc: 'doc4', label: 'API'},
     { page: 'help', label: 'Help' },
