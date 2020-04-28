@@ -15,8 +15,10 @@
     ],
     "Prerequisites": [
       "hms/prerequisites/prereq_overview",
+      "hms/prerequisites/quick_reference",
       "hms/prerequisites/running_itasser",
-      "hms/prerequisites/running_quark"
+      "hms/prerequisites/running_quark",
+      "hms/prerequisites/monitoring_models"
     ],
     "Chimera": [
       "hms/chimera/chimera_overview"
