@@ -1,0 +1,178 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Using SSM · Protein Features Documentation</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="## Description"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Using SSM · Protein Features Documentation"/><meta property="og:type" content="website"/><meta property="og:url" content="https://julianstanley.github.io/ProteinFeatures/"/><meta property="og:description" content="## Description"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/ProteinFeatures/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/ProteinFeatures/js/scrollSpy.js"></script><link rel="stylesheet" href="/ProteinFeatures/css/main.css"/><script src="/ProteinFeatures/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/ProteinFeatures/"><h2 class="headerTitle">Protein Features Documentation</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/ProteinFeatures/docs/public/intro_public" target="_self">Docs (Public)</a></li><li class="siteNavGroupActive"><a href="/ProteinFeatures/docs/hms/introduction/intro_hms" target="_self">Docs (HMS)</a></li><li class=""><a href="https://github.com/julianstanley/ProteinFeatures" target="_self">GitHub</a></li><li class=""><a href="/ProteinFeatures/help" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Sequence-Structure Mapping</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Introduction</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/introduction/intro_hms">Welcome!</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/introduction/overview">Package Overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Prerequisites</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/prerequisites/prereq_overview">Prerequisites Overview</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/prerequisites/quick_reference">Quick Reference</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/prerequisites/running_itasser">Creating and running I-TASSER jobs.</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/prerequisites/running_quark">Creating and running QUARK jobs.</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/prerequisites/monitoring_models">Maintaining and monitoring modelling jobs</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Chimera</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/chimera/chimera_overview">Chimera Overview</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/chimera/usage">Using Chimera</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">LOMETS</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/lomets/lomets_overview">LOMETS Overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Metal Binding</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/metal_binding/metal_overview">Metal Binding Overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">SPPIDER</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/sppider/sppider_overview">SPPIDER Overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">DISOPRED</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/disopred/disopred_overview">DISOPRED Overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Sequence-Structure Mapping</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/ssm/ssm_overview">Sequence-Structure Mapping Overview</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/ProteinFeatures/docs/hms/ssm/usage">Using SSM</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Using SSM</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" id="description"></a><a href="#description" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Description</h2>
+<p>Here's a collection of tools to derive a mapping between a protein structure (PDB format file) and a corresponding sequence (FASTA format file).</p>
+<h2><a class="anchor" aria-hidden="true" id="overview"></a><a href="#overview" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Overview</h2>
+<p>To derive a mapping, you need three things:</p>
+<p>(1) Sequences
+(1a) The primary sequence of the PDB-format structure
+(1b) The primary sequence of the FASTA-format file
+(2) PDB Numbering
+(2a) Since PDB files sometimes skip numbers due to gaps/etc., we also
+need a text file with all the site numbers from the PDB-format structre.</p>
+<p>After that, a Python script can do the rest. By which I mean it can output a text file
+in the following format:</p>
+<p>{structure file name}_{residue number from PDB structure}\t{residue number from FASTA sequence}</p>
+<h2><a class="anchor" aria-hidden="true" id="quickstart"></a><a href="#quickstart" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Quickstart</h2>
+<pre><code class="hljs css language-{bash}"># Original structure
+julian-ThinkPad-T460:<span class="hljs-number">04_21_2020</span>$ tree
+.
+├── sequence_fasta
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619</span>.</span></span>fasta
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515</span>.</span></span>fasta
+└── structure_pdb
+    ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835_deltop10</span>.</span></span>pdb
+    ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835_gap30_40</span>.</span></span>pdb
+    ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835_mut10_mut50</span>.</span></span>pdb
+    ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835</span>.</span></span>pdb
+    ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907_deltop10</span>.</span></span>pdb
+    ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907_gap20_30</span>.</span></span>pdb
+    ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907_mut2_mut82</span>.</span></span>pdb
+    ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907</span>.</span></span>pdb
+
+
+#  Will respond <span class="hljs-keyword">with</span> each pdb structure turned into a fasta file, leaving out here for brevity.
+julian-ThinkPad-T460:<span class="hljs-number">04_21_2020</span>$ bash ../scripts/pdb2fasta_wrapper_ssm.sh 
+julian-ThinkPad-T460:<span class="hljs-number">04_21_2020</span>$ bash ../scripts/extract_numbers_wrapper.sh 
+
+# Will respond <span class="hljs-keyword">with</span> each structure <span class="hljs-keyword">and</span> its alignment, but leaving out here for brevity
+julian-ThinkPad-T460:<span class="hljs-number">04_21_2020</span>$ python3 ../scripts/ssm_core.py 
+
+# Final output directory structure
+julian-ThinkPad-T460:<span class="hljs-number">04_21_2020</span>$ tree
+.
+├── output_maps
+│   ├── individual
+│   │   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835</span>.</span></span>csv
+│   │   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835_deltop10</span>.</span></span>csv
+│   │   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835_gap30_40</span>.</span></span>csv
+│   │   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835_mut10_mut50</span>.</span></span>csv
+│   │   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907</span>.</span></span>csv
+│   │   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907_deltop10</span>.</span></span>csv
+│   │   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907_gap20_30</span>.</span></span>csv
+│   │   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907_mut2_mut82</span>.</span></span>csv
+│   └── map_2020-<span class="hljs-number">04</span>-<span class="hljs-number">21.</span>csv
+├── pickled_intermediates
+│   ├── alignments.pickle
+│   └── up_to_sequences.pickle
+├── sequence_fasta
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619</span>.</span></span>fasta
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515</span>.</span></span>fasta
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Q46798</span>.</span></span>fasta
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Q9RUW8</span>.</span></span>fasta
+│   └── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Q9RXJ9</span>.</span></span>fasta
+├── structure_fasta
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835_deltop10</span>.</span></span>fasta
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835</span>.</span></span>fasta
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835_gap30_40</span>.</span></span>fasta
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835_mut10_mut50</span>.</span></span>fasta
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907_deltop10</span>.</span></span>fasta
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907</span>.</span></span>fasta
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907_gap20_30</span>.</span></span>fasta
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907_mut2_mut82</span>.</span></span>fasta
+├── structure_numbering
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835_deltop10</span>.</span></span>pdb
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835_gap30_40</span>.</span></span>pdb
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835_mut10_mut50</span>.</span></span>pdb
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835</span>.</span></span>pdb
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907_deltop10</span>.</span></span>pdb
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907_gap20_30</span>.</span></span>pdb
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907_mut2_mut82</span>.</span></span>pdb
+│   ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907</span>.</span></span>pdb
+└── structure_pdb
+    ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835_deltop10</span>.</span></span>pdb
+    ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835_gap30_40</span>.</span></span>pdb
+    ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835_mut10_mut50</span>.</span></span>pdb
+    ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A5A619_E10835</span>.</span></span>pdb
+    ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907_deltop10</span>.</span></span>pdb
+    ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907_gap20_30</span>.</span></span>pdb
+    ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907_mut2_mut82</span>.</span></span>pdb
+    ├── <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">P21515_E10907</span>.</span></span>pdb
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="creating-prerequisites"></a><a href="#creating-prerequisites" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Creating prerequisites</h2>
+<ol>
+<li>First, create a folder with today's date and cd into that folder. All of the scripts assume that your working directory is at the same depth as the <code>scripts</code> directory.</li>
+</ol>
+<p>This assumes that you start off with (1) a PDB files and (2) a file, <code>uniprot_ids</code>, containing each of the canonical uniprot IDs of your PDB files, one ID per lne.</p>
+<ol start="2">
+<li><p>Make a folder called <code>{today's date}/sequence_fasta</code>. Then, use the <code>./scripts/get_uniprot.sh</code> to query uniprot fasta sequences. So, for example, I ran <code>bash ../../scripts/get_uniprot.sh ../uniprot_ids</code> while in the <code>04_20_2020/sequence_fasta</code> folder. Now, you should have fasta files corresponding to each canonical ID.</p></li>
+<li><p>Put all of your PDB files in a folder called <code>{today's date}/structure_pdb</code>.</p></li>
+</ol>
+<p>Future scripts rely on the names of your files, so make sure to name them with the following scheme:</p>
+<ul>
+<li><p>For canonical sequence fasta files: {uniprot id}.fasta. So, for example, I have <code>P00338.fasta</code> in the <code>04_20_2020/sequence_fasta</code> folder.</p></li>
+<li><p>For PDB files: {uniprot id}_{structure name}.pdb. So, for example, I am putting a corresponding <code>P00338_pdb1i10.pdb</code> into the <code>04_17_2020/structure_pdb</code> folder.</p></li>
+</ul>
+<p>I created a helper script to help you rename your pdb files, if they are in the format <code>pdb1i10.pdb</code> and you want to rename to <code>P00338_pdb1i10.pdb</code>. Uniprot
+ids are not generally included in PDB files, so you'll need to provide your own comma-delimited mapping between UniProt and PDB structure file.</p>
+<p>^ Remember to back-up your original structures before running this!</p>
+<h3><a class="anchor" aria-hidden="true" id="converting-pdb-into-fasta"></a><a href="#converting-pdb-into-fasta" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Converting PDB into fasta</h3>
+<p>We can use the <code>./scripts/pdb2fasta_firstchain_js.sh</code> script to extract a sequence from the the first chain in your PDB file.</p>
+<p>To make this a bit easier on many files, I wrote the <code>./scripts/pdb2fasta_wrapper_ssm.sh</code> script.</p>
+<p>So, first <code>cd</code> into your base directory (the one with the date--in my case, <code>04_17_2017</code>).
+Then, run <code>bash ../scripts/pdb2fasta_wrapper_ssm.sh</code>.</p>
+<p>And that should convert all PDB files in <code>structure_pdb</code> into fasta files, located in <code>structure_fasta</code>.</p>
+<h3><a class="anchor" aria-hidden="true" id="converting-pdb-into-a-numbering-file"></a><a href="#converting-pdb-into-a-numbering-file" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Converting PDB into a numbering file.</h3>
+<p>We can use the <code>./scripts/extract_numbers.sh</code> script to extract sequence numbers from the first chain in your PDB file.</p>
+<p>To make this a bit easier on many files, I wrote the <code>./scripts/extract_numbers_wrapper.sh</code> script.</p>
+<p>Like the last step, you should be in your base directory. Then, run <code>bash ../scripts/extract_numbers_wrapper.sh</code>.</p>
+<p>And that should convert all PDB files in <code>structure_pdb</code> into numbering files, located in <code>structure_numbering</code>.</p>
+<p>(Note that these numbering files do include all chains, even though we're just using the first chain, so numbering from
+other chains will be ignored)</p>
+<h2><a class="anchor" aria-hidden="true" id="running-the-main-script"></a><a href="#running-the-main-script" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Running the main script</h2>
+<p>Then, you just need to run <code>python3 ../scripts/ssm_core.py</code> for the main computation.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/ProteinFeatures/docs/hms/ssm/ssm_overview"><span class="arrow-prev">← </span><span>Sequence-Structure Mapping Overview</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#description">Description</a></li><li><a href="#overview">Overview</a></li><li><a href="#quickstart">Quickstart</a></li><li><a href="#creating-prerequisites">Creating prerequisites</a><ul class="toc-headings"><li><a href="#converting-pdb-into-fasta">Converting PDB into fasta</a></li><li><a href="#converting-pdb-into-a-numbering-file">Converting PDB into a numbering file.</a></li></ul></li><li><a href="#running-the-main-script">Running the main script</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/ProteinFeatures/" class="nav-home"></a><div><h5>Docs</h5><a href="/ProteinFeatures/docs/public/intro_public.html">Start Here (General Documentation)</a></div><div><h5>Contact</h5><a href="http://silver.med.harvard.edu/" target="_blank" rel="noreferrer noopener">Silver Lab Website</a></div><div><h5>More</h5><a href="https://github.com/julianstanley/ProteinFeatures">GitHub Repository</a></div></section><section class="copyright">Copyright © 2020 Silver Lab, Harvard Medical School</section></footer></div></body></html>
