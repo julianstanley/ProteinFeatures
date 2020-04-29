@@ -21,7 +21,8 @@
       "hms/prerequisites/monitoring_models"
     ],
     "Chimera": [
-      "hms/chimera/chimera_overview"
+      "hms/chimera/chimera_overview",
+      "hms/chimera/usage"
     ],
     "LOMETS": [
       "hms/lomets/lomets_overview"
@@ -36,7 +37,8 @@
       "hms/disopred/disopred_overview"
     ],
     "Sequence-Structure Mapping": [
-      "hms/ssm/ssm_overview"
+      "hms/ssm/ssm_overview",
+      "hms/ssm/usage"
     ]
   }
 }
