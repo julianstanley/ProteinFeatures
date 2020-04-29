@@ -26,3 +26,5 @@ Utilies to run I-TASSER in high-throughput can be found at `/n/groups/drad/I-TAS
 Utilities to run QUARK in high-throughput can be found at `/n/groups/drad/QUARKmod/BatchScripts`.
 
 Utilities to move, archive, and run I-TASSER and QUARK modelling files can be found at `/n/groups/drad/julian/Modelling_Monitoring`.
+
+Utilites to track the progress of runs can be found at `/n/groups/drad/all_pdb_models/progress_logs`.
