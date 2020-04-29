@@ -13,7 +13,7 @@ We have used these tools on RPKT residues in E. coli, D. radiodurans, and human 
 
 This project is public, but still under active development. Check back in the next few weeks.
 
-### Authors
+## Authors
 
 Created by the [Silver Lab](http://silver.med.harvard.edu/) at Harvard Medical School.
 
@@ -23,6 +23,6 @@ Contacts:
 
 * Dr. Roger Chang (Project Lead, roger_chang at hms dot harvard dot edu)
 
-### Project Overview
+## Project Overview
 
 ![The Project Overview Image](./docs/assets/Protein_Features.png)
