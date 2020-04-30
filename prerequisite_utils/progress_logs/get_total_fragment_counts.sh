@@ -1,0 +1,1 @@
+while read fragment; do quark_count=$(grep $fragment pdb_all_quark_model1_fragments | wc -l); itasser_count=$(grep $fragment pdb_all_itasser_model1_fragments | wc -l); echo -e "${fragment}\t${itasser_count}\t${quark_count}">>total_fragments_count; done<total_fragments

@@ -1,0 +1,1 @@
+while read protein; do quark_count=$(grep $protein pdb_all_quark_model1_fragments | wc -l); itasser_count=$(grep $protein pdb_all_itasser_model1_fragments | wc -l); echo -e "${protein}\t${itasser_count}\t${quark_count}">>total_proteins_count; done<total_proteins

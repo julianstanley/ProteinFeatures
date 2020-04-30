@@ -1,0 +1,7 @@
+Just run `make all` to get everything. Then run `bash report_stats.sh` to see the statistics.
+
+To clean up, run `make clean`
+
+I didn't do a great job of naming the output folders here. Basically, "output" has files that are used during the process of updating all of the PDB files. No need to reference it most of the time. Then, "old" has files that are used in the process of getting all the names of current PDB files and fragments--those files can be really useful to see which proteins/fragments are done running.
+
+Then, "updates" has daily updates about how many fragments/proteins are completed.
