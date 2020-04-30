@@ -32,9 +32,6 @@
       "hms/prerequisites/prereq_overview": {
         "title": "Prerequisites Overview"
       },
-      "hms/prerequisites/quick_reference": {
-        "title": "Quick Reference"
-      },
       "hms/prerequisites/running_itasser": {
         "title": "Creating and running I-TASSER jobs."
       },
