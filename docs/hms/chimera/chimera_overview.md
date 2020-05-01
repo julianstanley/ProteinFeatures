@@ -7,7 +7,7 @@ Once you have 3D protein structures, you can use UCSF Chimera to extract certain
 
 It can be a bit involved to extract these features, so I've written a pipeline to do it for you. It requires the UCSF Chimera GUI, which has a built-in python2 interpreter.
 
-Unfortunately, in my hands at least, Chimera (and especially the builtin interpreter) can be very finnicky. So, I included my exact build of UCSF Chimera, built on Ubuntu 19.10, in this repository (`Chimera_Features/UCSF_Chimera64-2019-07-10.zip`). There is also a lab Dell laptop that has the same version of Chimera installed. Different versions can give different results, or sometimes not work alltogether.
+Unfortunately, in my hands at least, Chimera (and especially the builtin interpreter) can be very finnicky. So, I included my exact build of UCSF Chimera, built on Ubuntu 19.10, on the HMS "Protein Oxidation" Dropbox (in Feature_Engineering/Chimera). There is also a lab Dell laptop that has the same version of Chimera installed. Different versions can give different results, or sometimes not work alltogether.
 
 ## Quick Reference
 
