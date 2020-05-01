@@ -36,7 +36,7 @@ The perl script requires a few arguments to run correctly:
 * `-LBS`: See the I-TASSER docs for more info. We use `false`.
 * `-EC`: See the I-TASSER docs for more info. We use `false`.
 * `-GO`: See the I-TASSER docs for more info. We use `false`.
-* `-usrnamme`: Your O2 username. For example, Roger's is `rlc18`.
+* `-usrname`: Your O2 username. For example, Roger's is `rlc18`.
 
 So, here's an example of a full I-TASSER call:
 

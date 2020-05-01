@@ -24,7 +24,8 @@
       "hms/chimera/usage"
     ],
     "LOMETS": [
-      "hms/lomets/lomets_overview"
+      "hms/lomets/lomets_overview",
+      "hms/lomets/using_lomets"
     ],
     "Metal Binding": [
       "hms/metal_binding/metal_overview"

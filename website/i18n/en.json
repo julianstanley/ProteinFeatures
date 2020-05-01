@@ -23,6 +23,9 @@
       "hms/lomets/lomets_overview": {
         "title": "LOMETS Overview"
       },
+      "hms/lomets/using_lomets": {
+        "title": "Using LOMETS"
+      },
       "hms/metal_binding/metal_overview": {
         "title": "Metal Binding Overview"
       },
