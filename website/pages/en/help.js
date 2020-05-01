@@ -22,7 +22,7 @@ function Help(props) {
   const supportLinks = [
     {
       content: `Learn more using the [documentation on this site.](${docUrl(
-        'intro_public.html',
+        'public/intro_public.html',
       )})`,
       title: 'Browse Docs',
     },
@@ -31,7 +31,7 @@ function Help(props) {
       title: 'Interact via GitHub',
     },
     {
-      content: "For inquiries, feel free to contact [Julian](mailto:julianstanleya@gmail.com), who created this documentation, or [Dr. Roger Chang](roger_chang@hms.harvard.edu), who spearheaded the project.",
+      content: "For inquiries, feel free to contact [Julian](mailto:julianstanleya@gmail.com), who created this documentation, or [Dr. Roger Chang](mailto:roger_chang@hms.harvard.edu), who spearheaded the project.",
       title: 'Contact us Directly',
     },
   ];
