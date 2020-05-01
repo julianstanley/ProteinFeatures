@@ -6,4 +6,4 @@ scratch/
 .vscode
 data/
 old_logs/
-website/build/ProteinFeatures/
+website/build/
