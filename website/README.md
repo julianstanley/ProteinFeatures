@@ -1,3 +1,7 @@
+# Julian notes
+
+Just edit files in docs/ and sidebars.json. Then use `yarn start` to start a local server. When you're ready to deploy, first commit and push everything. Then, run `publish_gh_pages.sh` in this directory.
+
 This website was created with [Docusaurus](https://docusaurus.io/).
 
 # What's In This Document
