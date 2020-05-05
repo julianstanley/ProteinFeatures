@@ -1,0 +1,272 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Running findsitemetal · Protein Features Documentation</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="It&#x27;s a bit more involved to run findsitemetal, since you need to:"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Running findsitemetal · Protein Features Documentation"/><meta property="og:type" content="website"/><meta property="og:url" content="https://julianstanley.github.io/ProteinFeatures/"/><meta property="og:description" content="It&#x27;s a bit more involved to run findsitemetal, since you need to:"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/ProteinFeatures/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/ProteinFeatures/js/scrollSpy.js"></script><link rel="stylesheet" href="/ProteinFeatures/css/main.css"/><script src="/ProteinFeatures/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/ProteinFeatures/"><h2 class="headerTitle">Protein Features Documentation</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/ProteinFeatures/docs/public/intro_public" target="_self">Docs (Public)</a></li><li class="siteNavGroupActive"><a href="/ProteinFeatures/docs/hms/introduction/intro_hms" target="_self">Docs (HMS)</a></li><li class=""><a href="https://github.com/julianstanley/ProteinFeatures" target="_self">GitHub</a></li><li class=""><a href="/ProteinFeatures/help" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Metal Binding</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Introduction</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/introduction/intro_hms">Welcome!</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/introduction/overview">Package Overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Prerequisites</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/prerequisites/prereq_overview">Prerequisites Overview</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/prerequisites/running_itasser">Creating and running I-TASSER jobs.</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/prerequisites/running_quark">Creating and running QUARK jobs.</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/prerequisites/monitoring_models">Maintaining and monitoring modelling jobs</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Chimera</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/chimera/chimera_overview">Chimera Overview</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/chimera/usage">Using Chimera</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">LOMETS</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/lomets/lomets_overview">LOMETS Overview</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/lomets/using_lomets">Using LOMETS</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Metal Binding</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/metal_binding/metal_overview">Metal Binding Overview</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/metal_binding/running_uniprot">Running uniprotmetal</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/ProteinFeatures/docs/hms/metal_binding/running_findsite">Running findsitemetal</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">SPPIDER</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/sppider/sppider_overview">SPPIDER Overview</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/sppider/running_sppider">Running SPPIDER</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">DISOPRED</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/disopred/disopred_overview">DISOPRED Overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Sequence-Structure Mapping</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/ssm/ssm_overview">Sequence-Structure Mapping Overview</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/ssm/usage">Using SSM</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Notes</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/notes/05_04_2020">Chimera notes from May 04, 2020</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Running findsitemetal</h1></header><article><div><span><p>It's a bit more involved to run findsitemetal, since you need to:</p>
+<ol>
+<li>Generate a template list</li>
+<li>Set required variables</li>
+<li>Run findsite</li>
+</ol>
+<h2><a class="anchor" aria-hidden="true" id="generating-a-template-list"></a><a href="#generating-a-template-list" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Generating a template list</h2>
+<p>First, make sure that you've generated template lists for every UniProt ID of interest. We do this with LOMETS.</p>
+<p>If you also used LOMETS, then you need to parse the <code>init.dat</code> files to produce a simple list of templates. You can do this by making a folder called <code>LOMETSinitdatFiles</code> were you put each <code>init.dat</code> file. Label each file with the UniProt id, for example:</p>
+<pre><code class="hljs css language-{bash}">(base) [<span class="hljs-symbol">js741@</span>compute-e<span class="hljs-number">-16</span><span class="hljs-number">-233</span> LOMETSinitdatFiles]$ ll | head <span class="hljs-number">-3</span>
+total <span class="hljs-number">587656</span>
+-rw-rw-r-- <span class="hljs-number">1</span> js741 js741 <span class="hljs-number">1416739</span> May  <span class="hljs-number">4</span> <span class="hljs-number">22</span>:<span class="hljs-number">11</span> O00444_init.dat
+-rw-rw-r-- <span class="hljs-number">1</span> js741 js741 <span class="hljs-number">1905099</span> May  <span class="hljs-number">4</span> <span class="hljs-number">22</span>:<span class="hljs-number">11</span> O15020_init.dat
+</code></pre>
+<p>Then, make a folder called <code>FINDSITE_input</code> (at the same level as <code>LOMETSinitdatFiles</code>) and run <code>LOMETS_to_FINDSITE_files_js.py</code> (included in this repo and in <code>/n/groups/drad/julian/findsite</code>). That python script requires <code>FINDSITE_PDB_mapping.csv</code>, also included in the same directories, and will produce <code>.txt</code> files with template lists:</p>
+<pre><code class="hljs css language-{bash}">(base) [<span class="hljs-symbol">js741@</span>compute-e<span class="hljs-number">-16</span><span class="hljs-number">-233</span> FINDSITE_input]$ ll | head <span class="hljs-number">-3</span>
+total <span class="hljs-number">9864</span>
+-rw-rw-r-- <span class="hljs-number">1</span> js741 js741  <span class="hljs-number">36</span> May  <span class="hljs-number">4</span> <span class="hljs-number">22</span>:<span class="hljs-number">21</span> O00444.txt
+-rw-rw-r-- <span class="hljs-number">1</span> js741 js741  <span class="hljs-number">78</span> May  <span class="hljs-number">4</span> <span class="hljs-number">22</span>:<span class="hljs-number">21</span> O15020.txt
+(base) [<span class="hljs-symbol">js741@</span>compute-e<span class="hljs-number">-16</span><span class="hljs-number">-233</span> FINDSITE_input]$ head <span class="hljs-number">-5</span> O00444.txt
+<span class="hljs-number">1</span>y8ga
+<span class="hljs-number">2</span>euea
+<span class="hljs-number">1</span>muoa
+<span class="hljs-number">1</span>ia8a
+<span class="hljs-number">2</span>ou7a
+</code></pre>
+<p>Those <code>.txt</code> files will be your template input when running findsite.</p>
+<h2><a class="anchor" aria-hidden="true" id="setting-required-environmental-variables"></a><a href="#setting-required-environmental-variables" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Setting required environmental variables</h2>
+<p>findsite requires a few environmental variables. As of May 5th, 2020, I export these three variables in my bashrc:</p>
+<pre><code class="hljs css language-{bash}"><span class="hljs-builtin-name">export</span> <span class="hljs-attribute">FINDSITELIB</span>=/n/groups/drad/findsitemetal-1.0/dat/pdb_library
+<span class="hljs-builtin-name">export</span> <span class="hljs-attribute">FINDSITEMAP</span>=/n/groups/drad/findsitemetal-1.0/dat/my_mapping.cls
+<span class="hljs-builtin-name">export</span> <span class="hljs-attribute">FINDSITEDAT</span>=/n/groups/drad/findsitemetal-1.0/dat
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="running-findsite"></a><a href="#running-findsite" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Running findsite</h2>
+<p>The basic format for running findsite is:</p>
+<pre><code class="hljs css language-{bash}">/n/<span class="hljs-keyword">groups</span>/drad/findsitemetal<span class="hljs-number">-1.0</span>/bin/findsitemetal\
+    -s ${<span class="hljs-keyword">location</span> <span class="hljs-keyword">of</span> pdb file}\
+    -t ${<span class="hljs-keyword">location</span> <span class="hljs-keyword">of</span> templates list file}\
+    -o ${<span class="hljs-keyword">location</span> <span class="hljs-keyword">of</span> output files. Note that this isn<span class="hljs-string">'t a directory: so, if this argument is '</span>/home/findsite/my_findsit<span class="hljs-string">e', then files like '</span>/home/findsite/my_findsite.sites.dat<span class="hljs-string">' will be produced"
+</span></code></pre>
+<p>For example:</p>
+<pre><code class="hljs css language-{bash}">`<span class="hljs-regexp">/n/g</span>roups<span class="hljs-regexp">/drad/</span>findsitemetal-<span class="hljs-number">1.0</span><span class="hljs-regexp">/bin/</span>findsitemetal -s <span class="hljs-regexp">/n/g</span>roups<span class="hljs-regexp">/drad/</span>julian<span class="hljs-regexp">/Carbonylation_May2020/</span>all_relevant_pdbs<span class="hljs-regexp">/Q9Y6U3_5A1K_A.pdb -t FINDSITE_input/</span>Q9Y6U3.txt -o <span class="hljs-regexp">/home/</span>js741<span class="hljs-regexp">/CarbonylationSite_Prediction/</span>Human_Proteins<span class="hljs-regexp">/findsite/</span>LOMETS_to_findsitemetal<span class="hljs-regexp">/test_findsite/</span>Q9Y6U3_5A1K_A`
+</code></pre>
+<p>Findsite does run relatively quickly (less than a minute per run, generally).</p>
+<p>To help you run findsite in high-throughput, I provided a script here: <code>/n/groups/drad/julian/findsite/run_findsite.sh</code> as an example, but you may need to write your own script (since that one isn't super generalizable). (todo: make a more generalizable version of this script).</p>
+<h2><a class="anchor" aria-hidden="true" id="profit"></a><a href="#profit" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Profit</h2>
+<p>Now you should have findsite output files. Really, we just need the <code>*.findsitemetal.sites.dat</code> file.</p>
+<p>For more information about parsing that file, see RLC's notes in Findsitemetal_notes_rlc.docx. I'll paste them here for quicker reference.</p>
+<h2><a class="anchor" aria-hidden="true" id="rlc-notes"></a><a href="#rlc-notes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>RLC Notes</h2>
+<p>Findsitemetal notes:</p>
+<p>-First had to run LOMETS to get template lists for every protein</p>
+<p>-Then ran findsitemetal to predict metal binding sites based on
+structures and template lists</p>
+<p>-Results</p>
+<pre><code class="hljs">- Don't need data from &quot;\*.findsitemetal.alignments.dat&quot; right now
+
+-&quot;\*.findsitemetal.templates.pdb&quot; all-atom coordinates of
+    template structures aligned and superimposed on the target
+    protein structure (same coordinate system as target)
+
+-&quot;\*.findsitemetal.metals.pdb&quot; has Cartesian coordinates of metal
+    atoms from template structures aligned and superimposed on
+    target protein structure
+
+-   &quot;\*.findsitemetal.sites.pdb&quot; has Cartesian coordinates of
+    predicted metal atoms in their binding sites, but since I'm
+    taking my own approach to this based on centroid of metal
+    binding residues, I don't need this file
+
+-   &quot;\*.findsitemetal.sites.dat&quot; is probably the only file really
+    needed. From here we can parse out:
+
+    -   The number of the binding site: &quot;SITE 1 7 1.0000 2.2058
+        0.6435 0.2115 4&quot; second column
+
+    -   The number of metal binding residues in the site: &quot;SITE 1 7
+        1.0000 2.2058 0.6435 0.2115 4&quot; last column
+
+    -   Which metal(s) bind to each site: &quot;METAL MG 1.000000
+        0.764762&quot; third column equal to 1 means the site does bind
+        this metal, otherwise 0
+
+    -   Which residues make up the binding site: &quot;RESIDUE 25 T \* 7
+        4.205 0.35060 0.74038 0.85714 0.63671 0.05634&quot; if asterisk
+        follows third column, it is a binding residue, else not
+
+    -   Residue position(s) making up the binding site: &quot;RESIDUE 25
+        T \* 7 4.205 0.35060 0.74038 0.85714 0.63671 0.05634&quot; second
+        column
+
+    -   Amino acid type making up the binding site: &quot;RESIDUE 25 T \*
+        7 4.205 0.35060 0.74038 0.85714 0.63671 0.05634&quot; third
+        column
+
+    -   Parsed result columns look like: col1 = site\#, col2 =
+        METAL1,METAL2..., col3 = AA\#,AA\#\...
+</code></pre>
+<p>-What features to extract</p>
+<pre><code class="hljs">-   Total number of metal-specific binding sites on the protein
+    (this should have a column for each type of metal, and their sum
+    as well, and will consist of integers)
+
+-   Local metal ion contacts (should have a column for each type of
+    metal, their sum, and will be integers)
+
+    -   Approximate the locations of bound metal atoms as the
+        centroid of all atoms (or if possible, just sidechain atoms)
+        of all metal binding residues for each site; it is not known
+        which specific amino acid atoms metals may form bonds with
+        because it is difficult to know the partial charges on the
+        protein, protonation states, etc., so an approximation is
+        probably appropriate; this method leads to very slightly
+        different centroids than those output by findsitemetal
+        itself but is also extensible to metal binding sites from
+        UniProt
+
+    -   Use Bubble method (5-angstrom radius) and count the number
+        of metal atoms for each type of metal within this radius
+        (distance from centroid to potential CS atom \&lt; \[5
+        angstroms + atomic radius of metal\]) for a given RKPT
+        residue
+
+    -   Metal atomic radii (Chimera default ionic radii,
+        coordination number = 6; from R. D. Shannon (1976).
+        \&quot;Revised effective ionic radii and systematic studies of
+        interatomic distances in halides and chalcogenides\&quot;. Acta
+        Crystallogr A. 32: 751--767.):
+
+        -   CA2+ = 1.00 angstroms
+
+        -   CO2+ = 0.65 angstroms
+
+        -   CU2+ = 0.73 angstroms
+
+        -   CU1+ = 0.77 angstroms
+
+        -   FE2+ = 0.61 angstroms
+
+        -   K1+ = 1.38 angstroms
+
+        -   MG2+ = 0.72 angstroms
+
+        -   MN2+ = 0.83 angstroms
+
+        -   MO4+ = 0.65 angstroms
+
+        -   NA1+ = 1.02 angstroms
+
+        -   NI2+ = 0.69 angstroms
+
+        -   ZN2+ = 0.74 angstroms
+</code></pre>
+<p>Decide whether to say findsitemetal &quot;FE&quot; can stand-in for UniProt &quot;Iron
+sulfur&quot; clusters</p>
+<ul>
+<li><p>&quot;TP&quot; = 468 = Count number of overlapping residues that findsitemetal
+predicts bind FE and UniProt says bind an iron-sulfur cluster</p></li>
+<li><p>&quot;FN&quot; = 249 = Count number of residues that UniProt says bind an
+iron-sulfur cluster but findsite metal does not predict bind FE</p></li>
+<li><p>If TP &gt;&gt; FN, then when merging UniProt and findsitemetal sites,
+treat iron-sulfur clusters like they are just free FE, otherwise,
+these can't be merged and probably should toss out iron-sulfur
+cluster data from UniProt; TP &gt;&gt; FN can be evaluated by seeing if
+FE-ironSulfur(TP/FN) &gt;= FE-FE(TP/FN)</p>
+<ul>
+<li><p>FE-FE(TP) = 76</p></li>
+<li><p>FE-FE(FN) = 32+41 = 73</p></li>
+</ul></li>
+<li><p>FE-ironSulfur(TP/FN) = 468/249 = 1.88</p></li>
+<li><p>FE-FE(TP/FN) = 76/73 = 1.04</p></li>
+<li><p>This result suggests that if FE binding prediction by findsitemetal
+is considered to be predictive of iron-sulfur cluster binding sites,
+it performs substantially better at predicting FE binding overall,
+but since findsitemetal does not provide for the orientation of
+iron-sulfur clusters, to be conservative, I'll treat those binding
+sites as binding free FE. This means that I'll use the ionic radius
+of free FE2+ instead of the substantially larger size of the
+iron-sulfur cluster, and the position of the FE should be
+approximately the centroid of the position of the iron-sulfur
+cluster. RKPT will have to be closer to these FEs in order to count
+towards their Bubble feature for proximal metal binding than they
+would if the binding position of the iron-sulfur cluster was known.</p></li>
+</ul>
+<p>Merging UniProt metal binding site data with findsitemetal predictions</p>
+<ul>
+<li><p>If sites between UniProt and findsitemetal overlap at least
+partially in both residues and type of metal, merge them into one
+site by taking the union of residues and metals for both sites</p></li>
+<li><p>If sites between UniProt and findsitemetal overlap only in partially
+in residues and do not overlap at all in metals, consider the two as
+distinct sites that bind different metals; very few (76) such cases
+in my protein structures</p></li>
+<li><p>If sites between UniProt and findsitemetal overlap only in metals
+and not at all in residues, consider the two as distinct sites that
+bind the same type of metal but not the same actual ion
+simultaneously</p></li>
+<li><p>After merging in this fashion, make sure to include all
+findsitemetal results for proteins not annotated with metal binding
+sites in UniProt and all UniProt binding sites that either don't
+overlap with any findsitemetal results or for proteins with no
+predicted findsitemetal results</p></li>
+<li><p>De-duplicating</p>
+<ul>
+<li><p>If there are entirely identical final binding sites because of
+multiple findsitemetal sites that use the same binding residues,
+remove the higher-numbered site (or one with more metals
+associated; or combine metals for otherwise identical sites)</p></li>
+<li><p>If there are entirely identical final binding sites because of
+merging 2 or more uniprot sites with findsitemetal sites,
+de-merge them and keep only the uniprot sites as they were in
+uniprot; this is especially important because not doing so will
+reduce the count of real metal binding sites to be used in the
+Bubble method</p></li>
+</ul></li>
+</ul>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/ProteinFeatures/docs/hms/metal_binding/running_uniprot"><span class="arrow-prev">← </span><span>Running uniprotmetal</span></a><a class="docs-next button" href="/ProteinFeatures/docs/hms/sppider/sppider_overview"><span>SPPIDER Overview</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#generating-a-template-list">Generating a template list</a></li><li><a href="#setting-required-environmental-variables">Setting required environmental variables</a></li><li><a href="#running-findsite">Running findsite</a></li><li><a href="#profit">Profit</a></li><li><a href="#rlc-notes">RLC Notes</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/ProteinFeatures/" class="nav-home"></a><div><h5>Docs</h5><a href="/ProteinFeatures/docs/public/intro_public.html">Start Here (General Documentation)</a></div><div><h5>Contact</h5><a href="http://silver.med.harvard.edu/" target="_blank" rel="noreferrer noopener">Silver Lab Website</a></div><div><h5>More</h5><a href="https://github.com/julianstanley/ProteinFeatures">GitHub Repository</a></div></section><section class="copyright">Copyright © 2020 Silver Lab, Harvard Medical School</section></footer></div></body></html>

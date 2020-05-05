@@ -1,0 +1,106 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Running uniprotmetal · Protein Features Documentation</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="It is pretty straightforward to extract metal binding sites from UniProt."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Running uniprotmetal · Protein Features Documentation"/><meta property="og:type" content="website"/><meta property="og:url" content="https://julianstanley.github.io/ProteinFeatures/"/><meta property="og:description" content="It is pretty straightforward to extract metal binding sites from UniProt."/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/ProteinFeatures/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/ProteinFeatures/js/scrollSpy.js"></script><link rel="stylesheet" href="/ProteinFeatures/css/main.css"/><script src="/ProteinFeatures/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/ProteinFeatures/"><h2 class="headerTitle">Protein Features Documentation</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/ProteinFeatures/docs/public/intro_public" target="_self">Docs (Public)</a></li><li class="siteNavGroupActive"><a href="/ProteinFeatures/docs/hms/introduction/intro_hms" target="_self">Docs (HMS)</a></li><li class=""><a href="https://github.com/julianstanley/ProteinFeatures" target="_self">GitHub</a></li><li class=""><a href="/ProteinFeatures/help" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Metal Binding</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Introduction</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/introduction/intro_hms">Welcome!</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/introduction/overview">Package Overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Prerequisites</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/prerequisites/prereq_overview">Prerequisites Overview</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/prerequisites/running_itasser">Creating and running I-TASSER jobs.</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/prerequisites/running_quark">Creating and running QUARK jobs.</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/prerequisites/monitoring_models">Maintaining and monitoring modelling jobs</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Chimera</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/chimera/chimera_overview">Chimera Overview</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/chimera/usage">Using Chimera</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">LOMETS</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/lomets/lomets_overview">LOMETS Overview</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/lomets/using_lomets">Using LOMETS</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Metal Binding</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/metal_binding/metal_overview">Metal Binding Overview</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/ProteinFeatures/docs/hms/metal_binding/running_uniprot">Running uniprotmetal</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/metal_binding/running_findsite">Running findsitemetal</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">SPPIDER</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/sppider/sppider_overview">SPPIDER Overview</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/sppider/running_sppider">Running SPPIDER</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">DISOPRED</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/disopred/disopred_overview">DISOPRED Overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Sequence-Structure Mapping</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/ssm/ssm_overview">Sequence-Structure Mapping Overview</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/ssm/usage">Using SSM</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Notes</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/notes/05_04_2020">Chimera notes from May 04, 2020</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Running uniprotmetal</h1></header><article><div><span><p>It is pretty straightforward to extract metal binding sites from UniProt.</p>
+<p>First, you should grab xml files for each ID of interest from UniProt. To do this, I provided <code>get_all_uniprot.sh</code> in this repo:</p>
+<pre><code class="hljs css language-{bash get_all_uniprot.sh}"><span class="hljs-meta">#!/usr/bin/env bash</span>
+<span class="hljs-comment"># Usage: bash get_all_uniprot.sh [IDs] [outfolder]</span>
+<span class="hljs-comment"># IDs: A newline-seperated file containing all uniprot IDs to be queried</span>
+<span class="hljs-comment"># outfolder: folder to put the files in! (do not include final)</span>
+<span class="hljs-comment"># Note: downloads in xml format</span>
+
+<span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> up; <span class="hljs-keyword">do</span>
+    wget -O <span class="hljs-string">"<span class="hljs-variable">$2</span>/<span class="hljs-variable">${up}</span>.xml"</span> <span class="hljs-string">"https://www.uniprot.org/uniprot/<span class="hljs-variable">${up}</span>.xml"</span>
+<span class="hljs-keyword">done</span> &lt;<span class="hljs-variable">$1</span>
+</code></pre>
+<p>Then, you can use python to parse those xml files. To do this, I provided <code>xml_to_binding.py</code> in this repo.</p>
+<p>That script is a bit more involved, usage:</p>
+<pre><code class="hljs css language-{bash}"><span class="hljs-keyword">Usage</span>: python3 xml_to_binding.py [xml_folder]
+<span class="hljs-keyword">Where</span> xml_folder <span class="hljs-keyword">is</span> the folder <span class="hljs-keyword">where</span> <span class="hljs-keyword">all</span> <span class="hljs-keyword">of</span> the uniprot <span class="hljs-type">XML</span> files are located
+</code></pre>
+<p>It includes a few nice features. For example, it converts from UniProt terms to simple metal binding. For example, 'Iron-sulfur (4Fe-4S)' maps to just 'Fe', and &quot;Calcium 2&quot; maps to just &quot;Ca&quot;. Here are the full mappings:</p>
+<pre><code class="hljs css language-{python3}"><span class="hljs-symbol">METAL_MAPPING</span> = {
+    <span class="hljs-string">'Iron (heme proximal ligand)'</span>: [<span class="hljs-string">"Fe"</span>],
+    <span class="hljs-string">'Zinc 3'</span>: [<span class="hljs-string">"Zn"</span>],
+    <span class="hljs-string">'Iron (heme axial ligand)'</span>: [<span class="hljs-string">"Fe"</span>],
+    <span class="hljs-string">'Calcium 2; via carbonyl oxygen'</span>: [<span class="hljs-string">"Ca"</span>],
+    <span class="hljs-string">'Magnesium'</span>: [<span class="hljs-string">"Mg"</span>],
+    <span class="hljs-string">'Calcium 2'</span>: [<span class="hljs-string">"Ca"</span>],
+    <span class="hljs-string">'Magnesium 1'</span>: [<span class="hljs-string">"Mg"</span>],
+    <span class="hljs-string">'Magnesium or manganese'</span>: [<span class="hljs-string">"Mg"</span>, <span class="hljs-string">"Mn"</span>],
+    <span class="hljs-string">'Calcium; via carbonyl oxygen'</span>: [<span class="hljs-string">"Ca"</span>],
+    <span class="hljs-string">'Zinc 2'</span>: [<span class="hljs-string">"Zn"</span>],
+    <span class="hljs-string">'Divalent metal cation; catalytic'</span>: [<span class="hljs-string">"Ca"</span>, <span class="hljs-string">"Cr"</span>, <span class="hljs-string">"Co"</span>, <span class="hljs-string">"Cu"</span>,
+                                         <span class="hljs-string">"Fe"</span>, <span class="hljs-string">"Pb"</span>, <span class="hljs-string">"Mn"</span>, <span class="hljs-string">"Mg"</span>, <span class="hljs-string">"Ni"</span>, <span class="hljs-string">"Sn"</span>, <span class="hljs-string">"Zn"</span>],
+    <span class="hljs-string">'Iron-sulfur (4Fe-4S)'</span>: [<span class="hljs-string">"Fe"</span>],
+    <span class="hljs-string">'Zinc; catalytic'</span>: [<span class="hljs-string">"Zn"</span>],
+    <span class="hljs-string">'Calcium 1'</span>: [<span class="hljs-string">"Ca"</span>],
+    <span class="hljs-string">'Calcium'</span>: [<span class="hljs-string">"Ca"</span>],
+    <span class="hljs-string">'Zinc 4'</span>: [<span class="hljs-string">"Zn"</span>],
+    <span class="hljs-string">'Iron; catalytic'</span>: [<span class="hljs-string">"Fe"</span>],
+    <span class="hljs-string">'Zinc 1'</span>: [<span class="hljs-string">"Zn"</span>],
+    <span class="hljs-string">'Iron (heme distal ligand)'</span>: [<span class="hljs-string">"Fe"</span>],
+    <span class="hljs-string">'Calcium 1; catalytic'</span>: [<span class="hljs-string">"Ca"</span>],
+    <span class="hljs-string">'Calcium 3; via carbonyl oxygen'</span>: [<span class="hljs-string">"Ca"</span>],
+    <span class="hljs-string">'Copper'</span>: [<span class="hljs-string">"Cu"</span>],
+    <span class="hljs-string">'Iron-sulfur (4Fe-4S-S-AdoMet)'</span>: [<span class="hljs-string">"Fe"</span>],
+    <span class="hljs-string">'Magnesium 2'</span>: [<span class="hljs-string">"Mg"</span>],
+    <span class="hljs-string">'Calcium 3'</span>: [<span class="hljs-string">"Ca"</span>],
+    <span class="hljs-string">'Zinc'</span>: [<span class="hljs-string">"Zn"</span>]
+}
+</code></pre>
+<p>If you run the script as specified, it will print out all uniprot-derived metal binding features.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/ProteinFeatures/docs/hms/metal_binding/metal_overview"><span class="arrow-prev">← </span><span>Metal Binding Overview</span></a><a class="docs-next button" href="/ProteinFeatures/docs/hms/metal_binding/running_findsite"><span>Running findsitemetal</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/ProteinFeatures/" class="nav-home"></a><div><h5>Docs</h5><a href="/ProteinFeatures/docs/public/intro_public.html">Start Here (General Documentation)</a></div><div><h5>Contact</h5><a href="http://silver.med.harvard.edu/" target="_blank" rel="noreferrer noopener">Silver Lab Website</a></div><div><h5>More</h5><a href="https://github.com/julianstanley/ProteinFeatures">GitHub Repository</a></div></section><section class="copyright">Copyright © 2020 Silver Lab, Harvard Medical School</section></footer></div></body></html>
