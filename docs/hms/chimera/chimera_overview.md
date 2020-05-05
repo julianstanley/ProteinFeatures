@@ -13,6 +13,8 @@ Unfortunately, in my hands at least, Chimera (and especially the builtin interpr
 
 1. Copy the Chimera_Features folder. Then, create a subdirectory called `pdb` (or something of the sort) and put your source .pdb files in there.
 
-2. Make a subdirectory called `output` or something of the sort.
+2. Make a directory called `input` that will contain source text files for DISOPRED and SPPIDER.
 
-3. In the root directory, run `bash run_ChimeraFeatureExtraction.sh --pdbdir pdb/ --outdir output/`. This assumes that `chimera` is in your path and that you want to analyze bubble features at 5, 8, 10, and 12A.
+3. Make a subdirectory called `output` or something of the sort.
+
+4. In the root directory, run `bash run_ChimeraFeatureExtraction.sh --pdbdir pdb/ --outdir output/`. This assumes that `chimera` is in your path and that you want to analyze bubble features at 5, 8, 10, and 12A.
