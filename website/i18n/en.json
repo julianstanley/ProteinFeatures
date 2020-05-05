@@ -29,6 +29,9 @@
       "hms/metal_binding/metal_overview": {
         "title": "Metal Binding Overview"
       },
+      "hms/notes/05_04_2020": {
+        "title": "Chimera notes from May 04, 2020"
+      },
       "hms/prerequisites/monitoring_models": {
         "title": "Maintaining and monitoring modelling jobs"
       },
@@ -81,7 +84,8 @@
       "Metal Binding": "Metal Binding",
       "SPPIDER": "SPPIDER",
       "DISOPRED": "DISOPRED",
-      "Sequence-Structure Mapping": "Sequence-Structure Mapping"
+      "Sequence-Structure Mapping": "Sequence-Structure Mapping",
+      "Notes": "Notes"
     }
   },
   "pages-strings": {
