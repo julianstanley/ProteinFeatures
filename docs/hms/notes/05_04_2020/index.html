@@ -1,0 +1,182 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Chimera notes from May 04, 2020 · Protein Features Documentation</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Today (4 May, 2020) I have been working to generate Chimera features for human carbonylation-related proteins."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Chimera notes from May 04, 2020 · Protein Features Documentation"/><meta property="og:type" content="website"/><meta property="og:url" content="https://julianstanley.github.io/ProteinFeatures/"/><meta property="og:description" content="Today (4 May, 2020) I have been working to generate Chimera features for human carbonylation-related proteins."/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/ProteinFeatures/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/ProteinFeatures/js/scrollSpy.js"></script><link rel="stylesheet" href="/ProteinFeatures/css/main.css"/><script src="/ProteinFeatures/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/ProteinFeatures/"><h2 class="headerTitle">Protein Features Documentation</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/ProteinFeatures/docs/public/intro_public" target="_self">Docs (Public)</a></li><li class="siteNavGroupActive"><a href="/ProteinFeatures/docs/hms/introduction/intro_hms" target="_self">Docs (HMS)</a></li><li class=""><a href="https://github.com/julianstanley/ProteinFeatures" target="_self">GitHub</a></li><li class=""><a href="/ProteinFeatures/help" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Notes</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Introduction</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/introduction/intro_hms">Welcome!</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/introduction/overview">Package Overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Prerequisites</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/prerequisites/prereq_overview">Prerequisites Overview</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/prerequisites/running_itasser">Creating and running I-TASSER jobs.</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/prerequisites/running_quark">Creating and running QUARK jobs.</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/prerequisites/monitoring_models">Maintaining and monitoring modelling jobs</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Chimera</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/chimera/chimera_overview">Chimera Overview</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/chimera/usage">Using Chimera</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">LOMETS</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/lomets/lomets_overview">LOMETS Overview</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/lomets/using_lomets">Using LOMETS</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Metal Binding</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/metal_binding/metal_overview">Metal Binding Overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">SPPIDER</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/sppider/sppider_overview">SPPIDER Overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">DISOPRED</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/disopred/disopred_overview">DISOPRED Overview</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Sequence-Structure Mapping</h3><ul class=""><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/ssm/ssm_overview">Sequence-Structure Mapping Overview</a></li><li class="navListItem"><a class="navItem" href="/ProteinFeatures/docs/hms/ssm/usage">Using SSM</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Notes</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/ProteinFeatures/docs/hms/notes/05_04_2020">Chimera notes from May 04, 2020</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Chimera notes from May 04, 2020</h1></header><article><div><span><p>Today (4 May, 2020) I have been working to generate Chimera features for human carbonylation-related proteins.</p>
+<p>For the last few months, we've been modelling some of the human proteins that we'd need for carbonylation. We also picked out experimentally-determined PDB structures (usually x-ray) that would be relevant.</p>
+<h2><a class="anchor" aria-hidden="true" id="1-consolidation"></a><a href="#1-consolidation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>1. Consolidation</h2>
+<p>So, the first step was to get all of those structures in one place.</p>
+<p>You can see my work on that in <code>/n/groups/drad/julian/Carbonylation_May2020</code>. This was a good bit of work--and, for future reference, I wrote my scripts in the <code>./quickscripts</code> directory.</p>
+<h2><a class="anchor" aria-hidden="true" id="2-matching-structures-with-dataset-entries"></a><a href="#2-matching-structures-with-dataset-entries" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2. Matching structures with dataset entries</h2>
+<p>Next, I wanted to know: what structure should be associated with each line of the source data?</p>
+<p>So I navigated over to the source data--located in the Dropbox at <code>/Protein_Oxidation/PDB_Structures/Human/Source_Tables/Human_CS_data_from_peptide_calls_Bollineni2014_and_Madian2011_js.xlsx</code>.</p>
+<p>At the time, in the <code>CSdata_simple</code> tab, I only had the first few rows. I wanted to create a row that contained the structure that would be used for each &quot;Site by Ref Seq&quot; entry (I ultimately called this row &quot;Combined (JAS preference)&quot;.</p>
+<h3><a class="anchor" aria-hidden="true" id="2a-defining-the-range-of-residues-spanned-by-each-structure"></a><a href="#2a-defining-the-range-of-residues-spanned-by-each-structure" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2a. Defining the range of residues spanned by each structure</h3>
+<p>I made a new tab called <code>CSdata_simple_helper</code>. First, I added all the empirically-determined PDB structures. I did that by hand--previously I picked these structures in the <code>proteins</code> tab. It still required some work, since I had to seperate entries so that there was only one pdb structure per line.</p>
+<p>Then, I did the same for model structures. That didn't require any hand curation though--I generated the data in O2, in <code>/n/groups/drad/julian/Carbonylation_May2020/finished_models/locations_model1_best</code> and just copied over to excel.</p>
+<p>For the model structures, there was one extra step: for models of the whole protein, I replaced the &quot;start&quot; with 1 and the &quot;end&quot; with the length of the protein.</p>
+<p>This excluded one structure QUARK structure that did not have location coordinates specified (I'm not sure why that was the case, though? All files should be in the format <code>full_protein</code> or <code>pfam_start_end</code>. The exception was called <code>Q13813_PF08726_EFhand_Ca_insen_QUARK_model1.pdb</code>).</p>
+<h3><a class="anchor" aria-hidden="true" id="2b-using-csdata_simple_helper-to-populate-csdata_simple"></a><a href="#2b-using-csdata_simple_helper-to-populate-csdata_simple" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2b. Using CSdata_simple_helper to populate CSdata_simple</h3>
+<p>Now, I needed to use <code>CSdata_simple_helper</code> to populate the <code>CSdata_simple</code> tab. I used Python for that.</p>
+<p>First, I exported two files.</p>
+<p>The first was <code>source_pdbs</code>, which was just the <code>CSdata_simple_helper</code> tab, here's a few lines for reference:</p>
+<pre><code class="hljs css language-{text, source_pdbs}">P12259    <span class="hljs-number">2224</span>    P12259_PF07732_Cu_oxidase_3_65_197_I-TASSER_model1.pdb    <span class="hljs-number">65</span>    <span class="hljs-number">197</span>    Model
+Q13813    <span class="hljs-number">2472</span>    Q13813_PF00435_Spectrin_1092_1175_I-TASSER_model1.pdb    <span class="hljs-number">1092</span>    <span class="hljs-number">1175</span>    Model
+Q8WZ42    <span class="hljs-number">34350</span>    Q8WZ42_PF07679_I_set_7385_7474_I-TASSER_model1.pdb    <span class="hljs-number">7385</span>    <span class="hljs-number">7474</span>    Model
+Q8WZ42    <span class="hljs-number">34350</span>    Q8WZ42_PF00041_fn3_28585_28669_I-TASSER_model1.pdb    <span class="hljs-number">28585</span>    <span class="hljs-number">28669</span>    Model
+Q8NF91    <span class="hljs-number">8797</span>    Q8NF91_PF00435_Spectrin_5738_5835_I-TASSER_model1.pdb    <span class="hljs-number">5738</span>    <span class="hljs-number">5835</span>    Model
+</code></pre>
+<p>The second was <code>target_pdbs</code>, which was the uniprot id and location of the &quot;SiteByStructure&quot; row I wanted to match:</p>
+<pre><code class="hljs css language-{text, target_pdbs}">P01160    <span class="hljs-number">123</span>
+O75446    <span class="hljs-number">1</span>
+P42766    <span class="hljs-number">48</span>
+P62318    <span class="hljs-number">11</span>
+P62910    <span class="hljs-number">64</span>
+</code></pre>
+<p>Then, to fill the target_pdbs file, I made a Jupyter notebook (at <code>/Protein_Oxidation/PDB_Structures/Human/Source_Tables/jupyter_playground/filling_CSdata_simple</code>).</p>
+<p>I just used <code>source_pdbs</code> to build a dictionary mapping between uniprot IDs--&gt;sequence locations--&gt;structures, keeping track of whether structures were experimental or modelled:</p>
+<pre><code class="hljs css language-{python3}">mapping = {}
+with <span class="hljs-keyword">open</span>(<span class="hljs-string">"./source_pdbs"</span>) <span class="hljs-keyword">as</span> <span class="hljs-keyword">source</span>:
+    <span class="hljs-keyword">for</span> <span class="hljs-built_in">line</span> in <span class="hljs-keyword">source</span>:
+        <span class="hljs-keyword">up</span>, _, name, start, <span class="hljs-keyword">stop</span>, model_type = <span class="hljs-built_in">line</span>.rstrip().<span class="hljs-keyword">split</span>(<span class="hljs-string">"\t"</span>)
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">up</span> not in mappin<span class="hljs-variable">g:</span>
+            mapping[<span class="hljs-keyword">up</span>] = {}
+
+        <span class="hljs-keyword">if</span> model_type not in mapping[<span class="hljs-keyword">up</span>]:
+            mapping[<span class="hljs-keyword">up</span>][model_type] = {}
+
+        <span class="hljs-keyword">for</span> i in <span class="hljs-built_in">range</span>(<span class="hljs-keyword">int</span>(start), <span class="hljs-keyword">int</span>(<span class="hljs-keyword">stop</span>) + <span class="hljs-number">1</span>):
+            <span class="hljs-keyword">if</span> i in mapping[<span class="hljs-keyword">up</span>][model_type]:
+                mapping[<span class="hljs-keyword">up</span>][model_type][i].<span class="hljs-keyword">append</span>(name)
+            <span class="hljs-keyword">else</span>:
+                mapping[<span class="hljs-keyword">up</span>][model_type][i] = [name]
+</code></pre>
+<p>Then, I picked one structure for each location in <code>target_pdbs</code>. My priorities were: Experimental Structure &gt; Modelled Structure of a particular pfam &gt; Modelled Structure of an entire protein.</p>
+<pre><code class="hljs css language-{python3}">with <span class="hljs-keyword">open</span>(<span class="hljs-string">"./target_pdbs_output_one"</span>, <span class="hljs-string">"w"</span>) <span class="hljs-keyword">as</span> outfh:
+    with <span class="hljs-keyword">open</span>(<span class="hljs-string">"./target_pdbs"</span>) <span class="hljs-keyword">as</span> targe<span class="hljs-variable">t:</span>
+        <span class="hljs-keyword">for</span> <span class="hljs-built_in">line</span> in targe<span class="hljs-variable">t:</span>
+            <span class="hljs-keyword">up</span>, <span class="hljs-keyword">loc</span> = <span class="hljs-built_in">line</span>.rstrip().<span class="hljs-keyword">split</span>(<span class="hljs-string">"\t"</span>)
+            <span class="hljs-keyword">if</span> <span class="hljs-keyword">up</span> not in mappin<span class="hljs-variable">g:</span>
+                outfh.<span class="hljs-keyword">write</span>(<span class="hljs-keyword">f</span><span class="hljs-string">'{up}\t{loc}\t\n'</span>)
+            <span class="hljs-keyword">else</span>:
+                <span class="hljs-keyword">if</span> <span class="hljs-keyword">int</span>(<span class="hljs-keyword">loc</span>) in mapping[<span class="hljs-keyword">up</span>].<span class="hljs-built_in">get</span>(<span class="hljs-string">"Empirical"</span>, {}):
+                    structures = mapping[<span class="hljs-keyword">up</span>][<span class="hljs-string">"Empirical"</span>][<span class="hljs-keyword">int</span>(<span class="hljs-keyword">loc</span>)]
+                    structure = structures[<span class="hljs-number">0</span>]
+                    outfh.<span class="hljs-keyword">write</span>(<span class="hljs-keyword">f</span><span class="hljs-string">"{up}\t{loc}\t{structure}\n"</span>)
+                elif <span class="hljs-keyword">int</span>(<span class="hljs-keyword">loc</span>) in mapping[<span class="hljs-keyword">up</span>].<span class="hljs-built_in">get</span>(<span class="hljs-string">"Model"</span>, {}):
+                    structures = mapping[<span class="hljs-keyword">up</span>][<span class="hljs-string">"Model"</span>][<span class="hljs-keyword">int</span>(<span class="hljs-keyword">loc</span>)]
+                    structures_nofull = [structure <span class="hljs-keyword">for</span> structure in structures <span class="hljs-keyword">if</span> <span class="hljs-string">"full_protein"</span> not in structure]
+                    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(structures_nofull) == <span class="hljs-number">0</span>:
+                        structure = structures[<span class="hljs-number">0</span>]
+                    <span class="hljs-keyword">else</span>:
+                        structure = structures_nofull[<span class="hljs-number">0</span>]
+                    outfh.<span class="hljs-keyword">write</span>(<span class="hljs-keyword">f</span><span class="hljs-string">"{up}\t{loc}\t{structure}\n"</span>)
+                <span class="hljs-keyword">else</span>:
+                    outfh.<span class="hljs-keyword">write</span>(<span class="hljs-keyword">f</span><span class="hljs-string">'{up}\t{loc}\t\n'</span>)
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="2c-finishing-up"></a><a href="#2c-finishing-up" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2c Finishing up</h3>
+<p>Now that I had the table of structures for each Reference Sequence, I just pasted those into the <code>CSdata_simple</code> tab. Then, I combined them with the already-existing RLC structures. I decided to give the newer structures preference: so, if there was both an existing structure and a new structure, I picked the new one.</p>
+<h2><a class="anchor" aria-hidden="true" id="consolidating-all-structures-to-be-used"></a><a href="#consolidating-all-structures-to-be-used" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Consolidating all structures to be used</h2>
+<p>Now I just copied over the structures from the <code>CSdata_simple</code> tab (<code>Combined (JAS preference)</code> tab), removed N/As and duplicates, and put them in a text file on O2. There were 371 unique structures.</p>
+<p>(For consistency, I removed any <code>.pdb</code> extensions--since the PDB structures did not have those, but the models did)</p>
+<p>For convienence, I then copied all CSdata PDB files from <code>/home/rlc18</code> to <code>/n/groups/drad/julian/Carbonylation_May2020</code></p>
+<p>Then, I just used a short script (in <code>quickscripts/copy_all_relevant_pdbs.sh</code>) to move all of those files into one folder.</p>
+<p>4 structures erred. That's because some PDB structures actually don't have proper PDB downloads because they have so many chains. I'll grab those ones manually. They are:</p>
+<p>6EK0_Lh
+6EK0_Le
+5IJN_H (this one was just too big for the memory in my interactive job. Ran once I upped to 4GB)
+6MSB_B</p>
+<p>Now all of the 371 unique structures are in <code>/n/groups/drad/julian/Carbonylation_May2020/all_relevant_pdbs</code>.</p>
+<h2><a class="anchor" aria-hidden="true" id="getting-sppider_binding-data-for-all-structures"></a><a href="#getting-sppider_binding-data-for-all-structures" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Getting sppider_binding data for all structures</h2>
+<p>Now, I need to run SPPIDER on each of those 371 unique structures.</p>
+<p>To do that, I use the <code>sppider_mech_JAS.pl</code> script in the SPPIDER directory of this repo.</p>
+<p>For some reason, I have trouble running this script in high throughput. The only way I've gotten it to work is to copy the script into the same directory where I have my pdb files, and then run <code>for file in ./*.pdb; do perl sppider_mech_JAS.pl ${file/.\//}; done</code>.</p>
+<p>Once those finish running, I can run the <code>parseSPPIDER2results.pl</code> script to parse the results (after downloading results emails from Outlook), and then I'll need to do a bit more parsing to get them in chimera-ready format.</p>
+<p><strong>TODO:</strong> Collect SPPIDER output files and parse into the same format as the file found in <code>input/</code>.</p>
+<h2><a class="anchor" aria-hidden="true" id="getting-disopred-data-for-all-structures"></a><a href="#getting-disopred-data-for-all-structures" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Getting disopred data for all structures</h2>
+<p>Since DISOPRED only required uniprot IDs, I should already have all of the DISOPRED results that I need (in the DropBox at <code>/Protein_Oxidation/Feature_Engineering/DISOPRED</code>)</p>
+<p>Output files can be parsed like so:</p>
+<pre><code class="hljs css language-{bash}">(base) [js741@compute-a<span class="hljs-number">-16</span><span class="hljs-number">-161</span> Q9Y6U3]$ tail -n +<span class="hljs-number">4</span> Q9Y6U3.diso | tr -s <span class="hljs-string">" "</span> | cut -f1,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">5</span> -d<span class="hljs-string">" "</span> | head
+ <span class="hljs-number">1</span> M <span class="hljs-number">0.83</span>
+ <span class="hljs-number">2</span> A <span class="hljs-number">0.69</span>
+ <span class="hljs-number">3</span> R <span class="hljs-number">0.48</span>
+ <span class="hljs-number">4</span> E <span class="hljs-number">0.32</span>
+ <span class="hljs-number">5</span> L <span class="hljs-number">0.31</span>
+ <span class="hljs-number">6</span> Y <span class="hljs-number">0.20</span>
+ <span class="hljs-number">7</span> H <span class="hljs-number">0.16</span>
+ <span class="hljs-number">8</span> E <span class="hljs-number">0.23</span>
+ <span class="hljs-number">9</span> E <span class="hljs-number">0.23</span>
+ <span class="hljs-number">10</span> F <span class="hljs-number">0.16</span>
+</code></pre>
+<pre><code class="hljs css language-{bash}">(base) [js741@compute-a<span class="hljs-number">-16</span><span class="hljs-number">-161</span> Q9Y6U3]$ tail -n +<span class="hljs-number">6</span> Q9Y6U3.pbdat | tr -s <span class="hljs-string">" "</span> | cut -f2,<span class="hljs-number">3</span>,<span class="hljs-number">5</span> -d<span class="hljs-string">" "</span> | head
+<span class="hljs-number">1</span> M <span class="hljs-number">0.40</span>
+<span class="hljs-number">2</span> A <span class="hljs-number">0.27</span>
+<span class="hljs-number">3</span> R NA
+<span class="hljs-number">4</span> E NA
+<span class="hljs-number">5</span> L NA
+<span class="hljs-number">6</span> Y NA
+<span class="hljs-number">7</span> H NA
+<span class="hljs-number">8</span> E NA
+<span class="hljs-number">9</span> E NA
+<span class="hljs-number">10</span> F NA
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="getting-metal-binding-for-all-structures"></a><a href="#getting-metal-binding-for-all-structures" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Getting metal binding for all structures</h2>
+<p>LOMETS already ran.
+Consolidated really simply by running <code>for file in */init.dat; do new_file=&quot;${file/\//_}&quot;; cp $file all_files/$new_file; done</code> in the LOMETS directory.
+Copied to <code>/home/js741/CarbonylationSite_Prediction/Human_Proteins/findsite/LOMETS_to_findsitemetal/LOMETSinitdatFiles</code>
+Then ran <code>/home/js741/CarbonylationSite_Prediction/Human_Proteins/findsite/LOMETS_to_findsitemetal/LOMETS_to_FINDSITE_files_js.py</code></p>
+<p>Still need to work on merging findsitemetal and UniProt metals
+And parsing findsite output?</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/ProteinFeatures/docs/hms/ssm/usage"><span class="arrow-prev">← </span><span>Using SSM</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#1-consolidation">1. Consolidation</a></li><li><a href="#2-matching-structures-with-dataset-entries">2. Matching structures with dataset entries</a><ul class="toc-headings"><li><a href="#2a-defining-the-range-of-residues-spanned-by-each-structure">2a. Defining the range of residues spanned by each structure</a></li><li><a href="#2b-using-csdata_simple_helper-to-populate-csdata_simple">2b. Using CSdata_simple_helper to populate CSdata_simple</a></li><li><a href="#2c-finishing-up">2c Finishing up</a></li></ul></li><li><a href="#consolidating-all-structures-to-be-used">Consolidating all structures to be used</a></li><li><a href="#getting-sppider_binding-data-for-all-structures">Getting sppider_binding data for all structures</a></li><li><a href="#getting-disopred-data-for-all-structures">Getting disopred data for all structures</a></li><li><a href="#getting-metal-binding-for-all-structures">Getting metal binding for all structures</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/ProteinFeatures/" class="nav-home"></a><div><h5>Docs</h5><a href="/ProteinFeatures/docs/public/intro_public.html">Start Here (General Documentation)</a></div><div><h5>Contact</h5><a href="http://silver.med.harvard.edu/" target="_blank" rel="noreferrer noopener">Silver Lab Website</a></div><div><h5>More</h5><a href="https://github.com/julianstanley/ProteinFeatures">GitHub Repository</a></div></section><section class="copyright">Copyright © 2020 Silver Lab, Harvard Medical School</section></footer></div></body></html>
