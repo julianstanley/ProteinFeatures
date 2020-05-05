@@ -28,10 +28,13 @@
       "hms/lomets/using_lomets"
     ],
     "Metal Binding": [
-      "hms/metal_binding/metal_overview"
+      "hms/metal_binding/metal_overview",
+      "hms/metal_binding/running_uniprot",
+      "hms/metal_binding/running_findsite"
     ],
     "SPPIDER": [
-      "hms/sppider/sppider_overview"
+      "hms/sppider/sppider_overview",
+      "hms/sppider/running_sppider"
     ],
     "DISOPRED": [
       "hms/disopred/disopred_overview"
