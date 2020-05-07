@@ -21,7 +21,8 @@
     ],
     "Chimera": [
       "hms/chimera/chimera_overview",
-      "hms/chimera/usage"
+      "hms/chimera/usage",
+      "hms/chimera/formatting"
     ],
     "LOMETS": [
       "hms/lomets/lomets_overview",
@@ -44,7 +45,8 @@
       "hms/ssm/usage"
     ],
     "Notes": [
-      "hms/notes/05_04_2020"
+      "hms/notes/05_04_2020",
+      "hms/notes/05_06_2020"
     ]
   }
 }

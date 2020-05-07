@@ -108,7 +108,7 @@ julian-ThinkPad-T460:04_21_2020$ tree
 
 This assumes that you start off with (1) a PDB files and (2) a file, `uniprot_ids`, containing each of the canonical uniprot IDs of your PDB files, one ID per lne.
 
-2. Make a folder called `{today's date}/sequence_fasta`. Then, use the `./scripts/get_uniprot.sh` to query uniprot fasta sequences. So, for example, I ran `bash ../../scripts/get_uniprot.sh ../uniprot_ids` while in the `04_20_2020/sequence_fasta` folder. Now, you should have fasta files corresponding to each canonical ID. 
+2. Make a folder called `{today's date}/sequence_fasta`. Then, use the `./scripts/get_uniprot.sh` to query uniprot fasta sequences. So, for example, I ran `bash ../../scripts/get_uniprot.sh ../uniprot_ids` while in the `04_20_2020/sequence_fasta` folder. Now, you should have fasta files corresponding to each canonical ID.
 
 3. Put all of your PDB files in a folder called `{today's date}/structure_pdb`.
 
@@ -132,7 +132,7 @@ To make this a bit easier on many files, I wrote the `./scripts/pdb2fasta_wrappe
 So, first `cd` into your base directory (the one with the date--in my case, `04_17_2017`).
 Then, run `bash ../scripts/pdb2fasta_wrapper_ssm.sh`.
 
-And that should convert all PDB files in `structure_pdb` into fasta files, located in `structure_fasta`. 
+And that should convert all PDB files in `structure_pdb` into fasta files, located in `structure_fasta`.
 
 ### Converting PDB into a numbering file.
 

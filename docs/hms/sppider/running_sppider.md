@@ -26,3 +26,11 @@ perl parseSPPIDER2results.pl results_email/SPPIDER_05052020.CSV >parsed_spider_r
 ```
 
 The resulting file will have a line for each detected PPI.
+
+Extra: the resulting parsed file is not _quite_ in the format needed to be inputted into Chimera. I haven't had time to make a rigorous script for that step, but I wrote a quick script, in this repo as `SPPIDER/parseSPPIDER_forChimera.py` that can do that. It requires 5 arguments:
+
+(1) SPPIDER output from parseSPPIDER2results.pl,
+(2) A directory for protein numberings (in comma-separated format, I use the sequence-structure mapping scripts for this),
+(3) a directory for protein primary sequences (in .fasta format, I also use the sequence-structure mapping for this),
+(4) a directory containing the structures to analyze,
+(5) an output file name
