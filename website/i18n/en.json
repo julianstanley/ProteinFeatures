@@ -8,6 +8,9 @@
       "hms/chimera/chimera_overview": {
         "title": "Chimera Overview"
       },
+      "hms/chimera/formatting": {
+        "title": "Formatting Chimera Output"
+      },
       "hms/chimera/usage": {
         "title": "Using Chimera"
       },
@@ -36,6 +39,9 @@
         "title": "Running uniprotmetal"
       },
       "hms/notes/05_04_2020": {
+        "title": "Chimera notes from May 04, 2020 - May 06, 2020"
+      },
+      "hms/notes/05_06_2020": {
         "title": "Chimera notes from May 04, 2020 - May 06, 2020"
       },
       "hms/prerequisites/monitoring_models": {
