@@ -20,7 +20,7 @@ Specifically, I use these arguments:
 
 Here's an example full O2 script:
 
-```{bash}
+```bash
 #!/bin/bash
 #SBATCH -J LOMETS_O75446
 #SBATCH -p short

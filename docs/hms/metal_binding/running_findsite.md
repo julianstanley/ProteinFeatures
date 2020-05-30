@@ -15,7 +15,7 @@ First, make sure that you've generated template lists for every UniProt ID of in
 
 If you also used LOMETS, then you need to parse the `init.dat` files to produce a simple list of templates. You can do this by making a folder called `LOMETSinitdatFiles` were you put each `init.dat` file. Label each file with the UniProt id, for example: 
 
-```{bash}
+```text
 (base) [js741@compute-e-16-233 LOMETSinitdatFiles]$ ll | head -3
 total 587656
 -rw-rw-r-- 1 js741 js741 1416739 May  4 22:11 O00444_init.dat
@@ -24,7 +24,7 @@ total 587656
 
 Then, make a folder called `FINDSITE_input` (at the same level as `LOMETSinitdatFiles`) and run `LOMETS_to_FINDSITE_files_js.py` (included in this repo and in `/n/groups/drad/julian/findsite`). That python script requires `FINDSITE_PDB_mapping.csv`, also included in the same directories, and will produce `.txt` files with template lists:
 
-```{bash}
+```text
 (base) [js741@compute-e-16-233 FINDSITE_input]$ ll | head -3
 total 9864
 -rw-rw-r-- 1 js741 js741  36 May  4 22:21 O00444.txt
@@ -43,7 +43,7 @@ Those `.txt` files will be your template input when running findsite.
 
 findsite requires a few environmental variables. As of May 5th, 2020, I export these three variables in my bashrc:
 
-```{bash}
+```bash
 export FINDSITELIB=/n/groups/drad/findsitemetal-1.0/dat/pdb_library
 export FINDSITEMAP=/n/groups/drad/findsitemetal-1.0/dat/my_mapping.cls
 export FINDSITEDAT=/n/groups/drad/findsitemetal-1.0/dat
@@ -53,7 +53,7 @@ export FINDSITEDAT=/n/groups/drad/findsitemetal-1.0/dat
 
 The basic format for running findsite is:
 
-```{bash}
+```bash
 /n/groups/drad/findsitemetal-1.0/bin/findsitemetal\
     -s ${location of pdb file}\
     -t ${location of templates list file}\
@@ -62,8 +62,8 @@ The basic format for running findsite is:
 
 For example:
 
-```{bash}
-`/n/groups/drad/findsitemetal-1.0/bin/findsitemetal -s /n/groups/drad/julian/Carbonylation_May2020/all_relevant_pdbs/Q9Y6U3_5A1K_A.pdb -t FINDSITE_input/Q9Y6U3.txt -o /home/js741/CarbonylationSite_Prediction/Human_Proteins/findsite/LOMETS_to_findsitemetal/test_findsite/Q9Y6U3_5A1K_A`
+```bash
+/n/groups/drad/findsitemetal-1.0/bin/findsitemetal -s /n/groups/drad/julian/Carbonylation_May2020/all_relevant_pdbs/Q9Y6U3_5A1K_A.pdb -t FINDSITE_input/Q9Y6U3.txt -o /home/js741/CarbonylationSite_Prediction/Human_Proteins/findsite/LOMETS_to_findsitemetal/test_findsite/Q9Y6U3_5A1K_A
 ```
 
 Findsite does run relatively quickly (less than a minute per run, generally).

@@ -7,7 +7,7 @@ It is pretty straightforward to extract metal binding sites from UniProt.
 
 First, you should grab xml files for each ID of interest from UniProt. To do this, I provided `get_all_uniprot.sh` in this repo:
 
-```{bash get_all_uniprot.sh}
+```bash
 #!/usr/bin/env bash
 # Usage: bash get_all_uniprot.sh [IDs] [outfolder]
 # IDs: A newline-seperated file containing all uniprot IDs to be queried
@@ -23,14 +23,14 @@ Then, you can use python to parse those xml files. To do this, I provided `xml_t
 
 That script is a bit more involved, usage:
 
-```{bash}
+```bash
 Usage: python3 xml_to_binding.py [xml_folder]
 Where xml_folder is the folder where all of the uniprot XML files are located
 ```
 
 It includes a few nice features. For example, it converts from UniProt terms to simple metal binding. For example, 'Iron-sulfur (4Fe-4S)' maps to just 'Fe', and "Calcium 2" maps to just "Ca". Here are the full mappings:
 
-```{python3}
+```python
 METAL_MAPPING = {
     'Iron (heme proximal ligand)': ["Fe"],
     'Zinc 3': ["Zn"],

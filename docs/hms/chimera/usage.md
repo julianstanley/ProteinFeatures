@@ -11,7 +11,7 @@ To generate 3D features from Chimera:
 
 ## Usage help
 
-```{BASH}
+```text
 Usage: run_generateAlignments.py [OPTIONS]
 
 Options:
@@ -21,7 +21,7 @@ Options:
   --help             Show this message and exit.
 ```
 
-```{BASH}
+```text
 Usage: run_ChimeraFeatureExtraction_core.py [OPTIONS]
 
   Takes in the command line arguments, checks to make sure pdb files were

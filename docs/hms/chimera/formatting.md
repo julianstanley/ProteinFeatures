@@ -11,7 +11,7 @@ The raw output also does not contain any "averages" features, so that needs to b
 
 In this repo, the `format_output.py` script accomplishes that task:
 
-```{bash}
+```text
 julian-ThinkPad-T460:test$ python3 format_output.py --help
 Usage: format_output.py [OPTIONS]
 
