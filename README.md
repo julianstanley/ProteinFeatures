@@ -13,6 +13,7 @@ We have used these tools on RPKT residues in E. coli, D. radiodurans, and human 
 
 This project is public and functional, but not yet well-documented for external use. If you're interested, check out the [documentation](https://julianstanley.github.io/ProteinFeatures/), send us an email, or post an issue and we can try to help.
 
+Here is a copy of the UCSF Chimera version we used: [dropbox link](https://www.dropbox.com/s/emwkftqw6o7axiv/UCSF-Chimera64-2019-07-10.zip?dl=0)
 ## Authors
 
 Created by the [Silver Lab](http://silver.med.harvard.edu/) at Harvard Medical School.
