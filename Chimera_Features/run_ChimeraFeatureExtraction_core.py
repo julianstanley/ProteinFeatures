@@ -165,7 +165,7 @@ def featureWrapper(
             disopred_disorder_file, pdb_files_short
         )
     except Exception as e:
-        disopred_binding = {}
+        disopred_disorder = {}
         log_message(
             logfile,
             "DISOPRED binding file({}) not found: {}".format(disopred_binding_file, e),
